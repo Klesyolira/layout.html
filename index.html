@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>VPN Yumeko</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-color: #310579;
+      font-family: Arial, sans-serif;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    input, select, button {
+      margin: 8px;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      background-color: #ffffff;
+      color: #310579;
+      cursor: pointer;
+    }
+    .status {
+      font-weight: bold;
+      margin: 12px 0;
+    }
+  </style>
+</head>
+<body>
+  <h2>Bem-vindo!</h2>
+  <div class="status" id="status">VOCÊ ESTÁ DESCONECTADO</div>
+  <div id="operadora-info">Operadora: carregando...</div>
+  <input type="text" id="username" placeholder="Usuário"><br>
+  <input type="password" id="password" placeholder="Senha"><br>
+  <select id="servidores">
+    <option>Carregando servidores...</option>
+  </select><br>
+  <button onclick="startVPN()">Iniciar VPN</button>
+
+  <script>
+    function startVPN() {
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+      const server = document.getElementById("servidores").value;
+      if (typeof Android !== "undefined" && Android.startVPN) {
+        Android.startVPN(user, pass, server);
+      }
+    }
+
+    function setStatus(text) {
+      document.getElementById("status").innerText = text;
+    }
+
+    // Carregar config.json remoto
+    fetch("config.json")
+      .then(resp => resp.json())
+      .then(config => {
+        document.getElementById("operadora-info").innerText = "Operadora: " + config.operadora;
+        const spinner = document.getElementById("servidores");
+        spinner.innerHTML = "";
+        config.servidores.forEach(server => {
+          let opt = document.createElement("option");
+          opt.text = server;
+          opt.value = server.toLowerCase();
+          spinner.add(opt);
+        });
+      })
+      .catch(err => {
+        document.getElementById("operadora-info").innerText = "Operadora: (erro ao carregar)";
+        console.error("Erro ao carregar config.json", err);
+      });
+  </script>
+</body>
+</html>
