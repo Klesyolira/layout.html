@@ -1,5 +1,5 @@
 {
-  "Version": "03",
+  "Version": "04",
   "InterfaceMode": "",
   "OperadoraColor": "#15ff0000",
   "ServidorColor": "#15ff0000",
@@ -47,7 +47,7 @@
       "Payload": "ACL / HTTP/1.1[lf]Host: [app_host][lf]Upgrade: Websocket websocket[lf][split][lf]",
       "SNI": "",
       "TlsIP": "",
-      "ProxyIP": "104.17.70.206#172.66.0.157#141.193.213.10#101espn.com#162.159.140.159",
+      "ProxyIP": "104.17.70.206",
       "ProxyPort": "80",
       "Categoria": "Vivo e Tim",
       "ID": "10",
