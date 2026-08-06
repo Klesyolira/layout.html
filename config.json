@@ -1,5 +1,5 @@
 {
-  "Version": "02",
+  "Version": "03",
   "InterfaceMode": "",
   "OperadoraColor": "#15ff0000",
   "ServidorColor": "#15ff0000",
@@ -24,30 +24,30 @@
   "videoUrl": "https://github.com/Klesyolira/yumko.html/raw/refs/heads/main/anime.mp4",
   "Servers": [
     {
-      "Name": "🌍: CANADA  🇨🇦",
+      "Name": "ORACLE  BR",
       "Color": "#C82F50",
       "TYPE": "free",
       "FLAG": "https://cdn-icons-png.flaticon.com/512/3153/3153937.png",
       "PServerIP": "148.113.174.235",
-      "ServerIP": "free1.sshtproject.com",
+      "ServerIP": "g.gugu55.online",
       "CheckUser": "http://148.113.174.241:5454/checkUser",
       "ServerPort": "22",
       "SSLPort": "443",
       "Categoria": "Vivo e Tim",
       "ID": "10",
-      "USER": "ssht2025",
-      "PASS": "ssht2025"
+      "USER": "",
+      "PASS": ""
     }
   ],
   "Networks": [
     {
-      "Name": "🟣. VIVO 01",
+      "Name": "🟣 01",
       "FLAG": "https://i.imgur.com/V1ZxzjQ.png",
       "Color": "#BD993399",
-      "Payload": "MERGE / HTTP/1.1[crlf]Host: [app_host][crlf]Upgrade: Websocket[crlf]Connection: Upgrade[ua][split][crlf][crlf]",
+      "Payload": "ACL / HTTP/1.1[lf]Host: [app_host][lf]Upgrade: Websocket websocket[lf][split][lf]",
       "SNI": "",
       "TlsIP": "",
-      "ProxyIP": "104.26.12.205#104.26.13.205#dev-otube.oracle.com#162.159.135.91#investor.ofss.oracle.com#162.159.129.11#investor.ofss.oracle.com#investor.oracle.com#162.159.135.91#dev-otube.oracle.com#otube.oracle.com",
+      "ProxyIP": "104.17.70.206#172.66.0.157#141.193.213.10#101espn.com#162.159.140.159",
       "ProxyPort": "80",
       "Categoria": "Vivo e Tim",
       "ID": "10",
