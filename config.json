@@ -1,4 +1,58 @@
 {
-  "operadora": "Claro",
-  "servidores": ["Brasil", "EUA", "Japão"]
+  "Version": "01",
+  "InterfaceMode": "",
+  "OperadoraColor": "#15ff0000",
+  "ServidorColor": "#15ff0000",
+  "FundoColor": "#15ff0000",
+  "UserColor": "#15ff0000",
+  "PassColor": "#15ff0000",
+  "Spinner1Color": "#15ff0000",
+  "Spinner2Color": "#15ff0000",
+  "USER": "",
+  "PASS": "",
+  "layout_url": "https://klesyolira.github.io/index.html/",
+  "CheckUser": true,
+  "UDPPort": "7300;7400;7500",
+  "UrlContato": "https://t.me/LughLT",
+  "EmailFeedback": "lughlt@bk.ru",
+  "Sms": "https://paste.minerdso.com.br/paste.php?raw&id=140",
+  "UrlTermos": "https://paste.anasor.com/paste.php?raw&id=353145",
+  "UrlUpdate": "https://paste.anasor.com/paste.php?raw&id=353375",
+  "LogoLink": "https://i.gifer.com/2eSh.gif",
+  "BackgroundLink": "https://pbs.twimg.com/media/GqadQ_MXQAAeSQb?format=jpg&name=large",
+  "Rodape": "https://st4.depositphotos.com/3877249/40424/v/450/depositphotos_404245056-stock-illustration-vector-banner-of-website-maintenance.jpg",
+  "videoUrl": "https://github.com/Klesyolira/yumko.html/raw/refs/heads/main/anime.mp4",
+  "Servers": [
+    {
+      "Name": "🌍: CANADA  🇨🇦",
+      "Color": "#C82F50",
+      "TYPE": "free",
+      "FLAG": "https://cdn-icons-png.flaticon.com/512/3153/3153937.png",
+      "PServerIP": "148.113.174.235",
+      "ServerIP": "free1.sshtproject.com",
+      "CheckUser": "http://148.113.174.241:5454/checkUser",
+      "ServerPort": "22",
+      "SSLPort": "443",
+      "Categoria": "Vivo e Tim",
+      "ID": "10",
+      "USER": "ssht2025",
+      "PASS": "ssht2025"
+    }
+  ],
+  "Networks": [
+    {
+      "Name": "🟣. VIVO 01",
+      "FLAG": "https://i.imgur.com/V1ZxzjQ.png",
+      "Color": "#BD993399",
+      "Payload": "MERGE / HTTP/1.1[crlf]Host: [app_host][crlf]Upgrade: Websocket[crlf]Connection: Upgrade[ua][split][crlf][crlf]",
+      "SNI": "",
+      "TlsIP": "",
+      "ProxyIP": "104.26.12.205#104.26.13.205#dev-otube.oracle.com#162.159.135.91#investor.ofss.oracle.com#162.159.129.11#investor.ofss.oracle.com#investor.oracle.com#162.159.135.91#dev-otube.oracle.com#otube.oracle.com",
+      "ProxyPort": "80",
+      "Categoria": "Vivo e Tim",
+      "ID": "10",
+      "Info": "Proxy"
+    }
+  ],
+  "HTML": ""
 }
