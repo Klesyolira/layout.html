@@ -1,5 +1,5 @@
 {
-  "Version": "16",
+  "Version": "17",
   "FundoColor": "#6D1A1A2E",
   "Spinner1Color": "#401A1A2E",
   "Spinner2Color": "#401A1A2E",
@@ -108,7 +108,7 @@
     },
     {
       "Name": "01 Tlsws",
-      "Info": "TLSWS",
+      "Info": "Tlsws",
       "Categoria": "operadora 1",
       "ID": "10",
       "Color": "#BD993399",
