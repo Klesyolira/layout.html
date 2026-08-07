@@ -1,5 +1,5 @@
 {
-  "Version": "17",
+  "Version": "18",
   "FundoColor": "#6D1A1A2E",
   "Spinner1Color": "#401A1A2E",
   "Spinner2Color": "#401A1A2E",
@@ -36,7 +36,26 @@
       "ID": "10",
       "USER": "gustavo33",
       "PASS": "341914"
+    },
+
+    {
+      "Name": "ORACLE  CN",
+      "Color": "#C82F50",
+      "TYPE": "free",
+      "FLAG": "https://cdn-icons-png.flaticon.com/512/3153/3153937.png",
+      "PServerIP": "148.113.174.235",
+      "ServerIP": "tr2.vpnjantit.com",
+      "CheckUser": "http://148.113.174.241:5454/checkUser",
+      "ServerPort": "22",
+      "SSLPort": "443",
+      "Categoria": "Servidores free",
+      "ID": "10",
+      "USER": "",
+      "PASS": ""
     }
+
+
+    
   ],
   "Networks": [
     {
