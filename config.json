@@ -1,5 +1,5 @@
 {
-  "Version": "23",
+  "Version": "24",
   "FundoColor": "#6D1A1A2E",
   "Spinner1Color": "#401A1A2E",
   "Spinner2Color": "#401A1A2E",
@@ -20,7 +20,7 @@
   "LogoLink": "https://i.gifer.com/2eSh.gif",
   "BackgroundLink": "https://pbs.twimg.com/media/GqadQ_MXQAAeSQb?format=jpg&name=large",
   "Rodape": "https://st4.depositphotos.com/3877249/40424/v/450/depositphotos_404245056-stock-illustration-vector-banner-of-website-maintenance.jpg",
-  "1videoUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/paisage.mp4",
+  "videoUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/paisage.mp4",
   "Servers": [
     {
       "Name": "ORACLE  BR",
