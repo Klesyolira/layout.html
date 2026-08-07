@@ -1,5 +1,5 @@
 {
-  "Version": "04",
+  "Version": "05",
   "InterfaceMode": "",
   "OperadoraColor": "#15ff0000",
   "ServidorColor": "#15ff0000",
@@ -33,7 +33,7 @@
       "CheckUser": "http://148.113.174.241:5454/checkUser",
       "ServerPort": "22",
       "SSLPort": "443",
-      "Categoria": "Vivo e Tim",
+      "Categoria": "Servidores free",
       "ID": "10",
       "USER": "",
       "PASS": ""
@@ -41,15 +41,15 @@
   ],
   "Networks": [
     {
-      "Name": "🟣 01",
-      "FLAG": "https://i.imgur.com/V1ZxzjQ.png",
+      "Name": "Proxy 01",
+      "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/free.png",
       "Color": "#BD993399",
       "Payload": "ACL / HTTP/1.1[lf]Host: [app_host][lf]Upgrade: Websocket websocket[lf][split][lf]",
       "SNI": "",
       "TlsIP": "",
       "ProxyIP": "104.17.70.206",
       "ProxyPort": "80",
-      "Categoria": "Vivo e Tim",
+      "Categoria": "operadora 1",
       "ID": "10",
       "Info": "Proxy"
     }
