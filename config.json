@@ -1,5 +1,5 @@
 {
-  "Version": "22",
+  "Version": "23",
   "FundoColor": "#6D1A1A2E",
   "Spinner1Color": "#401A1A2E",
   "Spinner2Color": "#401A1A2E",
@@ -106,38 +106,28 @@
       "ID": "13",
       "Info": "Tlsws"
     },
-    {
-      "Name": "Xray 01",
-      "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Oracle.webp",
-      "Color": "#BD993399",
-      "Payload": "",
-      "SNI": "",
-      "TlsIP": "",
-      "ProxyIP": "",
-      "ProxyPort": "",
-      "Categoria": "Xray",
-      "ID": "10",
-      "Info": "Xray",
-      "xray_protocol": "vless",
-      "xray_address": "144.22.239.150",
-      "xray_port": "443",
-      "xray_uuid": "",
-      "xray_network": "tcp",
-      "xray_path": "",
-      "xray_mode": "auto",
-      "xray_security": "reality",
-      "xray_tls": true,
-      "xray_fingerprint": "random",
-      "xray_sni": "www.cloudflare.com",
-      "xray_xhttp_host": "www.cloudflare.com",
-      "xray_flow": "xtls-rprx-vision",
-      "xray_pbk": "A26-1ekfNekdwUFSmnZEMR7CL7MzwsxuT2GyUI-KaDk",
-      "xray_sid": "9d3f7a2b8e1c4d60",
-      "xray_host": "www.cloudflare.com",
-      "xray_mux": false,
-      "use_fake_dns": false,
-      "xray_fragment_packets": ""
-    }
+
+{
+  "Name": "Xray 01",
+  "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Oracle.webp",
+  "Color": "#BD993399",
+  "Categoria": "Xray",
+  "Info": "Xray",
+  "xray_protocol": "vless",
+  "xray_address": "144.22.239.150",
+  "xray_port": "443",
+  "xray_uuid": "",
+  "xray_network": "tcp",
+  "xray_security": "reality",
+  "xray_flow": "xtls-rprx-vision",
+  "xray_sni": "www.cloudflare.com",
+  "xray_fingerprint": "random",
+  "xray_pbk": "A26-1ekfNekdwUFSmnZEMR7CL7MzwsxuT2GyUI-KaDk",
+  "xray_sid": "9d3f7a2b8e1c4d60",
+  "xray_host": "www.cloudflare.com"
+}
+    
+
   ],
   "HTML": ""
 }
