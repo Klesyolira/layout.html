@@ -1,5 +1,5 @@
 {
-  "Version": "27",
+  "Version": "28",
   "FundoColor": "#6D1A1A2E",
   "Spinner1Color": "#401A1A2E",
   "Spinner2Color": "#401A1A2E",
@@ -58,7 +58,7 @@
       "Name": "Direct 00",
       "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/free.png",
       "Color": "#BD993399",
-      "Payload": "[delay_split]ACL / HTTP/1.1[lf][crlf]Host:[rotate= 104.18.6.80;104.18.7.80;162.159.138.6;162.159.128.7;104.17.70.206;104.17.71.206;104.17.72.206;104.17.73.206;104.17.74.206;172.64.144.109;104.18.43.147;104.18.7.41][crlf]Connection: Upgrade[crlf]Upgrade: Websocket[crlf][crlf]",
+      "Payload": "GET / HTTP/1.1[crlf]Host: [app_host][crlf]Upgrade: websocket[crlf][crlf]",
       "SNI": "",
       "TlsIP": "[app_host]",
       "ProxyIP": "104.17.70.206",
