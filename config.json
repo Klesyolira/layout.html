@@ -1,20 +1,16 @@
 {
-  "Version": "45",
+  "Version": "67",
   "FundoColor": "#5F000000",
-  "Spinner1Color": "#8B9F9F9F",
-  "Spinner2Color": "#8B9F9F9F",
-  "UserColor": "#EA595959",
-  "PassColor": "#EA595959",
-  "ButtonColor": "#D93B3B3B",
-  "BordaColor": "#D93B3B3B",
-
-  "FundoSpinner1Color": "#1C1E26",
-  "FundoSpinner2Color": "#1C1E26",
-
-  
-  "CorUser": "#D93B3B3B",
-  "CorLogs": "#D93B3B3B",
-  
+  "Spinner1Color": "#219F9F9F",
+  "Spinner2Color": "#219F9F9F",
+  "UserColor": "#219F9F9F",
+  "PassColor": "#219F9F9F",
+  "ButtonColor": "#219F9F9F",
+  "BordaColor": "#219F9F9F",
+  "FundoSpinner1Color": "#C600030E",
+  "FundoSpinner2Color": "#C600030E",
+  "CorUser": "#219F9F9F",
+  "CorLogs": "#219F9F9F",
   "BordaWidth": "2",
   "CornerRadius": "25",
   "layout_url": "https://klesyolira.github.io/index.html/",
@@ -25,7 +21,7 @@
   "Sms": "https://paste.minerdso.com.br/paste.php?raw&id=140",
   "UrlTermos": "https://paste.anasor.com/paste.php?raw&id=353145",
   "UrlUpdate": "https://raw.githubusercontent.com/Klesyolira/layout.html/refs/heads/main/config.json",
-    "Icons": {
+  "Icons": {
     "vpn": "https://raw.githubusercontent.com/Klesyolira/yumko.html/refs/heads/main/vpn.png",
     "apn": "https://raw.githubusercontent.com/Klesyolira/yumko.html/refs/heads/main/apn.png",
     "wifi_share": "https://raw.githubusercontent.com/Klesyolira/yumko.html/refs/heads/main/wifi_share.png",
@@ -62,7 +58,6 @@
       "USER": "gustavo33",
       "PASS": "341914"
     },
-
     {
       "Name": "ORACLE BR 03",
       "Color": "#C82F50",
@@ -78,7 +73,6 @@
       "USER": "",
       "PASS": ""
     },
-    
     {
       "Name": "YORU CN 02",
       "Color": "#C82F50",
@@ -109,7 +103,6 @@
       "ID": "10",
       "Info": "Direct"
     },
-    
     {
       "Name": "Normal 01",
       "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/free.png",
@@ -162,28 +155,25 @@
       "ID": "13",
       "Info": "Tlsws"
     },
-
-{
-  "Name": "Xray 01",
-  "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Oracle.webp",
-  "Color": "#BD993399",
-  "Categoria": "Xray",
-  "Info": "Xray",
-  "xray_protocol": "vless",
-  "xray_address": "144.22.239.150",
-  "xray_port": "443",
-  "xray_uuid": "",
-  "xray_network": "tcp",
-  "xray_security": "reality",
-  "xray_flow": "xtls-rprx-vision",
-  "xray_sni": "www.cloudflare.com",
-  "xray_fingerprint": "random",
-  "xray_pbk": "A26-1ekfNekdwUFSmnZEMR7CL7MzwsxuT2GyUI-KaDk",
-  "xray_sid": "9d3f7a2b8e1c4d60",
-  "xray_host": "www.cloudflare.com"
-}
-    
-
+    {
+      "Name": "Xray 01",
+      "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Oracle.webp",
+      "Color": "#BD993399",
+      "Categoria": "Xray",
+      "Info": "Xray",
+      "xray_protocol": "vless",
+      "xray_address": "144.22.239.150",
+      "xray_port": "443",
+      "xray_uuid": "",
+      "xray_network": "tcp",
+      "xray_security": "reality",
+      "xray_flow": "xtls-rprx-vision",
+      "xray_sni": "www.cloudflare.com",
+      "xray_fingerprint": "random",
+      "xray_pbk": "A26-1ekfNekdwUFSmnZEMR7CL7MzwsxuT2GyUI-KaDk",
+      "xray_sid": "9d3f7a2b8e1c4d60",
+      "xray_host": "www.cloudflare.com"
+    }
   ],
   "HTML": ""
 }
