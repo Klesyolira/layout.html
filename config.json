@@ -40,7 +40,7 @@
   "videoUrl": "https://raw.githubusercontent.com/Klesyolira/yumko.html/refs/heads/main/rico.mp4",
   "Servers": [
     {
-      "Name": "ORACLE  BR",
+      "Name": "ORACLE BR 01",
       "Color": "#C82F50",
       "TYPE": "free",
       "FLAG": "https://cdn-icons-png.flaticon.com/512/3153/3153937.png",
@@ -56,7 +56,7 @@
     },
 
     {
-      "Name": "ORACLE  BR",
+      "Name": "ORACLE BR 03",
       "Color": "#C82F50",
       "TYPE": "Premium",
       "FLAG": "https://cdn-icons-png.flaticon.com/512/3153/3153937.png",
@@ -72,7 +72,7 @@
     },
     
     {
-      "Name": "ORACLE  CN",
+      "Name": "YORU CN 02",
       "Color": "#C82F50",
       "TYPE": "free",
       "FLAG": "https://cdn-icons-png.flaticon.com/512/3153/3153937.png",
