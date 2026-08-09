@@ -1,5 +1,5 @@
 {
-  "Version": "67",
+  "Version": "67.0",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -7,8 +7,8 @@
   "PassColor": "#219F9F9F",
   "ButtonColor": "#219F9F9F",
   "BordaColor": "#219F9F9F",
-  "FundoSpinner1Color": "#C600030E",
-  "FundoSpinner2Color": "#C600030E",
+  "FundoSpinner1Color": "#E500030E",
+  "FundoSpinner2Color": "#E500030E",
   "CorUser": "#219F9F9F",
   "CorLogs": "#219F9F9F",
   "BordaWidth": "2",
