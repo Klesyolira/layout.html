@@ -1,5 +1,5 @@
 {
-  "Version": "35",
+  "Version": "36",
   "FundoColor": "#7FE602FF",
   "Spinner1Color": "#8E076500",
   "Spinner2Color": "#A8006754",
@@ -8,7 +8,7 @@
   "ButtonColor": "#EE0000",
   "BordaColor": "#7A0000",
   "BordaWidth": "2",
-  "CornerRadius": "25",
+  "CornerRadius": "33",
   "layout_url": "https://klesyolira.github.io/index.html/",
   "CheckUser": true,
   "UDPPort": "7300;7400;7500",
