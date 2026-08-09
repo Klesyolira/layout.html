@@ -1,12 +1,12 @@
 {
-  "Version": "40",
+  "Version": "41",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#8B9F9F9F",
   "Spinner2Color": "#8B9F9F9F",
   "UserColor": "#EA595959",
   "PassColor": "#EA595959",
-  "ButtonColor": "#80787878",
-  "BordaColor": "#7D0000",
+  "ButtonColor": "#D93B3B3B",
+  "BordaColor": "#D93B3B3B",
  
   "CorUser": "#FFFF2FC2",
   "CorLogs": "#FFFF2FC2",
