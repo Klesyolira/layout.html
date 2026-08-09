@@ -1,11 +1,11 @@
 {
-  "Version": "67.0.1",
+  "Version": "67.1.0",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
   "UserColor": "#219F9F9F",
   "PassColor": "#219F9F9F",
-  "ButtonColor": "#219F9F9F",
+  "ButtonColor": "#C2930000",
   "BordaColor": "#219F9F9F",
   "FundoSpinner1Color": "#E500030E",
   "FundoSpinner2Color": "#E500030E",
