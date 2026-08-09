@@ -1,5 +1,5 @@
 {
-  "Version": "67.0.0",
+  "Version": "67.0.1",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -9,8 +9,8 @@
   "BordaColor": "#219F9F9F",
   "FundoSpinner1Color": "#E500030E",
   "FundoSpinner2Color": "#E500030E",
-  "CorUser": "#219F9F9F",
-  "CorLogs": "#219F9F9F",
+  "CorUser": "#F000030E",
+  "CorLogs": "#F000030E",
   "BordaWidth": "2",
   "CornerRadius": "25",
   "layout_url": "https://klesyolira.github.io/index.html/",
