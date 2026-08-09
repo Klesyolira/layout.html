@@ -7,7 +7,11 @@
   "PassColor": "#EA595959",
   "ButtonColor": "#D93B3B3B",
   "BordaColor": "#D93B3B3B",
- 
+
+  "FundoSpinner1Color": "#1C1E26",
+  "FundoSpinner2Color": "#1C1E26",
+
+  
   "CorUser": "#D93B3B3B",
   "CorLogs": "#D93B3B3B",
   
