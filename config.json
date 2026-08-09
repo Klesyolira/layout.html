@@ -8,7 +8,7 @@
   "ButtonColor": "#EE0000",
   "BordaColor": "#7A0000",
   "BordaWidth": "2",
-  "CornerRadius": "20",
+  "CornerRadius": "25",
   "layout_url": "https://klesyolira.github.io/index.html/",
   "CheckUser": true,
   "UDPPort": "7300;7400;7500",
