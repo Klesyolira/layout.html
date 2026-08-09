@@ -1,5 +1,5 @@
 {
-  "Version": "41",
+  "Version": "42",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#8B9F9F9F",
   "Spinner2Color": "#8B9F9F9F",
@@ -8,8 +8,8 @@
   "ButtonColor": "#D93B3B3B",
   "BordaColor": "#D93B3B3B",
  
-  "CorUser": "#FFFF2FC2",
-  "CorLogs": "#FFFF2FC2",
+  "CorUser": "#D93B3B3B",
+  "CorLogs": "#D93B3B3B",
   
   "BordaWidth": "2",
   "CornerRadius": "25",
