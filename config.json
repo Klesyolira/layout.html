@@ -204,7 +204,7 @@
   "CheckUser": "http://vp.dspeed.shop:9090/check?user={user}",
   "USER": "",
   "PASS": "",
-  "Payload": "PATH: /ssh\nHOST: app.t.com.br",
+  "Payload": "PATH: /ssh\nHOST: app.tim.com.br",
   "ProxyIP": "",
   "ProxyPort": "",
   "SNI": "app.tim.com.br",
