@@ -195,9 +195,7 @@
 
 {
   "Name": "xHTTP com Payload",
-  "ColorName": "#ffffff",
-  "Description": "xHTTP Lite - Via Payload",
-  "ColorDescription": "#ffffff",
+  "Categoria": "xHTTP Lite - Via Payload",
   "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Oracle.webp",
   "ServerIP": "179.191.168.17",
   "ServerPort": "443",
@@ -215,9 +213,7 @@
 
 {
   "Name": "xHTTP com Path Direto",
-  "ColorName": "#ffffff",
-  "Description": "xHTTP Lite - Padrão APK",
-  "ColorDescription": "#ffffff",
+  "Categoria": "xHTTP Lite - Padrão APK",
   "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Oracle.webp",
   "ServerIP": "179.191.168.17",
   "ServerPort": "443",
