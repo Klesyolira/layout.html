@@ -1,5 +1,5 @@
 {
-  "Version": "67.2",
+  "Version": "67.3",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -53,10 +53,10 @@
       "CheckUser": "http://vp.dspeed.shop:9090/checkUser",
       "ServerPort": "443",
       "SSLPort": "443",
-      "Categoria": "Servidores xhttp",
+      "Categoria": "Servidores Free",
       "ID": "10",
-      "USER": "",
-      "PASS": ""
+      "USER": "gustavo33",
+      "PASS": "341914"
     },
     {
       "Name": "ORACLE BR 03",
@@ -76,14 +76,14 @@
     {
       "Name": "YORU CN 02",
       "Color": "#C82F50",
-      "TYPE": "free",
+      "TYPE": "Premium",
       "FLAG": "https://cdn-icons-png.flaticon.com/512/3153/3153937.png",
       "PServerIP": "148.113.174.235",
       "ServerIP": "tr2.vpnjantit.com",
       "CheckUser": "http://152.70.220.155:5656/checkUser",
       "ServerPort": "22",
       "SSLPort": "443",
-      "Categoria": "Servidores free",
+      "Categoria": "Servidores Premium",
       "ID": "11",
       "USER": "",
       "PASS": ""
