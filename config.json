@@ -1,5 +1,5 @@
 {
-  "Version": "67.3",
+  "Version": "67.4",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -227,7 +227,25 @@
   "Path": "/ssh",
   "Color": "#78FF00",
   "Info": "XHTTP"
-}
+},
+{
+         "Name": "BRASILEIRO",
+         "ColorName": "#ffffff",
+         "Categoria": "B2 01",
+         "FLAG":"https://telegra.ph/file/02b0f511eaaaa1d2d467a.png",
+         "ServerIP":"179.191.168.17",
+         "ServerPort":"443",
+         "USER":"",
+         "PASS":"",
+         "Payload":"",
+         "ProxyIP":"oc3xhkzwdcw.map.azionedge.net",
+         "ProxyPort":"443",
+         "SNI":"app.tim.com.br",
+         "Path":"/ssh",
+         "Color": "#0000ff",
+         "Info":"XHTTP"
+      }
+    
 
 
     
