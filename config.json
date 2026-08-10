@@ -1,5 +1,5 @@
 {
-  "Version": "67.1.4",
+  "Version": "67.1.5",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -92,17 +92,17 @@
     {
       "Name": "Xhttp BR 01",
       "Color": "#C82F50",
-      "TYPE": "free",
+      "TYPE": "Premium",
       "FLAG": "https://cdn-icons-png.flaticon.com/512/3153/3153937.png",
       "PServerIP": "179.191.168.17",
       "ServerIP": "179.191.168.17",
       "CheckUser": "http://152.70.220.155:5656/checkUser",
       "ServerPort": "80",
       "SSLPort": "443",
-      "Categoria": "Servidores free",
+      "Categoria": "Servidores Xhttp",
       "ID": "10",
-      "USER": "gustavo33",
-      "PASS": "341914"
+      "USER": "",
+      "PASS": ""
     },
 
     
