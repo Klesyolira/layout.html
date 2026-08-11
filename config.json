@@ -1,5 +1,5 @@
 {
-  "Version": "67.4",
+  "Version": "67.5",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -117,7 +117,7 @@
       "TlsIP": "[app_host]",
       "ProxyIP": "104.17.70.206",
       "ProxyPort": "80",
-      "Categoria": "Ssh",
+      "Categoria": "01 Ssh",
       "ID": "10",
       "Info": "Direct"
     },
@@ -130,7 +130,7 @@
       "TlsIP": "",
       "ProxyIP": "104.17.70.206",
       "ProxyPort": "80",
-      "Categoria": "Ssh",
+      "Categoria": "01 Ssh",
       "ID": "10",
       "Info": "Proxy"
     },
@@ -143,7 +143,7 @@
       "TlsIP": "",
       "ProxyIP": "104.17.70.206#172.66.0.157#141.193.213.10#101espn.com#162.159.140.159#104.17.72.206#[app_host]#104.18.43.123#dev-cms.vivo.com.br#servicosdigitais.vivo.com.br#equipamentos.vivo.com.br#z9w105.store.vivo.com.br#assine.vivo.com.br#api.app.vivo.com.br#api.vivo-torpedoempresas.vivo.com.br#vivoplataformadigital.com.br#vivoup.vivo.com.br#serpro.vivo.com.br#planosempresas.vivo.com.br#portaldegovernancadocumental.vivo.com.br#planosempresas-hml.vivo.com.br#ospregional.vivo.com.br",
       "ProxyPort": "80",
-      "Categoria": "Ssh",
+      "Categoria": "01 Ssh",
       "ID": "11",
       "Info": "Proxy"
     },
@@ -156,7 +156,7 @@
       "TlsIP": "",
       "ProxyIP": "",
       "ProxyPort": "",
-      "Categoria": "Ssh",
+      "Categoria": "01 Ssh",
       "ID": "12",
       "Info": "Ssl"
     },
@@ -169,7 +169,7 @@
       "TlsIP": "[app_host]",
       "ProxyIP": "[app_host]",
       "ProxyPort": "443",
-      "Categoria": "Ssh",
+      "Categoria": "01 Ssh",
       "ID": "13",
       "Info": "Tlsws"
     },
@@ -177,7 +177,7 @@
       "Name": "Xray 01",
       "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Oracle.webp",
       "Color": "#BD993399",
-      "Categoria": "Xray",
+      "Categoria": "02 Xray",
       "Info": "Xray",
       "xray_protocol": "vless",
       "xray_address": "144.22.239.150",
@@ -195,7 +195,7 @@
 
 {
   "Name": "xHTTP com Payload",
-  "Categoria": "xHTTP Lite - Via Payload",
+  "Categoria": "03 xHTTP Lite - Via Payload",
   "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Oracle.webp",
   "ServerIP": "179.191.168.17",
   "ServerPort": "443",
@@ -213,7 +213,7 @@
 
 {
   "Name": "xHTTP com Path Direto",
-  "Categoria": "xHTTP Lite - Padrão APK",
+  "Categoria": "03 xHTTP Lite - Padrão APK 01",
   "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Oracle.webp",
   "ServerIP": "179.191.168.17",
   "ServerPort": "443",
@@ -231,7 +231,7 @@
 {
          "Name": "BRASILEIRO",
          "ColorName": "#ffffff",
-         "Categoria": "B2 01",
+         "Categoria": "03 xHTTP Lite - Padrão APK 02",
          "FLAG":"https://telegra.ph/file/02b0f511eaaaa1d2d467a.png",
          "ServerIP":"179.191.168.17",
          "ServerPort":"443",
