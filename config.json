@@ -1,5 +1,5 @@
 {
-  "Version": "67.6",
+  "Version": "67.7",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -179,6 +179,7 @@
       "Color": "#BD993399",
       "Categoria": "02 Xray",
       "Info": "Xray",
+      "CheckUser": "http://152.70.220.155:5656/checkUser",      
       "xray_protocol": "vless",
       "xray_address": "144.22.239.150",
       "xray_port": "443",
@@ -199,7 +200,7 @@
   "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Oracle.webp",
   "ServerIP": "179.191.168.17",
   "ServerPort": "443",
-  "CheckUser": "http://vp.dspeed.shop:9090/check?user={user}",
+  "CheckUser": "http://152.70.220.155:5656/checkUser",
   "USER": "",
   "PASS": "",
   "Payload": "PATH: /ssh\nHOST: app.tim.com.br",
@@ -217,7 +218,7 @@
   "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Oracle.webp",
   "ServerIP": "179.191.168.17",
   "ServerPort": "443",
-  "CheckUser": "http://vp.dspeed.shop:9090/check?user={user}",
+  "CheckUser": "http://152.70.220.155:5656/checkUser",
   "USER": "",
   "PASS": "",
   "Payload": "",
@@ -242,6 +243,7 @@
          "ProxyPort":"443",
          "SNI":"app.tim.com.br",
          "Path":"/ssh",
+         "CheckUser": "http://152.70.220.155:5656/checkUser",
          "Color": "#0000ff",
          "Info":"XHTTP"
       }
