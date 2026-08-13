@@ -1,5 +1,5 @@
 {
-  "Version": "67.7.3",
+  "Version": "67.7.4",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -51,7 +51,7 @@
       "PServerIP": "152.70.220.155",
       "ServerIP": "g.gugu55.online",
       "CheckUser": "http://152.70.220.155:5656/checkUser",
-      "ServerPort": "22",
+      "ServerPort": "80",
       "SSLPort": "443",
       "Categoria": "Servidores Free",
       "ID": "10",
