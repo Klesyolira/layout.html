@@ -1,5 +1,5 @@
 {
-  "Version": "67.7.8",
+  "Version": "67.7.9",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -87,24 +87,7 @@
       "ID": "11",
       "USER": "",
       "PASS": ""
-    },
-    
-    {
-      "Name": "Xhttp BR 01",
-      "Color": "#C82F50",
-      "TYPE": "Premium",
-      "FLAG": "https://cdn-icons-png.flaticon.com/512/3153/3153937.png",
-      "PServerIP": "179.191.168.17",
-      "ServerIP": "179.191.168.17",
-      "CheckUser": "http://152.70.220.155:5656/checkUser",
-      "ServerPort": "80",
-      "SSLPort": "443",
-      "Categoria": "Servidores Xhttp",
-      "ID": "10",
-      "USER": "",
-      "PASS": ""
-    },
-
+    }
     
   ],
   "Networks": [
@@ -194,43 +177,9 @@
       "xray_host": "www.cloudflare.com"
     },
 
-{
-  "Name": "xHTTP com Payload",
-  "Categoria": "03 xHTTP Lite - Via Payload",
-  "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Oracle.webp",
-  "ServerIP": "179.191.168.49",
-  "ServerPort": "443",
-  "CheckUser": "http://152.70.220.155:5656/checkUser",
-  "USER": "",
-  "PASS": "",
-  "Payload": "PATH: /ssh\nHOST: app.tim.com.br",
-  "ProxyIP": "br5.azion.app",
-  "ProxyPort": "443",
-  "SNI": "app.tim.com.br",
-  "Path": "/ssh",
-  "Color": "#78FF00",
-  "Info": "XHTTP"
-},
 
 {
-  "Name": "xHTTP com Path Direto",
-  "Categoria": "03 xHTTP Lite - Padrão APK 01",
-  "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Oracle.webp",
-  "ServerIP": "179.191.168.49",
-  "ServerPort": "443",
-  "CheckUser": "http://152.70.220.155:5656/checkUser",
-  "USER": "",
-  "PASS": "",
-  "Payload": "",
-  "ProxyIP": "br5.azion.app",
-  "ProxyPort": "443",
-  "SNI": "app.tim.com.br",
-  "Path": "/ssh",
-  "Color": "#78FF00",
-  "Info": "XHTTP"
-},
-{
-         "Name": "BRASILEIRO",
+         "Name": "BRASILEIRO 01",
          "ColorName": "#ffffff",
          "Categoria": "03 xHTTP Lite - Padrão APK 02",
          "FLAG":"https://telegra.ph/file/02b0f511eaaaa1d2d467a.png",
@@ -238,9 +187,8 @@
          "ServerPort":"443",
          "USER":"",
          "PASS":"",
-         "Payload":"",
          "ProxyIP":"br5.azion.app",
-         "ProxyPort":"443",
+         "ProxyPort":"",
          "SNI":"app.tim.com.br",
          "Path":"/ssh",
          "CheckUser": "http://152.70.220.155:5656/checkUser",
