@@ -1,5 +1,5 @@
 {
-  "Version": "67.7.5",
+  "Version": "67.7.6",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -112,7 +112,7 @@
       "Name": "Direct 00",
       "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/free.png",
       "Color": "#BD993399",
-      "Payload": "[split]HTTP/ 2 HTTP/1.1 CONNECT HTTP/1.1[lf][lf]#HTTP/ 2\\nHost: m.opera.com\\n\\n",
+      "Payload": "GET / HTTP/1.1[crlf]Host: [app_host][crlf]Connection: Upgrade[crlf]Upgrade: websocket[crlf][crlf]@@@GET / HTTP/1.1[crlf]Host: [app_host][crlf]Connection: Upgrade[crlf]Upgrade: websocket[crlf][crlf]@@@[split]HTTP/ 2 HTTP/1.1 CONNECT HTTP/1.1[lf][lf]#HTTP/ 2\\nHost: m.opera.com\\n\\n",
       "SNI": "",
       "TlsIP": "[app_host]",
       "ProxyIP": "104.17.70.206",
