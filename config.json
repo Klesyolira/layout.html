@@ -1,5 +1,5 @@
 {
-  "Version": "67.7.9",
+  "Version": "67.7.10",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -176,7 +176,37 @@
       "xray_sid": "9d3f7a2b8e1c4d60",
       "xray_host": "www.cloudflare.com"
     },
-
+           {
+            "Name": "AZION BETO",
+            "Info": "Xray",
+            "FLAG": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/br.png",
+            "Color": "#BD993399",
+            "Categoria": "02 Xray",      
+            "CheckUser": "http://152.70.220.155:5656/checkUser",
+            "Premium": false,
+            "xray_protocol": "vless",
+            "xray_address": "179.191.168.49",
+            "xray_port": "443",
+            "xray_uuid": "e80da181-c3f1-46fd-bc15-2b4d924c4e66",
+            "xray_network": "xhttp",
+            "xray_path": "/xhttp",
+            "xray_mode": "auto",
+            "xray_security": "tls",
+            "xray_tls": true,
+            "xray_tls_allow_insecure": false,
+            "xray_fingerprint": "chrome",
+            "xray_sni": "app.tim.com.br",
+            "xray_xhttp_host": "br5.azion.app",
+            "xray_flow": "",
+            "xray_pbk": "",
+            "xray_sid": "",
+            "xray_host": "br5.azion.app",
+            "xray_mux": false,
+            "use_fake_dns": false,
+            "xray_fragment_packets": ""
+        },
+        
+      
 
 {
          "Name": "BRASILEIRO 01",
