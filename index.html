@@ -1,0 +1,1963 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Yumeko 6G · Painel de Configuração</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        display: ['"Space Grotesk"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --signal:#0d9c9f; --signal-rgb:13,156,159; --signal-soft:#e3fbfa;
+            --canvas:#f5f7fb; --panel:#ffffff; --panel-2:#f8fafc; --edge:#e3e7f0;
+            --ink:#1b2338; --muted:#6b7690; --muted-2:#94a0b8;
+            --success:#0f9d6b; --danger:#e11d48; --warning:#b45309; --violet:#7c3aed;
+            --header-h:64px; --sidebar-w:260px;
+        }
+        html.dark {
+            --signal:#2dd4c6; --signal-rgb:45,212,198; --signal-soft:rgba(45,212,198,.14);
+            --canvas:#090d17; --panel:#121a2c; --panel-2:#0d1424; --edge:#232d42;
+            --ink:#e8ebf4; --muted:#8891a8; --muted-2:#5b6684;
+            --success:#34d399; --danger:#fb7185; --warning:#fbbf24; --violet:#a78bfa;
+        }
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        html, body { background: var(--canvas); }
+        body { color: var(--ink); font-family:'Plus Jakarta Sans',ui-sans-serif,system-ui,sans-serif; transition: background-color .2s ease, color .2s ease; }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; scroll-behavior:auto!important; }
+        }
+        a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+            outline: 2px solid var(--signal); outline-offset: 2px; border-radius: 4px;
+        }
+        ::-webkit-scrollbar { width:6px; height:6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--edge); border-radius:8px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--muted-2); }
+        input, select, textarea, button { font-size:16px; font-family:inherit; }
+        @media (min-width:640px) { input, select, textarea, button { font-size:inherit; } }
+        select { appearance:auto; -webkit-appearance:menulist; max-width:100%; }
+
+        .text-ink{color:var(--ink)} .text-muted{color:var(--muted)} .text-muted-2{color:var(--muted-2)}
+        .text-signal{color:var(--signal)} .text-danger{color:var(--danger)} .text-success{color:var(--success)}
+        .bg-panel{background:var(--panel)} .bg-panel-2{background:var(--panel-2)}
+        .border-edge{border-color:var(--edge)}
+
+        /* ---------- shell / nav ---------- */
+        header#topbar{ height:var(--header-h); background:var(--panel); border-bottom:1px solid var(--edge); }
+        #main-nav{
+            position:fixed; left:0; right:0; bottom:0; z-index:40;
+            display:flex; flex-direction:row; align-items:stretch; justify-content:space-between; gap:2px;
+            padding:6px 8px calc(6px + env(safe-area-inset-bottom));
+            background:var(--panel); border-top:1px solid var(--edge);
+        }
+        #content{ padding-bottom:calc(4.75rem + env(safe-area-inset-bottom)); }
+        @media (min-width:1024px){
+            #main-nav{
+                left:0; right:auto; top:var(--header-h); bottom:0; width:var(--sidebar-w);
+                flex-direction:column; justify-content:flex-start; gap:2px;
+                padding:20px 12px; border-top:none; border-right:1px solid var(--edge);
+            }
+            #content{ padding-left:var(--sidebar-w); padding-bottom:2rem; }
+        }
+        .nav-btn{
+            position:relative; display:flex; flex:1 1 0; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+            padding:8px 4px; border-radius:12px; color:var(--muted-2); font-weight:700; transition:.15s;
+        }
+        .nav-btn i{ font-size:17px; } .nav-btn span{ font-size:10px; letter-spacing:.01em; }
+        .nav-btn:hover{ color:var(--signal); background:var(--signal-soft); }
+        .nav-btn.active-nav-btn{ color:var(--signal); }
+        .nav-btn.active-nav-btn::before{
+            content:''; position:absolute; background:var(--signal); border-radius:3px;
+            top:-6px; left:50%; transform:translateX(-50%); width:22px; height:3px;
+        }
+        @media (min-width:1024px){
+            .nav-btn{ flex:none; flex-direction:row; justify-content:flex-start; gap:12px; padding:11px 14px; width:100%; }
+            .nav-btn i{ font-size:16px; width:18px; text-align:center; }
+            .nav-btn span{ font-size:13.5px; }
+            .nav-btn.active-nav-btn{ background:var(--signal-soft); }
+            .nav-btn.active-nav-btn::before{ top:50%; left:-12px; transform:translateY(-50%); width:3px; height:20px; }
+            .nav-cloud{ margin-top:auto; border-top:1px solid var(--edge); padding-top:16px; border-radius:0; }
+        }
+
+        /* ---------- surfaces ---------- */
+        .section-card{ background:var(--panel); border:1px solid var(--edge); border-radius:20px; padding:20px; }
+        .group-title{ display:flex; align-items:center; gap:10px; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:var(--signal); margin:22px 0 14px; }
+        .group-title:first-of-type{ margin-top:0; }
+        .group-title::after{ content:''; flex:1; height:1px; background:var(--edge); }
+        .file-badge{ font-size:10px; font-weight:700; font-family:'JetBrains Mono',monospace; color:var(--muted); background:var(--panel-2); border:1px solid var(--edge); padding:4px 9px; border-radius:8px; }
+
+        /* ---------- forms ---------- */
+        .field-label{ display:block; font-size:11px; font-weight:800; letter-spacing:.03em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+        .field-input{ width:100%; padding:10px 12px; border-radius:12px; border:1px solid var(--edge); background:var(--panel-2); color:var(--ink); transition:.15s; }
+        .field-input::placeholder{ color:var(--muted-2); }
+        .field-input:focus{ outline:none; border-color:var(--signal); box-shadow:0 0 0 3px rgba(var(--signal-rgb),.16); background:var(--panel); }
+        .field-hint{ font-size:10.5px; color:var(--muted-2); margin-top:5px; line-height:1.4; }
+        textarea.field-input{ resize:vertical; }
+        .callout{ border-radius:14px; padding:12px 14px; font-size:11.5px; line-height:1.5; border:1px solid; }
+        .callout-info{ background:var(--signal-soft); border-color:rgba(var(--signal-rgb),.3); color:var(--ink); }
+        .toggle-row{ display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:14px; border:1px solid var(--edge); background:var(--panel-2); cursor:pointer; }
+        .toggle-row input{ position:absolute; opacity:0; width:0; height:0; }
+        .toggle-track{ position:relative; width:38px; height:22px; background:var(--edge); border-radius:999px; flex-shrink:0; transition:.2s; }
+        .toggle-thumb{ position:absolute; top:2px; left:2px; width:18px; height:18px; background:#fff; border-radius:50%; transition:.2s; box-shadow:0 1px 2px rgba(0,0,0,.25); }
+        .toggle-row input:checked + .toggle-track{ background:var(--signal); }
+        .toggle-row input:checked + .toggle-track .toggle-thumb{ transform:translateX(16px); }
+        .toggle-label{ font-size:12.5px; font-weight:700; color:var(--ink); display:flex; align-items:center; gap:6px; }
+        .flag-input-wrap{ position:relative; } .flag-input-wrap .field-input{ padding-right:46px; }
+        .flag-preview{ position:absolute; right:7px; top:50%; transform:translateY(-50%); width:28px; height:20px; border-radius:4px; object-fit:cover; border:1px solid var(--edge); background:var(--panel); display:none; }
+        .img-preview-wrap{ position:relative; } .img-preview-wrap .field-input{ padding-right:52px; }
+        .img-preview{ position:absolute; right:7px; top:50%; transform:translateY(-50%); width:34px; height:34px; border-radius:8px; object-fit:cover; border:1px solid var(--edge); background:var(--panel-2); display:none; }
+
+        /* ---------- buttons ---------- */
+        .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; font-weight:700; font-size:12.5px; border-radius:12px; padding:11px 16px; transition:.15s; border:1px solid transparent; cursor:pointer; }
+        .btn-primary{ background:var(--signal); color:#04211f; box-shadow:0 6px 16px rgba(var(--signal-rgb),.28); }
+        .btn-primary:hover{ filter:brightness(1.08); }
+        .btn-deploy{ background:var(--success); color:#fff; box-shadow:0 6px 16px rgba(15,157,107,.28); }
+        .btn-deploy:hover{ filter:brightness(1.08); }
+        .btn-secondary{ background:var(--panel-2); color:var(--ink); border-color:var(--edge); }
+        .btn-secondary:hover{ background:var(--edge); }
+        .btn-soft{ background:var(--signal-soft); color:var(--signal); border-color:rgba(var(--signal-rgb),.3); }
+        .btn-soft:hover{ filter:brightness(.97); }
+        .btn-danger-ghost{ background:rgba(225,29,72,.08); color:var(--danger); border-color:rgba(225,29,72,.25); }
+        .btn-danger-ghost:hover{ background:rgba(225,29,72,.15); }
+        .btn-block{ width:100%; } .btn-sm{ padding:8px 12px; font-size:11.5px; }
+        .icon-btn{ width:30px; height:30px; display:inline-flex; align-items:center; justify-content:center; border-radius:9px; color:var(--muted-2); font-size:12px; transition:.15s; flex-shrink:0; }
+        .icon-btn:hover{ background:var(--edge); color:var(--ink); }
+        .icon-btn:disabled{ opacity:.25; } .icon-btn:disabled:hover{ background:none; color:var(--muted-2); }
+        .icon-btn-edit:hover{ color:var(--signal); background:var(--signal-soft); }
+        .icon-btn-danger:hover{ color:var(--danger); background:rgba(225,29,72,.12); }
+
+        /* ---------- badges ---------- */
+        .badge{ font-size:9.5px; font-weight:800; padding:3px 8px; border-radius:999px; border:1px solid; letter-spacing:.02em; white-space:nowrap; }
+        .badge-ssh{ background:rgba(37,99,235,.1); color:#2563eb; border-color:rgba(37,99,235,.25); }
+        .badge-xray{ background:rgba(124,58,237,.1); color:var(--violet); border-color:rgba(124,58,237,.25); }
+        .badge-xhttp{ background:rgba(13,148,136,.1); color:#0d9488; border-color:rgba(13,148,136,.25); }
+        .badge-other{ background:rgba(100,116,139,.12); color:var(--muted); border-color:var(--edge); }
+
+        /* ---------- server / multiserv cards ---------- */
+        .entity-list{ display:flex; flex-direction:column; gap:8px; }
+        .entity-card{ display:flex; align-items:center; gap:10px; padding:11px 12px; border-radius:14px; border:1px solid var(--edge); background:var(--panel); transition:.15s; }
+        .entity-card:hover{ border-color:rgba(var(--signal-rgb),.4); }
+        .entity-card.dragging{ opacity:.45; background:var(--signal-soft); }
+        .entity-drag{ flex-shrink:0; color:var(--muted-2); cursor:grab; padding:2px 4px; }
+        .entity-drag:active{ cursor:grabbing; }
+        .entity-info{ min-width:0; flex:1 1 auto; }
+        .entity-title{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+        .entity-name{ font-weight:700; font-size:13px; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
+        .entity-detail{ font-size:11px; color:var(--muted-2); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-family:'JetBrains Mono',monospace; }
+        .entity-actions{ flex-shrink:0; display:flex; align-items:center; gap:1px; }
+        .empty-state{ text-align:center; padding:34px 16px; color:var(--muted-2); }
+        .empty-state i{ font-size:22px; margin-bottom:10px; display:block; opacity:.4; }
+        .empty-state span{ font-size:12px; }
+
+        /* ---------- progressive disclosure ---------- */
+        details.adv{ border:1px dashed var(--edge); border-radius:14px; }
+        details.adv summary{ list-style:none; cursor:pointer; padding:12px 14px; font-size:12px; font-weight:700; color:var(--signal); display:flex; align-items:center; gap:9px; }
+        details.adv summary::-webkit-details-marker{ display:none; }
+        details.adv summary::marker{ content:''; }
+        .adv-chevron{ transition:transform .2s ease; }
+        details.adv[open] .adv-chevron{ transform:rotate(90deg); }
+        details.adv .adv-body{ padding:14px; border-top:1px solid var(--edge); }
+
+        /* ---------- modals ---------- */
+        .modal-overlay{ position:fixed; inset:0; z-index:60; background:rgba(6,10,20,.7); backdrop-filter:blur(3px); opacity:0; pointer-events:none; transition:opacity .25s ease; display:flex; align-items:flex-end; justify-content:center; padding:0; }
+        .modal-overlay.is-open{ opacity:1; pointer-events:auto; }
+        @media (min-width:640px){ .modal-overlay{ align-items:center; padding:1rem; } }
+        .modal-sheet{ width:100%; max-width:30rem; max-height:min(94vh,100dvh); background:var(--panel); border:1px solid var(--edge); border-radius:20px 20px 0 0; box-shadow:0 -10px 40px rgba(0,0,0,.25); display:flex; flex-direction:column; overflow:hidden; transform:translateY(14px); transition:transform .25s ease; }
+        .modal-overlay.is-open .modal-sheet{ transform:translateY(0); }
+        @media (min-width:640px){ .modal-sheet{ border-radius:20px; max-height:90vh; box-shadow:0 24px 70px rgba(0,0,0,.35); } }
+        .modal-head{ padding:16px 20px; border-bottom:1px solid var(--edge); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; gap:12px; }
+        .modal-body{ overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; flex:1 1 auto; min-height:0; padding:18px 20px; }
+        .modal-footer{ flex-shrink:0; padding:14px 20px calc(14px + env(safe-area-inset-bottom)); border-top:1px solid var(--edge); display:flex; justify-content:flex-end; gap:10px; background:var(--panel-2); }
+
+        .cloud-file-row{ display:flex; align-items:center; justify-content:space-between; gap:8px; background:var(--panel); border:1px solid var(--edge); padding:10px; border-radius:12px; margin-bottom:6px; }
+        .cloud-file-info{ display:flex; align-items:center; gap:10px; overflow:hidden; min-width:0; }
+        .cloud-file-info i{ color:#eab308; font-size:15px; flex-shrink:0; }
+        .cloud-file-name{ font-size:11.5px; font-weight:700; color:var(--ink); display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .cloud-file-name.is-current{ color:var(--signal); }
+        .cloud-file-size{ font-size:9px; color:var(--muted-2); text-transform:uppercase; }
+        .cloud-file-actions{ display:flex; gap:1px; flex-shrink:0; }
+
+        .status-dot{ width:8px; height:8px; border-radius:50%; background:var(--success); flex-shrink:0; box-shadow:0 0 0 2px var(--panel); }
+        .status-dot.pulse{ animation:dotpulse 2.4s ease-in-out infinite; }
+        @keyframes dotpulse{ 0%,100%{opacity:1;} 50%{opacity:.45;} }
+
+        #toast-container{ position:fixed; bottom:calc(4.75rem + env(safe-area-inset-bottom) + 8px); right:12px; left:12px; z-index:50; display:flex; flex-direction:column; align-items:flex-end; gap:8px; pointer-events:none; }
+        @media (min-width:1024px){ #toast-container{ left:auto; bottom:20px; right:20px; } }
+        .toast{ display:flex; align-items:center; gap:10px; padding:12px 16px; border-radius:14px; font-size:12px; font-weight:700; color:#fff; box-shadow:0 10px 28px rgba(0,0,0,.22); transform:translateY(10px); opacity:0; transition:transform .25s ease, opacity .25s ease; pointer-events:auto; max-width:100%; }
+        .toast.toast-in{ transform:translateY(0); opacity:1; }
+        .toast-success{ background:var(--success); } .toast-error{ background:var(--danger); }
+
+        /* ---------- login gate ---------- */
+        .login-scrim{ position:fixed; inset:0; z-index:50; background:#050810; display:flex; align-items:center; justify-content:center; padding:20px; }
+        .login-card{ width:100%; max-width:25.5rem; background:#0e1526; border:1px solid #202b42; border-radius:24px; overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,.5); max-height:92vh; display:flex; flex-direction:column; }
+        .login-brand{ padding:34px 26px 22px; text-align:center; background:radial-gradient(circle at 50% 0%, rgba(45,212,198,.14), transparent 70%); flex-shrink:0; }
+        .login-mark{ position:relative; width:60px; height:60px; margin:0 auto 14px; display:flex; align-items:center; justify-content:center; }
+        .login-mark i{ position:relative; z-index:2; font-size:23px; color:#2dd4c6; }
+        .login-ring{ position:absolute; inset:0; border:1px solid rgba(45,212,198,.45); border-radius:50%; animation:pingring 3s cubic-bezier(0,0,.2,1) infinite; }
+        .login-ring-2{ animation-delay:1.5s; }
+        @keyframes pingring{ 0%{transform:scale(.65);opacity:.9;} 100%{transform:scale(1.9);opacity:0;} }
+        .login-brand h2{ font-family:'Space Grotesk',sans-serif; font-size:21px; font-weight:700; color:#f1f5f9; letter-spacing:-.01em; }
+        .login-brand p{ font-size:11.5px; color:#8891a8; margin-top:7px; line-height:1.5; max-width:19rem; margin-left:auto; margin-right:auto; }
+        .login-form{ padding:22px 26px 26px; display:flex; flex-direction:column; gap:13px; background:#0b1120; overflow-y:auto; }
+        .login-form .field-label{ color:#7c8aa8; }
+        .login-form .field-input{ background:#141d33; border-color:#26314a; color:#e8ebf4; }
+        .login-form .field-input::placeholder{ color:#4a5674; }
+        .login-form .field-input:focus{ border-color:#2dd4c6; box-shadow:0 0 0 3px rgba(45,212,198,.15); background:#101828; }
+        .login-form .callout-info{ background:rgba(45,212,198,.08); border-color:rgba(45,212,198,.25); color:#a8b3c9; }
+    </style>
+    <script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else { document.documentElement.classList.remove('dark'); }
+    </script>
+</head>
+<body>
+
+    <!-- LOGIN -->
+    <div id="login-screen" class="login-scrim hidden">
+        <div class="login-card">
+            <div class="login-brand">
+                <div class="login-mark">
+                    <span class="login-ring"></span><span class="login-ring login-ring-2"></span>
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h2>Yumeko 6G</h2>
+                <p>Conecte seu repositório GitHub para editar e publicar o Config do Yumeko 6G. O token fica somente no seu navegador.</p>
+            </div>
+            <div class="login-form">
+                <div class="callout callout-info">
+                    <i class="fa-solid fa-lock mr-1"></i> O painel conversa diretamente com a API do GitHub. O token fica somente no navegador.
+                </div>
+                <div>
+                    <label class="field-label">GitHub Personal Access Token</label>
+                    <input type="password" id="loginToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="field-input font-mono">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div><label class="field-label">Owner</label><input type="text" id="loginOwner" placeholder="Ex: LUGH" class="field-input"></div>
+                    <div><label class="field-label">Repositório</label><input type="text" id="loginRepo" placeholder="Ex: Lugh-LT" class="field-input"></div>
+                </div>
+                <div><label class="field-label">Pasta do projeto (opcional)</label><input type="text" id="loginFolder" placeholder="Ex: painel/dados/" class="field-input"></div>
+                <button onclick="saveCloudConnection()" class="btn btn-primary btn-block" style="padding:13px;">
+                    <i class="fa-solid fa-circle-check"></i> Inicializar painel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header id="topbar" class="sticky top-0 z-20 flex items-center px-4 lg:px-6">
+        <div class="w-full flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="background:var(--signal);">
+                    <i class="fa-solid fa-shield-halved" style="color:#04211f;"></i>
+                </div>
+                <div class="min-w-0">
+                    <h1 class="font-display font-bold text-[15px] leading-tight truncate text-ink">Yumeko 6G</h1>
+                    <span class="text-[9px] font-bold uppercase tracking-wider text-muted-2">Painel de configuração</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 flex-shrink-0">
+                <button onclick="toggleDarkMode()" class="icon-btn" style="width:36px;height:36px;font-size:14px;" title="Alternar tema">
+                    <i id="theme-toggle-icon" class="fa-solid fa-moon"></i>
+                </button>
+                <button id="user-profile-card" onclick="openProfileModal()" class="flex items-center gap-2 pl-1.5 pr-3 py-1.5 rounded-full transition-colors bg-panel-2 border-edge" style="border-width:1px;border-style:solid;">
+                    <span class="relative flex-shrink-0">
+                        <img id="user-avatar" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2394a0b8'><circle cx='12' cy='12' r='10'/></svg>" alt="Perfil" class="w-7 h-7 rounded-full object-cover" style="border:1.5px solid var(--panel);">
+                        <span class="status-dot pulse absolute -bottom-0.5 -right-0.5"></span>
+                    </span>
+                    <div class="text-left leading-none max-w-[68px] sm:max-w-[140px]">
+                        <div id="user-name" class="text-[11px] font-bold truncate text-ink">Conectando...</div>
+                        <div id="user-repo-name" class="text-[9px] truncate mt-0.5 font-mono text-muted-2">carregando…</div>
+                    </div>
+                    <i class="fa-solid fa-chevron-down text-[10px] hidden sm:block text-muted-2"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAV -->
+    <nav id="main-nav">
+        <button id="nav-config" data-tab="config" onclick="switchTab('config')" class="nav-btn active-nav-btn">
+            <i class="fa-solid fa-gears"></i><span>Config</span>
+        </button>
+        <button id="nav-theme" data-tab="theme" onclick="switchTab('theme')" class="nav-btn">
+            <i class="fa-solid fa-palette"></i><span>Tema</span>
+        </button>
+        <button id="nav-html" data-tab="html" onclick="switchTab('html')" class="nav-btn">
+            <i class="fa-brands fa-html5"></i><span>HTML</span>
+        </button>
+        <button onclick="openProfileModal()" class="nav-btn nav-cloud">
+            <i class="fa-solid fa-cloud"></i><span>Nuvem</span>
+        </button>
+    </nav>
+
+    <!-- MAIN -->
+    <main id="content">
+        <div class="max-w-7xl mx-auto px-4 py-5 lg:py-7 flex flex-col lg:flex-row gap-5 lg:gap-6">
+            <div class="w-full lg:w-[62%] min-w-0 flex flex-col gap-5">
+
+                <!-- Versão -->
+                <div class="section-card flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background:var(--signal-soft); color:var(--signal);">
+                        <i class="fa-solid fa-code-compare"></i>
+                    </div>
+                    <div class="flex-grow min-w-0">
+                        <label class="field-label">Versão geral do projeto</label>
+                        <input type="text" id="inputVersion" placeholder="Ex: 1.0" value="1.0" class="field-input font-mono" oninput="processForm()">
+                    </div>
+                </div>
+
+                <!-- CONFIG -->
+                <div id="section-config" class="section-card">
+                    <div class="flex items-center justify-between mb-1">
+                        <h2 class="font-display font-bold text-base text-ink">Ajustes de configuração</h2>
+                        <span class="file-badge">config.json</span>
+                    </div>
+
+                    <div class="group-title">Identidade &amp; modo</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div><label class="field-label">Modo UI</label><input type="text" id="inputUIMode" placeholder="nativo" class="field-input" oninput="processForm()"></div>
+                        <div>
+                            <label class="field-label">NativeAnchor (chave de genuinidade)</label>
+                            <input type="text" id="inputNativeAnchor" value="4affa1f54a40194f" class="field-input font-mono" oninput="processForm()">
+                            <p class="field-hint">Valor padrão do app. Só altere se também mudar a key no código-fonte.</p>
+                        </div>
+                    </div>
+
+                    <div class="group-title">Recursos</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <label class="toggle-row">
+                            <input type="checkbox" id="checkAds" onchange="processForm()">
+                            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                            <span class="toggle-label"><i class="fa-solid fa-rectangle-ad text-muted-2"></i>Ativar anúncios (Ads)</span>
+                        </label>
+                        <label class="toggle-row">
+                            <input type="checkbox" id="checkHybridMode" onchange="processForm()">
+                            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                            <span class="toggle-label"><i class="fa-solid fa-flask" style="color:var(--violet);"></i>Modo híbrido (servidores offline VIP)</span>
+                        </label>
+                    </div>
+
+                    <div class="group-title">Atualizações &amp; links</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div><label class="field-label">layout_url do painel externo</label><input type="text" id="inputHtmlUiUrl" placeholder="https://seuusuario.github.io/seurepo/" class="field-input" oninput="processForm()"></div>
+                        <div><label class="field-label">UrlUpdate do Config</label><input type="text" id="inputUpdateUrl" placeholder="https://raw.githubusercontent.com/.../config.json" class="field-input" oninput="processForm()"></div>
+                        <div class="sm:col-span-2"><label class="field-label">Notas de lançamento</label><input type="text" id="inputReleaseNotes" placeholder="Novidades da versão..." class="field-input" oninput="processForm()"></div>
+                    </div>
+
+                    <div class="group-title">Aparência</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div><label class="field-label">LogoLink</label><input type="text" id="inputThemeUrl" placeholder="https://..." class="field-input" oninput="processForm()"></div>
+                        <div><label class="field-label">BackgroundLink</label><input type="text" id="inputConfigFundo" placeholder="https://..." class="field-input" oninput="processForm()"></div>
+                        <div class="sm:col-span-2"><label class="field-label">videoUrl (reprodução somente no modo nativo)</label><input type="text" id="inputVideoUrl" placeholder="https://.../video.mp4" class="field-input font-mono" oninput="processForm()"><p class="field-hint">O site apenas grava esta URL no Config. O aplicativo Yumeko reproduz o vídeo somente na interface nativa.</p></div>
+                    </div>
+
+                    <div class="group-title">Servidores</div>
+                    <div class="flex justify-between items-center mb-3 -mt-2">
+                        <span class="text-[11px] text-muted-2"><i class="fa-solid fa-arrows-up-down mr-1"></i>Arraste para reordenar</span>
+                        <button onclick="openServerModal(-1)" class="btn btn-soft btn-sm"><i class="fa-solid fa-plus"></i> Adicionar</button>
+                    </div>
+                    <div id="serversList" class="entity-list"></div>
+                    <div id="serversEmpty" class="empty-state"><i class="fa-solid fa-server"></i><span>Nenhum servidor configurado.</span></div>
+
+                    <div class="group-title">MultiServs (premium)</div>
+                    <div class="flex justify-between items-center mb-3 -mt-2">
+                        <span class="text-[11px] text-muted-2">Grupos de servidores multi-região</span>
+                        <button onclick="openMultiServModal(-1)" class="btn btn-soft btn-sm"><i class="fa-solid fa-plus"></i> Adicionar</button>
+                    </div>
+                    <div id="multiServsList" class="entity-list"></div>
+                    <div id="multiServsEmpty" class="empty-state"><i class="fa-solid fa-network-wired"></i><span>Nenhum grupo MultiServ configurado.</span></div>
+                </div>
+
+                <!-- THEME -->
+                <div id="section-theme" class="section-card hidden">
+                    <div class="flex items-center justify-between mb-1">
+                        <h2 class="font-display font-bold text-base text-ink">Ajustes de tema</h2>
+                        <span class="file-badge">config.json · Tema</span>
+                    </div>
+                    <div class="group-title">Identidade visual</div>
+                    <div class="space-y-4">
+                        <div class="img-preview-wrap"><label class="field-label">BackgroundLink / wallpaper URL</label><input type="text" id="inputWallpaper" placeholder="https://..." class="field-input" oninput="processForm(); updateFlagPreview('inputWallpaper','wallpaperPreview')"><img id="wallpaperPreview" class="img-preview" alt=""></div>
+                        <div class="img-preview-wrap"><label class="field-label">LogoLink</label><input type="text" id="inputLogo" placeholder="https://..." class="field-input" oninput="processForm(); updateFlagPreview('inputLogo','logoPreview')"><img id="logoPreview" class="img-preview" alt=""></div>
+                        <div class="img-preview-wrap"><label class="field-label">Banner image URL</label><input type="text" id="inputBanner" placeholder="https://..." class="field-input" oninput="processForm(); updateFlagPreview('inputBanner','bannerPreview')"><img id="bannerPreview" class="img-preview" alt=""></div>
+                    </div>
+                    <div class="group-title">Banner</div>
+                    <div class="space-y-4">
+                        <div><label class="field-label">Banner link</label><input type="text" id="inputBannerLink" placeholder="https://..." class="field-input" oninput="processForm()"></div>
+                        <div><label class="field-label">Mensagem do banner</label><input type="text" id="inputBannerMsg" placeholder="Aviso importante..." class="field-input" oninput="processForm()"></div>
+                    </div>
+                </div>
+
+                <!-- HTML CONVERTER -->
+                <div id="section-html" class="section-card hidden">
+                    <div class="flex items-center justify-between mb-1">
+                        <h2 class="font-display font-bold text-base text-ink">HTML converter</h2>
+                        <span class="file-badge">config.json · HTML</span>
+                    </div>
+                    <p class="text-xs mb-4 text-muted">Transforme designs HTML completos em blocos JSON para o Config externo do Yumeko 6G (@).</p>
+                    <div class="flex justify-between items-end mb-1.5">
+                        <label class="field-label" style="margin-bottom:0;">Código HTML raw</label>
+                        <div class="flex gap-3">
+                            <button onclick="clearHtml()" class="text-[11px] font-bold text-danger"><i class="fa-solid fa-eraser"></i> Limpar</button>
+                            <button onclick="document.getElementById('htmlFileInput').click()" class="text-[11px] font-bold text-signal"><i class="fa-solid fa-folder-open"></i> Importar arquivo</button>
+                        </div>
+                    </div>
+                    <textarea id="inputHtmlRaw" rows="9" class="field-input font-mono text-xs" placeholder="<!DOCTYPE html><html>..."></textarea>
+                    <input type="file" id="htmlFileInput" class="hidden" accept=".html,.txt">
+                    <div class="flex flex-wrap gap-2 my-4">
+                        <button onclick="convertHtml()" class="btn btn-primary"><i class="fa-solid fa-rotate"></i> Gerar JSON HTML (@)</button>
+                        <button onclick="previewHtml()" class="btn btn-secondary"><i class="fa-regular fa-eye"></i> Visualizar render</button>
+                    </div>
+                    <label class="field-label">Resultado JSON</label>
+                    <textarea id="outputHtmlJson" rows="5" readonly class="field-input font-mono text-xs"></textarea>
+                    <div class="grid grid-cols-2 gap-2 mt-4 pt-4 border-edge" style="border-top-width:1px;border-top-style:solid;">
+                        <button onclick="pullCurrentFileFromCloud()" class="btn btn-soft btn-sm"><i class="fa-solid fa-cloud-arrow-down"></i> Importar da nuvem</button>
+                        <button onclick="executeCloudDeploy()" class="btn btn-deploy btn-sm"><i class="fa-solid fa-cloud-arrow-up"></i> Commit &amp; Push</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COLUNA DIREITA -->
+            <div class="w-full lg:w-[38%] min-w-0 flex flex-col gap-4">
+                <div id="action-panel" class="section-card flex flex-col" style="min-height:480px;">
+                    <div class="flex justify-between items-center mb-3 pb-3 border-edge" style="border-bottom-width:1px;border-bottom-style:solid;">
+                        <h2 class="font-display font-bold text-[13px] uppercase tracking-wide flex items-center gap-2 text-ink"><i class="fa-solid fa-terminal text-signal"></i>Console JSON</h2>
+                        <button onclick="processForm()" class="icon-btn" title="Re-compilar"><i class="fa-solid fa-arrows-rotate"></i></button>
+                    </div>
+                    <textarea id="outputJson" class="field-input font-mono text-xs flex-grow whitespace-pre" style="min-height:260px;" spellcheck="false" oninput="saveDraftToLocalStorage()"></textarea>
+                    <div class="grid grid-cols-2 gap-2 mt-4">
+                        <button onclick="loadFromJson()" class="btn btn-secondary btn-sm"><i class="fa-solid fa-code-pull-request"></i> Ler console</button>
+                        <button onclick="document.getElementById('jsonFileInput').click()" class="btn btn-secondary btn-sm"><i class="fa-solid fa-folder-open"></i> Upload local</button>
+                        <input type="file" id="jsonFileInput" class="hidden" accept=".json">
+                        <button onclick="pullCurrentFileFromCloud()" class="btn btn-soft btn-sm"><i class="fa-solid fa-cloud-arrow-down"></i> Importar nuvem</button>
+                        <button onclick="downloadJson()" class="btn btn-secondary btn-sm"><i class="fa-solid fa-file-arrow-down"></i> Baixar local</button>
+                        <button onclick="executeCloudDeploy()" class="btn btn-deploy col-span-2 mt-1"><i class="fa-solid fa-cloud-arrow-up"></i> Commit &amp; Push para nuvem</button>
+                    </div>
+                </div>
+                <div id="html-preview-panel" class="section-card hidden flex flex-col" style="min-height:480px;">
+                    <div class="flex items-center gap-2 mb-3 pb-3 border-edge" style="border-bottom-width:1px;border-bottom-style:solid;">
+                        <span class="status-dot pulse"></span>
+                        <h2 class="font-display font-bold text-[13px] uppercase tracking-wide text-ink">Live preview</h2>
+                    </div>
+                    <iframe id="htmlPreviewFrame" class="w-full flex-grow rounded-xl bg-white border-edge" style="border-width:1px;border-style:solid;"></iframe>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL PERFIL/NUVEM -->
+    <div id="modal-profile" class="modal-overlay">
+        <div class="modal-sheet" style="max-width:24rem;">
+            <div class="modal-head bg-panel-2">
+                <div class="flex items-center gap-3 min-w-0">
+                    <img id="modal-user-avatar" src="" class="w-10 h-10 rounded-full object-cover flex-shrink-0 border-edge" style="border-width:2px;border-style:solid;">
+                    <div class="min-w-0">
+                        <div id="modal-user-name" class="font-bold text-sm truncate text-ink">Carregando...</div>
+                        <div id="modal-user-login" class="text-xs text-muted"></div>
+                        <div id="modal-user-repo" class="text-[10px] font-mono mt-0.5 text-signal"></div>
+                    </div>
+                </div>
+                <button onclick="closeModal('modal-profile')" class="icon-btn flex-shrink-0"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="modal-body space-y-4">
+                <div>
+                    <label class="field-label">Pasta do projeto</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="configFolder" placeholder="Ex: pasta/ ou vazio" class="field-input">
+                        <button onclick="updateCloudPath()" class="btn btn-secondary" style="padding:0 14px;"><i class="fa-solid fa-check"></i></button>
+                    </div>
+                </div>
+                <div class="border-edge" style="border-top-width:1px;border-top-style:solid;padding-top:14px;">
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="text-[11px] font-extrabold uppercase tracking-wider flex items-center gap-1.5 text-muted"><i class="fa-solid fa-folder-tree"></i> Arquivos na nuvem</h4>
+                        <button onclick="fetchCloudFiles()" class="btn btn-soft btn-sm" style="padding:5px 10px;"><i class="fa-solid fa-rotate-right"></i> Atualizar</button>
+                    </div>
+                    <div id="cloud-files-container" class="bg-panel-2 border-edge" style="border-width:1px;border-style:solid;border-radius:14px;padding:8px;min-height:80px;max-height:12rem;overflow-y:auto;">
+                        <div class="text-center text-xs py-4 text-muted-2"><i class="fa-solid fa-spinner fa-spin"></i> Carregando...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="clearCloudSession()" class="btn btn-danger-ghost btn-block"><i class="fa-solid fa-sign-out"></i> Desconectar GitHub</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL SERVIDOR -->
+    <div id="modal-server" class="modal-overlay">
+        <div class="modal-sheet">
+            <div class="modal-head">
+                <h3 class="font-display font-bold text-[15px] text-signal" id="serverModalTitle">Adicionar servidor</h3>
+                <button type="button" onclick="closeModal('modal-server')" class="icon-btn"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="srvIndex">
+
+                <div class="group-title">Geral</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div><label class="field-label">Nome do servidor</label><input type="text" id="srvName" class="field-input"></div>
+                    <div>
+                        <label class="field-label">Modo (info)</label>
+                        <select id="srvInfo" class="field-input" onchange="onModeChange()">
+                            <option value="DIRECT">DIRECT</option>
+                            <option value="PROXY">PROXY</option>
+                            <option value="SSL">SSL</option>
+                            <option value="TLSWS">TLSWS</option>
+                            <option value="WS">WS</option>
+                            <option value="WSS">WSS</option>
+                            <option value="XHTTP">XHTTP (SSH)</option>
+                            <option value="OPENVPN">OPENVPN</option>
+                            <option value="WIREGUARD">WIREGUARD</option>
+                            <option value="LIGHTWAY">LIGHTWAY</option>
+                            <option value="XRAY">XRAY</option>
+                        </select>
+                        <p class="field-hint">Troque o modo para revelar os campos SSH, XHTTP ou XRay.</p>
+                    </div>
+                    <div><label class="field-label">Sigla país (flag)</label><input type="text" id="srvFlag" placeholder="Ex: br, us" class="field-input"></div>
+                    <div class="flag-input-wrap"><label class="field-label">URL ícone (FlagUrl)</label><input type="text" id="srvFlagUrl" class="field-input" oninput="updateFlagPreview('srvFlagUrl','srvFlagPreview')"><img id="srvFlagPreview" class="flag-preview" alt=""></div>
+                    <div class="sm:col-span-2"><label class="field-label">CheckUser URL</label><input type="text" id="srvCheckUser" class="field-input"></div>
+                    <label class="toggle-row sm:col-span-2"><input type="checkbox" id="srvPremium"><span class="toggle-track"><span class="toggle-thumb"></span></span><span class="toggle-label">Servidor Premium / VIP</span></label>
+                </div>
+
+                <!-- SSH -->
+                <div id="ssh-section" class="mt-2">
+                    <div class="group-title"><i class="fa-solid fa-terminal"></i> SSH</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div><label class="field-label">Host (ServerHost)</label><input type="text" id="srvHost" class="field-input font-mono"></div>
+                        <div><label class="field-label">Porta SSH (ServerPort)</label><input type="text" id="srvPort" placeholder="22" class="field-input font-mono"></div>
+                        <div><label class="field-label">Porta SSL (SSLPort)</label><input type="text" id="srvSSLPort" placeholder="443" class="field-input font-mono"></div>
+                        <div><label class="field-label">Usuário SSH (USER)</label><input type="text" id="srvUser" class="field-input"></div>
+                        <div><label class="field-label">Senha SSH (PASS)</label><input type="text" id="srvPass" class="field-input"></div>
+                        <div><label class="field-label">SNI</label><input type="text" id="srvSni" class="field-input"></div>
+                        <div class="sm:col-span-2"><label class="field-label">Payload</label><textarea id="srvPayload" rows="2" class="field-input font-mono text-xs"></textarea></div>
+                    </div>
+                    <details class="adv mt-3">
+                        <summary><i class="fa-solid fa-chevron-right adv-chevron"></i> Proxy (opcional)</summary>
+                        <div class="adv-body grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div><label class="field-label">Proxy host</label><input type="text" id="srvProxyHost" class="field-input font-mono"></div>
+                            <div><label class="field-label">Proxy port</label><input type="text" id="srvProxyPort" placeholder="80" class="field-input font-mono"></div>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- XHTTP -->
+                <div id="xhttp-section" class="hidden mt-2">
+                    <div class="group-title"><i class="fa-solid fa-globe"></i> Transporte SSH-XHTTP</div>
+                    <div class="callout callout-info mb-3"><i class="fa-solid fa-circle-info mr-1"></i> XHTTP é o transporte do SSH (não usa core Xray). Preencha o endpoint HTTP/2 + SNI/Host/Path — USER/PASS continuam sendo credenciais SSH.</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div><label class="field-label">xhttpServer (IP/host endpoint)</label><input type="text" id="srvXhttpServer" placeholder="179.191.168.49" class="field-input font-mono"></div>
+                        <div><label class="field-label">xhttpPort</label><input type="text" id="srvXhttpPort" placeholder="443" class="field-input font-mono"></div>
+                        <div><label class="field-label">xhttpHost (header host / CDN)</label><input type="text" id="srvXhttpHost" placeholder="br5.azion.app" class="field-input font-mono"></div>
+                        <div><label class="field-label">xhttpSni (SNI TLS)</label><input type="text" id="srvXhttpSni" placeholder="app.p.com.br" class="field-input font-mono"></div>
+                        <div><label class="field-label">xhttpPath</label><input type="text" id="srvXhttpPath" placeholder="/ssh" class="field-input font-mono"></div>
+                        <label class="toggle-row" style="align-self:end;">
+                            <input type="checkbox" id="srvXhttpTls" checked>
+                            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                            <span class="toggle-label">xhttpTls (HTTPS)</span>
+                        </label>
+                        <div><label class="field-label">SSH host destino (opcional)</label><input type="text" id="srvXhttpSshHost" placeholder="mesmo do xhttpServer se vazio" class="field-input font-mono"></div>
+                        <div><label class="field-label">SSH port destino</label><input type="text" id="srvXhttpSshPort" placeholder="22" class="field-input font-mono"></div>
+                        <div><label class="field-label">Usuário SSH (USER)</label><input type="text" id="srvXhttpUser" class="field-input"></div>
+                        <div><label class="field-label">Senha SSH (PASS)</label><input type="text" id="srvXhttpPass" class="field-input"></div>
+                    </div>
+                </div>
+
+                <!-- OPENVPN -->
+                <div id="openvpn-section" class="hidden mt-2">
+                    <div class="group-title"><i class="fa-solid fa-shield-halved"></i> OpenVPN / OpenConnect</div>
+                    <div class="callout callout-info mb-3"><i class="fa-solid fa-circle-info mr-1"></i> O APK Full/Lite OpenVPN lê estes campos pelo Config.json. Você pode colar o perfil `.ovpn` completo ou preencher os campos estruturados.</div>
+                    <div class="flex flex-wrap gap-2 mb-3">
+                        <button type="button" onclick="importOpenVpnFile()" class="btn btn-secondary btn-sm"><i class="fa-solid fa-file-import"></i> Importar .ovpn</button>
+                        <input type="file" id="srvOpenvpnFile" class="hidden" accept=".ovpn,.conf,.txt" onchange="readOpenVpnFile(this)">
+                        <button type="button" onclick="clearOpenVpnProfile()" class="btn btn-danger-ghost btn-sm"><i class="fa-solid fa-eraser"></i> Limpar perfil</button>
+                    </div>
+                    <div class="space-y-4">
+                        <div><label class="field-label">Perfil `.ovpn` completo (opcional)</label><textarea id="srvOpenvpnProfile" rows="7" placeholder="client\\ndev tun\\nproto tcp-client\\nremote ...\\n<ca>...</ca>" class="field-input font-mono text-xs"></textarea><p class="field-hint">Se preenchido, ele tem prioridade sobre os campos estruturados abaixo.</p></div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div><label class="field-label">Servidor OpenVPN</label><input type="text" id="srvOpenvpnServer" placeholder="vpn.example.com" class="field-input font-mono"></div>
+                            <div><label class="field-label">Porta</label><input type="text" id="srvOpenvpnPort" placeholder="443" class="field-input font-mono"></div>
+                            <div><label class="field-label">Protocolo</label><select id="srvOpenvpnProto" class="field-input"><option value="tcp-client">TCP</option><option value="udp">UDP</option></select></div>
+                            <div><label class="field-label">Cifra</label><input type="text" id="srvOpenvpnCipher" placeholder="AES-256-GCM:CHACHA20-POLY1305" class="field-input font-mono"></div>
+                            <div><label class="field-label">Usuário</label><input type="text" id="srvOpenvpnUser" class="field-input"></div>
+                            <div><label class="field-label">Senha</label><input type="password" id="srvOpenvpnPass" class="field-input"></div>
+                            <div><label class="field-label">Auth digest</label><input type="text" id="srvOpenvpnAuth" placeholder="SHA256" class="field-input font-mono"></div>
+                            <div><label class="field-label">DNS secundário</label><input type="text" id="srvOpenvpnDns2" placeholder="8.8.8.8" class="field-input font-mono"></div>
+                            <div><label class="field-label">DNS primário</label><input type="text" id="srvOpenvpnDns" placeholder="1.1.1.1" class="field-input font-mono"></div>
+                            <label class="toggle-row" style="align-self:end;"><input type="checkbox" id="srvOpenvpnIpv6"><span class="toggle-track"><span class="toggle-thumb"></span></span><span class="toggle-label">Ativar IPv6</span></label>
+                        </div>
+                        <details class="adv">
+                            <summary><i class="fa-solid fa-chevron-right adv-chevron"></i> Certificados e chaves PEM</summary>
+                            <div class="adv-body space-y-3">
+                                <div><label class="field-label">CA (`ca`)</label><textarea id="srvOpenvpnCa" rows="3" placeholder="-----BEGIN CERTIFICATE-----" class="field-input font-mono text-xs"></textarea></div>
+                                <div><label class="field-label">Certificado do cliente (`cert`)</label><textarea id="srvOpenvpnCert" rows="3" placeholder="-----BEGIN CERTIFICATE-----" class="field-input font-mono text-xs"></textarea></div>
+                                <div><label class="field-label">Chave privada (`key`)</label><textarea id="srvOpenvpnKey" rows="3" placeholder="-----BEGIN PRIVATE KEY-----" class="field-input font-mono text-xs"></textarea></div>
+                                <div><label class="field-label">TLS Crypt (`tls_crypt`)</label><textarea id="srvOpenvpnTlsCrypt" rows="3" placeholder="-----BEGIN OpenVPN Static key V1-----" class="field-input font-mono text-xs"></textarea></div>
+                                <div><label class="field-label">TLS Auth (`tls_auth`, opcional)</label><textarea id="srvOpenvpnTlsAuth" rows="3" class="field-input font-mono text-xs"></textarea></div>
+                                <div><label class="field-label">CRL (`crl`, opcional)</label><textarea id="srvOpenvpnCrl" rows="3" class="field-input font-mono text-xs"></textarea></div>
+                            </div>
+                        </details>
+                        <details class="adv">
+                            <summary><i class="fa-solid fa-chevron-right adv-chevron"></i> WSS / relay HTTP opcional</summary>
+                            <div class="adv-body grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <label class="toggle-row sm:col-span-2"><input type="checkbox" id="srvOpenvpnWss" onchange="onOpenVpnWssChange()"><span class="toggle-track"><span class="toggle-thumb"></span></span><span class="toggle-label">Usar OpenVPN sobre WSS</span></label>
+                                <div><label class="field-label">WSS host / bughost</label><input type="text" id="srvOpenvpnWssHost" placeholder="cdn.example.com" class="field-input font-mono"></div>
+                                <div><label class="field-label">WSS porta</label><input type="text" id="srvOpenvpnWssPort" placeholder="443" class="field-input font-mono"></div>
+                                <div class="sm:col-span-2"><label class="field-label">Payload</label><textarea id="srvOpenvpnWssPayload" rows="3" class="field-input font-mono text-xs" placeholder="GET / HTTP/1.1[crlf]Host: [host][crlf]Upgrade: websocket[crlf][crlf]"></textarea></div>
+                                <label class="toggle-row"><input type="checkbox" id="srvOpenvpnWssTls" checked><span class="toggle-track"><span class="toggle-thumb"></span></span><span class="toggle-label">TLS no relay</span></label>
+                                <div><label class="field-label">Porta local</label><input type="text" id="srvOpenvpnWssLocalPort" placeholder="9393" class="field-input font-mono"></div>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
+                <!-- WIREGUARD -->
+                <div id="wireguard-section" class="hidden mt-2">
+                    <div class="group-title"><i class="fa-solid fa-link"></i> WireGuard</div>
+                    <div class="callout callout-info mb-3"><i class="fa-solid fa-circle-info mr-1"></i> O APK usa a biblioteca oficial WireGuard. Cole um perfil completo ou preencha a interface e o peer; as chaves ficam no Config JSON.</div>
+                    <div class="space-y-4">
+                        <div><label class="field-label">Config WireGuard completo (opcional)</label><textarea id="srvWireguardConfig" rows="6" placeholder="[Interface]\nPrivateKey = ...\nAddress = 10.0.0.2/32\n\n[Peer]\nPublicKey = ...\nEndpoint = vpn.example.com:51820\nAllowedIPs = 0.0.0.0/0" class="field-input font-mono text-xs"></textarea></div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div><label class="field-label">PrivateKey</label><input type="password" id="srvWireguardPrivateKey" class="field-input font-mono"></div>
+                            <div><label class="field-label">Address</label><input type="text" id="srvWireguardAddress" placeholder="10.0.0.2/32" class="field-input font-mono"></div>
+                            <div><label class="field-label">DNS</label><input type="text" id="srvWireguardDns" placeholder="1.1.1.1" class="field-input font-mono"></div>
+                            <div><label class="field-label">ListenPort / MTU</label><div class="flex gap-2"><input type="text" id="srvWireguardListenPort" placeholder="51820" class="field-input font-mono"><input type="text" id="srvWireguardMtu" placeholder="1420" class="field-input font-mono"></div></div>
+                            <div><label class="field-label">Peer PublicKey</label><input type="text" id="srvWireguardPeerPublicKey" class="field-input font-mono"></div>
+                            <div><label class="field-label">PresharedKey</label><input type="password" id="srvWireguardPresharedKey" class="field-input font-mono"></div>
+                            <div><label class="field-label">Endpoint</label><input type="text" id="srvWireguardEndpoint" placeholder="vpn.example.com:51820" class="field-input font-mono"></div>
+                            <div><label class="field-label">AllowedIPs</label><input type="text" id="srvWireguardAllowedIps" value="0.0.0.0/0, ::/0" class="field-input font-mono"></div>
+                            <div><label class="field-label">PersistentKeepalive</label><input type="text" id="srvWireguardKeepalive" placeholder="25" class="field-input font-mono"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LIGHTWAY -->
+                <div id="lightway-section" class="hidden mt-2">
+                    <div class="group-title"><i class="fa-solid fa-route"></i> Lightway Rust</div>
+                    <div class="callout callout-info mb-3"><i class="fa-solid fa-circle-info mr-1"></i> O core Android usa YAML internamente. Cole YAML completo ou preencha o endpoint, autenticação e CA PEM.</div>
+                    <div class="space-y-4">
+                        <div><label class="field-label">Config Lightway YAML completo (opcional)</label><textarea id="srvLightwayConfig" rows="6" placeholder="server: vpn.example.com:443\nmode: tcp\nserver_dn: vpn.example.com\nca_cert: |\n  -----BEGIN CERTIFICATE-----" class="field-input font-mono text-xs"></textarea></div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div><label class="field-label">Servidor</label><input type="text" id="srvLightwayServer" placeholder="vpn.example.com" class="field-input font-mono"></div>
+                            <div><label class="field-label">Porta</label><input type="text" id="srvLightwayPort" placeholder="443" class="field-input font-mono"></div>
+                            <div><label class="field-label">Modo</label><select id="srvLightwayMode" class="field-input"><option value="tcp">TCP</option><option value="udp">UDP</option></select></div>
+                            <div><label class="field-label">Server DN / SNI</label><input type="text" id="srvLightwayServerDn" class="field-input font-mono"></div>
+                            <div><label class="field-label">Cipher</label><input type="text" id="srvLightwayCipher" value="aes256" class="field-input font-mono"></div>
+                            <div><label class="field-label">Token (ou User/Password)</label><input type="text" id="srvLightwayToken" class="field-input"></div>
+                            <div><label class="field-label">User</label><input type="text" id="srvLightwayUser" class="field-input"></div>
+                            <div><label class="field-label">Password</label><input type="password" id="srvLightwayPassword" class="field-input"></div>
+                            <div class="sm:col-span-2"><label class="field-label">CA Cert PEM</label><textarea id="srvLightwayCa" rows="4" placeholder="-----BEGIN CERTIFICATE-----" class="field-input font-mono text-xs"></textarea></div>
+                            <div><label class="field-label">TUN local IP</label><input type="text" id="srvLightwayTunLocal" value="100.64.0.6" class="field-input font-mono"></div>
+                            <div><label class="field-label">TUN peer IP</label><input type="text" id="srvLightwayTunPeer" value="100.64.0.5" class="field-input font-mono"></div>
+                            <div><label class="field-label">TUN DNS IP</label><input type="text" id="srvLightwayTunDns" value="100.64.0.1" class="field-input font-mono"></div>
+                            <div><label class="field-label">Outside MTU</label><input type="text" id="srvLightwayMtu" placeholder="1500" class="field-input font-mono"></div>
+                            <div><label class="field-label">Keepalive interval</label><input type="text" id="srvLightwayKeepalive" placeholder="10s" class="field-input font-mono"></div>
+                            <div><label class="field-label">Keepalive timeout</label><input type="text" id="srvLightwayTimeout" placeholder="30s" class="field-input font-mono"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- XRAY -->
+                <div id="xray-section" class="hidden mt-2">
+                    <div class="group-title"><i class="fa-solid fa-bolt"></i> XRay</div>
+                    <div class="callout callout-info mb-3">
+                        <label class="field-label text-signal" style="margin-bottom:6px;">Colar link vmess:// vless:// (ou UUID)</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="srvXrayImportLink" placeholder="vmess://... ou vless://... ou UUID" class="field-input font-mono bg-panel">
+                            <button onclick="importBase64ToFields()" class="btn btn-primary btn-sm" style="flex-shrink:0;"><i class="fa-solid fa-qrcode"></i> Importar</button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="field-label">Protocolo</label>
+                            <select id="srvXrayProtocol" class="field-input">
+                                <option value="vmess">VMess</option><option value="vless">VLess</option><option value="trojan">Trojan</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="field-label">Network</label>
+                            <select id="srvXrayNetwork" class="field-input" onchange="onXrayNetworkChange()">
+                                <option value="tcp">TCP</option><option value="ws">WebSocket (WS)</option>                                <option value="grpc">gRPC</option><option value="xhttp">XHTTP</option><option value="h2">HTTP/2</option><option value="httpupgrade">HTTP Upgrade</option>
+                            </select>
+                        </div>
+                        <div><label class="field-label">Address</label><input type="text" id="srvXrayAddress" placeholder="servidor.example.com" class="field-input font-mono"></div>
+                        <div><label class="field-label">Port</label><input type="text" id="srvXrayPort" placeholder="443" class="field-input font-mono"></div>
+                        <div class="sm:col-span-2"><label class="field-label">UUID / Password</label><input type="text" id="srvXrayUuid" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" class="field-input font-mono"></div>
+                        <div><label class="field-label">Path</label><input type="text" id="srvXrayPath" placeholder="/ws" class="field-input font-mono"></div>
+                        <div id="xrayModeWrap"><label class="field-label">Mode</label><select id="srvXrayMode" class="field-input"><option value="auto">Auto</option><option value="manual">Manual</option></select></div>
+                        <div><label class="field-label">SNI</label><input type="text" id="srvXraySni" placeholder="server.name.com" class="field-input font-mono"></div>
+                        <div id="xrayXhttpHostWrap"><label class="field-label">Host / XHTTP host</label><input type="text" id="srvXrayXhttpHost" placeholder="Host header" class="field-input font-mono"></div>
+                        <div>
+                            <label class="field-label">Security (TLS)</label>
+                            <select id="srvXraySecurity" class="field-input" onchange="onXraySecurityChange()"><option value="none">None</option><option value="tls">TLS</option><option value="reality">Reality</option></select>
+                        </div>
+                        <div class="flex items-end">
+                            <label class="toggle-row" title="Ative somente quando o perfil exigir compatibilidade com certificado/SNI do outro app.">
+                                <input type="checkbox" id="srvXrayAllowInsecure">
+                                <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                <span class="toggle-label">TLS legado (v2rTlsAllowInsecure; não vai ao core)</span>
+                            </label>
+                        </div>
+                        <div class="sm:col-span-2"><label class="field-label">Certificado pinado SHA-256</label><input type="text" id="srvXrayPinnedCert" placeholder="hexadecimal, vários separados por vírgula" class="field-input font-mono"><p class="field-hint">O builder envia este valor como string em pinnedPeerCertSha256. Não use array.</p></div>
+                        <div><label class="field-label">Fingerprint</label><input type="text" id="srvXrayFingerprint" placeholder="chrome" class="field-input"></div>
+                        <div id="xrayFlowWrap"><label class="field-label">Flow</label><input type="text" id="srvXrayFlow" placeholder="xtls-rprx-vision" class="field-input font-mono"></div>
+                        <div id="xrayPbkWrap" class="hidden"><label class="field-label">Public key (pbk)</label><input type="text" id="srvXrayPbk" placeholder="Chave pública" class="field-input font-mono"></div>
+                        <div id="xraySidWrap" class="hidden"><label class="field-label">Short ID (sid)</label><input type="text" id="srvXraySid" placeholder="abcdef" class="field-input font-mono"></div>
+                    </div>
+
+                    <details class="adv mt-4">
+                        <summary><i class="fa-solid fa-chevron-right adv-chevron"></i> Opções avançadas — Mux, FakeDNS, fragmentação</summary>
+                        <div class="adv-body">
+                            <div class="grid grid-cols-2 gap-3 mb-3">
+                                <label class="toggle-row"><input type="checkbox" id="srvXrayMux"><span class="toggle-track"><span class="toggle-thumb"></span></span><span class="toggle-label">Mux</span></label>
+                                <label class="toggle-row"><input type="checkbox" id="srvXrayFakeDns"><span class="toggle-track"><span class="toggle-thumb"></span></span><span class="toggle-label">Fake DNS</span></label>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div><label class="field-label">Fragment packets</label><input type="text" id="srvXrayFragmentPackets" placeholder="tlshello" class="field-input font-mono"></div>
+                                <div><label class="field-label">Fragment length</label><input type="text" id="srvXrayFragmentLength" placeholder="100-200" class="field-input font-mono"></div>
+                                <div><label class="field-label">Fragment interval</label><input type="text" id="srvXrayFragmentInterval" placeholder="10-30" class="field-input font-mono"></div>
+                            </div>
+                        </div>
+                    </details>
+
+                    <div class="mt-4">
+                        <label class="field-label">JSON XRay completo (opcional — sobrepõe campos acima)</label>
+                        <textarea id="srvXrayJson" rows="3" placeholder='{"log":{"loglevel":"warning"},...}' class="field-input font-mono text-xs"></textarea>
+                        <p class="field-hint">Se preenchido, este JSON é usado diretamente no campo "xray" do servidor.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closeModal('modal-server')" class="btn btn-secondary">Cancelar</button>
+                <button type="button" onclick="saveServer()" class="btn btn-primary">Salvar servidor</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL NETWORK / PAYLOAD -->
+    <div id="modal-multiserv" class="modal-overlay">
+        <div class="modal-sheet" style="max-width:36rem;">
+            <div class="modal-head">
+                <h3 class="font-display font-bold text-[15px] text-signal" id="multiServModalTitle">Adicionar Network/Payload</h3>
+                <button type="button" onclick="closeModal('modal-multiserv')" class="icon-btn"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="msIndex">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div><label class="field-label">Nome da payload</label><input type="text" id="msName" class="field-input"></div>
+                    <div><label class="field-label">Info / tipo</label><input type="text" id="msType" placeholder="Ex: Proxy, XHTTP, Ssl" class="field-input"></div>
+                    <div class="flag-input-wrap"><label class="field-label">FLAG ou ícone</label><input type="text" id="msFlagUrl" class="field-input" oninput="updateFlagPreview('msFlagUrl','msFlagPreview')"><img id="msFlagPreview" class="flag-preview" alt=""></div>
+                    <div><label class="field-label">Categoria</label><input type="text" id="msCategoria" placeholder="01 Ssh / 02 Xray" class="field-input"></div>
+                    <div class="sm:col-span-2"><label class="field-label">Payload</label><textarea id="msPayload" rows="4" class="field-input font-mono text-xs"></textarea></div>
+                    <div><label class="field-label">SNI</label><input type="text" id="msSni" class="field-input font-mono"></div>
+                    <div><label class="field-label">TlsIP</label><input type="text" id="msTlsIP" class="field-input font-mono"></div>
+                    <div><label class="field-label">ProxyIP</label><input type="text" id="msProxyIP" class="field-input font-mono"></div>
+                    <div><label class="field-label">ProxyPort</label><input type="text" id="msProxyPort" class="field-input font-mono"></div>
+                    <div class="sm:col-span-2"><label class="field-label">CheckUser opcional</label><input type="text" id="msCheckUser" class="field-input font-mono"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closeModal('modal-multiserv')" class="btn btn-secondary">Cancelar</button>
+                <button type="button" onclick="saveMultiServ()" class="btn btn-primary">Salvar Network</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script>
+    // ── DARK MODE ─────────────────────────────────────────────────────────────
+    function toggleDarkMode() {
+        const html = document.documentElement;
+        html.classList.toggle('dark');
+        localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
+        updateThemeIcon();
+    }
+    function updateThemeIcon() {
+        const isDark = document.documentElement.classList.contains('dark');
+        const icon = document.getElementById('theme-toggle-icon');
+        if (icon) icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    }
+    document.addEventListener('DOMContentLoaded', updateThemeIcon);
+
+    // ── ESTADO ────────────────────────────────────────────────────────────────
+    let currentTab      = 'config';
+    let serversArray    = [];
+    let multiServsArray = [];
+    let githubConfig    = { token: "", owner: "", repo: "", folder: "" };
+    let yumekoConfigDocument = {};
+    let dragSrcIndex    = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadCloudSession();
+        setupFileListeners();
+        processForm();
+    });
+
+    // ── LOGIN / CLOUD ─────────────────────────────────────────────────────────
+    function loadCloudSession() {
+        const saved = localStorage.getItem('yumeko_github_config');
+        if (saved) {
+            githubConfig = JSON.parse(saved);
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('configFolder').value = githubConfig.folder || "";
+            loadState();
+            fetchGitHubProfile();
+            setTimeout(() => { autoLoadCurrentTabFromCloud(); }, 500);
+        } else {
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+    }
+
+    function saveCloudConnection() {
+        const token = document.getElementById('loginToken').value.trim();
+        const owner = document.getElementById('loginOwner').value.trim();
+        const repo  = document.getElementById('loginRepo').value.trim();
+        let folder  = document.getElementById('loginFolder').value.trim();
+        if (!token || !owner || !repo) { showToast("Preencha todos os campos!", "error"); return; }
+        if (folder && !folder.endsWith('/')) folder += '/';
+        githubConfig = { token, owner, repo, folder };
+        localStorage.setItem('yumeko_github_config', JSON.stringify(githubConfig));
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('configFolder').value = folder;
+        showToast("Conexão estabelecida!", "success");
+        fetchGitHubProfile();
+        autoLoadCurrentTabFromCloud();
+        processForm();
+    }
+
+    function clearCloudSession() {
+        if (confirm("Deseja se desconectar? Suas alterações locais não serão perdidas.")) {
+            localStorage.removeItem('yumeko_github_config'); location.reload();
+        }
+    }
+
+    function updateCloudPath() {
+        let folder = document.getElementById('configFolder').value.trim();
+        if (folder && !folder.endsWith('/')) folder += '/';
+        githubConfig.folder = folder;
+        localStorage.setItem('yumeko_github_config', JSON.stringify(githubConfig));
+        showToast("Pasta atualizada!", "success");
+        fetchCloudFiles();
+        autoLoadCurrentTabFromCloud();
+    }
+
+    // ── AUTO-CARREGAMENTO POR ABA ─────────────────────────────────────────────
+    async function autoLoadCurrentTabFromCloud() {
+        if (!githubConfig.token) return;
+        const filenameMap = { 'config': 'config.json', 'theme': 'config.json', 'html': 'HTML.json' };
+        const filename = filenameMap[currentTab] || 'config.json';
+        try {
+            const res = await fetch(
+                `https://api.github.com/repos/${githubConfig.owner}/${githubConfig.repo}/contents/${githubConfig.folder||""}${filename}`,
+                { headers: getGitHeaders() }
+            );
+            if (res.ok) {
+                const data = await res.json();
+                const decoded = decodeURIComponent(escape(atob(data.content.replace(/\n/g,''))));
+                if (currentTab === 'html') document.getElementById('outputHtmlJson').value = decoded;
+                else document.getElementById('outputJson').value = decoded;
+                loadFromJson();
+                showToast(`${filename} carregado automaticamente da nuvem!`, "success");
+            } else if (res.status === 404) {
+                console.log(`${filename} não encontrado na nuvem. Usando dados locais.`);
+            }
+        } catch(e) { console.log("Erro ao carregar da nuvem:", e.message); }
+    }
+
+    // ── GITHUB API ────────────────────────────────────────────────────────────
+    const getGitHeaders = () => ({ 'Authorization': `Bearer ${githubConfig.token}`, 'Accept': 'application/vnd.github+json' });
+
+    async function fetchGitHubProfile() {
+        if (!githubConfig.token) return;
+        try {
+            const res = await fetch('https://api.github.com/user', { headers: getGitHeaders() });
+            if (res.ok) {
+                const p = await res.json();
+                document.getElementById('user-name').innerText      = p.name || p.login;
+                document.getElementById('user-repo-name').innerText = `${githubConfig.owner}/${githubConfig.repo}`;
+                document.getElementById('user-avatar').src          = p.avatar_url;
+                document.getElementById('modal-user-name').innerText  = p.name || p.login;
+                document.getElementById('modal-user-login').innerText = `@${p.login}`;
+                document.getElementById('modal-user-repo').innerText  = `${githubConfig.owner}/${githubConfig.repo}`;
+                document.getElementById('modal-user-avatar').src      = p.avatar_url;
+            }
+        } catch(e) { document.getElementById('user-name').innerText = "Sem Conexão"; }
+    }
+
+    async function fetchCloudFiles() {
+        if (!githubConfig.token) return;
+        const container = document.getElementById('cloud-files-container');
+        container.innerHTML = '<div class="text-center text-xs py-4 text-muted-2"><i class="fa-solid fa-spinner fa-spin"></i> Lendo repositório...</div>';
+        const url = `https://api.github.com/repos/${githubConfig.owner}/${githubConfig.repo}/contents/${githubConfig.folder || ""}`;
+        try {
+            const res = await fetch(url, { headers: getGitHeaders() });
+            if (res.status === 404) { container.innerHTML = '<div class="text-center text-xs py-4 text-muted-2">Pasta vazia ou inexistente.</div>'; return; }
+            if (!res.ok) throw new Error("Erro de permissão");
+            let files = await res.json();
+            if (!Array.isArray(files)) files = [files];
+            container.innerHTML = '';
+            let count = 0;
+            files.forEach(f => {
+                if (f.type === 'file' && f.name.endsWith('.json')) {
+                    count++;
+                    const isCurrent = f.name === (currentTab==='config' || currentTab==='theme' ? 'config.json' : 'HTML.json');
+                    container.innerHTML += `
+                        <div class="cloud-file-row">
+                            <div class="cloud-file-info">
+                                <i class="fa-brands fa-js"></i>
+                                <div class="min-w-0"><span class="cloud-file-name ${isCurrent?'is-current':''}">${f.name}</span>
+                                <span class="cloud-file-size">${(f.size/1024).toFixed(1)} kb</span></div>
+                            </div>
+                            <div class="cloud-file-actions">
+                                <button onclick="pullSpecificFile('${f.name}')" class="icon-btn icon-btn-edit" title="Carregar"><i class="fa-solid fa-cloud-arrow-down"></i></button>
+                                <button onclick="deleteCloudFile('${f.path}','${f.sha}')" class="icon-btn icon-btn-danger" title="Excluir"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        </div>`;
+                }
+            });
+            if (count === 0) container.innerHTML = '<div class="text-center text-xs py-4 text-muted-2">Nenhum .json encontrado.</div>';
+        } catch(e) { container.innerHTML = `<div class="text-center text-xs py-4 text-danger"><i class="fa-solid fa-triangle-exclamation"></i> ${e.message}</div>`; }
+    }
+
+    async function deleteCloudFile(path, sha) {
+        if (!confirm(`Excluir permanentemente [${path}]?`)) return;
+        try {
+            const res = await fetch(`https://api.github.com/repos/${githubConfig.owner}/${githubConfig.repo}/contents/${path}`, {
+                method: 'DELETE', headers: { ...getGitHeaders(), 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: `Yumeko 6G: Removendo ${path}`, sha })
+            });
+            if (res.ok) { showToast("Arquivo removido!", "success"); fetchCloudFiles(); }
+            else { const e = await res.json(); showToast(`Erro: ${e.message}`, "error"); }
+        } catch(e) { showToast("Erro de conexão.", "error"); }
+    }
+
+    async function pullCurrentFileFromCloud() {
+        let filename = currentTab==='html' ? 'HTML.json' : 'config.json';
+        await pullSpecificFile(filename);
+    }
+
+    async function pullSpecificFile(filename) {
+        if (!githubConfig.token) return showToast("GitHub não configurado.", "error");
+        showToast(`Sincronizando ${filename}...`, "success");
+        try {
+            const res = await fetch(`https://api.github.com/repos/${githubConfig.owner}/${githubConfig.repo}/contents/${githubConfig.folder||""}${filename}`, { headers: getGitHeaders() });
+            if (!res.ok) throw new Error(res.status === 404 ? "Arquivo não existe na nuvem." : "Erro ao baixar.");
+            const data = await res.json();
+            const decoded = decodeURIComponent(escape(atob(data.content.replace(/\n/g,''))));
+            if (filename === 'HTML.json') { switchTab('html'); document.getElementById('outputHtmlJson').value = decoded; }
+            else { document.getElementById('outputJson').value = decoded; }
+            loadFromJson();
+            showToast(`${filename} importado!`, "success");
+            closeModal('modal-profile');
+        } catch(e) { showToast(e.message, "error"); }
+    }
+
+    // ── FORM / JSON ───────────────────────────────────────────────────────────
+    function processForm() {
+        if (currentTab === 'html') return;
+        const jsonObj = sanitizeLegacyAllowInsecure(JSON.parse(JSON.stringify(yumekoConfigDocument || {})));
+        jsonObj.Version = document.getElementById('inputVersion').value;
+        jsonObj.layout_url = document.getElementById('inputHtmlUiUrl').value.trim();
+        jsonObj.UrlUpdate = document.getElementById('inputUpdateUrl').value.trim();
+        jsonObj.LogoLink = document.getElementById('inputThemeUrl').value.trim();
+        jsonObj.BackgroundLink = document.getElementById('inputConfigFundo').value.trim();
+        jsonObj.videoUrl = document.getElementById('inputVideoUrl').value.trim();
+        jsonObj.Servers = sanitizeLegacyAllowInsecure(serversArray);
+        jsonObj.Networks = sanitizeLegacyAllowInsecure(multiServsArray);
+        jsonObj.ReleaseNotes = document.getElementById('inputReleaseNotes').value;
+        if (currentTab === 'theme') {
+            jsonObj.BackgroundLink = document.getElementById('inputWallpaper').value.trim() || jsonObj.BackgroundLink;
+            jsonObj.LogoLink = document.getElementById('inputLogo').value.trim() || jsonObj.LogoLink;
+            jsonObj.Banner = document.getElementById('inputBanner').value;
+            jsonObj.BannerLink = document.getElementById('inputBannerLink').value;
+            jsonObj.BannerMsg = document.getElementById('inputBannerMsg').value;
+        }
+        yumekoConfigDocument = jsonObj;
+        document.getElementById('outputJson').value = JSON.stringify(jsonObj, null, 4);
+        saveDraftToLocalStorage();
+    }
+
+    function loadFromJson() {
+        try {
+            const data = currentTab === 'html'
+                ? document.getElementById('outputHtmlJson').value.trim()
+                : document.getElementById('outputJson').value.trim();
+            if (!data) return;
+            const json = JSON.parse(data);
+
+            if (json.UrlUpdate !== undefined || json.layout_url !== undefined || json.Servers !== undefined || json.Networks !== undefined || json.UpdateUrl !== undefined) {
+                if (currentTab !== 'config') switchTab('config');
+                yumekoConfigDocument = Object.assign({}, json);
+                document.getElementById('inputVersion').value      = json.Version || "";
+                document.getElementById('checkAds').checked        = (json.Ads && String(json.Ads).toLowerCase() === 'on');
+                document.getElementById('checkHybridMode').checked = (json.ServerEditMode && String(json.ServerEditMode).toLowerCase() === 'hybrid');
+                document.getElementById('inputUIMode').value       = json.UIMode || "nativo";
+                document.getElementById('inputNativeAnchor').value = json.NativeAnchor || "";
+                document.getElementById('inputHtmlUiUrl').value    = json.layout_url || json.HtmlUIUrl || "";
+                document.getElementById('inputUpdateUrl').value    = json.UrlUpdate || json.UpdateUrl || "";
+                document.getElementById('inputReleaseNotes').value = json.ReleaseNotes || "";
+                document.getElementById('inputThemeUrl').value     = json.LogoLink || json.Tema || "";
+                document.getElementById('inputConfigFundo').value  = json.BackgroundLink || json.Fundo || "";
+                document.getElementById('inputVideoUrl').value     = json.videoUrl || json.VideoUrl || "";
+                serversArray    = Array.isArray(json.Servers) ? json.Servers : [];
+                multiServsArray = Array.isArray(json.Networks) ? json.Networks : (Array.isArray(json.MultiServs) ? json.MultiServs : []);
+                renderServers(); renderMultiServs();
+            } else if (json.BackgroundLink !== undefined || json.LogoLink !== undefined || json.Wallpaper !== undefined || json.Logo !== undefined) {
+                if (currentTab !== 'theme') switchTab('theme');
+                yumekoConfigDocument = Object.assign({}, json);
+                document.getElementById('inputVersion').value = json.Version || "";
+                document.getElementById('inputWallpaper').value = json.BackgroundLink || json.Wallpaper || "";
+                document.getElementById('inputLogo').value = json.LogoLink || json.Logo || "";
+                document.getElementById('inputBanner').value = json.Banner || "";
+                document.getElementById('inputBannerLink').value = json.BannerLink || "";
+                document.getElementById('inputBannerMsg').value = json.BannerMsg || "";
+                updateFlagPreview('inputWallpaper','wallpaperPreview');
+                updateFlagPreview('inputLogo','logoPreview');
+                updateFlagPreview('inputBanner','bannerPreview');
+            } else if (json.HtmlUI !== undefined) {
+                if (currentTab !== 'html') switchTab('html');
+                document.getElementById('inputVersion').value = json.Version || "";
+                let htmlLido = json.HtmlUI;
+                if (typeof htmlLido === 'string') {
+                    htmlLido = htmlLido.trim();
+                    if (htmlLido.startsWith('@') && htmlLido.endsWith('@'))
+                        htmlLido = htmlLido.slice(1,-1).trim();
+                }
+                document.getElementById('inputHtmlRaw').value   = htmlLido;
+                document.getElementById('outputHtmlJson').value = data;
+                previewHtml();
+            }
+            processForm();
+        } catch(e) { showToast("JSON inválido ou corrompido.", "error"); }
+    }
+
+    // ── ABAS ──────────────────────────────────────────────────────────────────
+    function switchTab(tab) {
+        saveDraftToLocalStorage();
+        currentTab = tab;
+        document.querySelectorAll('#main-nav button').forEach(b => b.classList.remove('active-nav-btn'));
+        const activeBtn = document.getElementById(`nav-${tab}`);
+        if (activeBtn) activeBtn.classList.add('active-nav-btn');
+        ['config','theme','html'].forEach(t => document.getElementById(`section-${t}`).classList.add('hidden'));
+        document.getElementById(`section-${tab}`).classList.remove('hidden');
+        const actionPanel  = document.getElementById('action-panel');
+        const previewPanel = document.getElementById('html-preview-panel');
+        if (tab === 'html') { actionPanel.classList.add('hidden'); previewPanel.classList.remove('hidden'); previewHtml(); }
+        else { actionPanel.classList.remove('hidden'); previewPanel.classList.add('hidden'); processForm(); }
+        autoLoadCurrentTabFromCloud();
+    }
+
+    // ── FLAG / IMAGE PREVIEW ──────────────────────────────────────────────────
+    function updateFlagPreview(inputId, previewId) {
+        const input = document.getElementById(inputId);
+        const preview = document.getElementById(previewId);
+        const url = input.value.trim();
+        if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+            preview.src = url;
+            preview.style.display = 'inline-block';
+            preview.onerror = function() { preview.style.display = 'none'; preview.src = ''; };
+            preview.onload = function() { preview.style.display = 'inline-block'; };
+        } else {
+            preview.src = '';
+            preview.style.display = 'none';
+        }
+    }
+
+    // ── MODAL SERVIDOR ────────────────────────────────────────────────────────
+    function onModeChange() {
+        const mode = document.getElementById('srvInfo').value.toUpperCase();
+        const isXray = mode === 'XRAY';
+        const isXHttp = mode === 'XHTTP' || mode === 'SSHXHTTP';
+        const isOpenVpn = mode === 'OPENVPN' || mode === 'OVPN' || mode === 'OPENCONNECT';
+        const isWireGuard = mode === 'WIREGUARD' || mode === 'WG';
+        const isLightway = mode === 'LIGHTWAY' || mode === 'EXPRESSVPN';
+        const isSshLegacy = !isXray && !isXHttp && !isOpenVpn && !isWireGuard && !isLightway;
+        document.getElementById('ssh-section').classList.toggle('hidden', !isSshLegacy);
+        document.getElementById('xhttp-section').classList.toggle('hidden', !isXHttp);
+        document.getElementById('openvpn-section').classList.toggle('hidden', !isOpenVpn);
+        document.getElementById('wireguard-section').classList.toggle('hidden', !isWireGuard);
+        document.getElementById('lightway-section').classList.toggle('hidden', !isLightway);
+        document.getElementById('xray-section').classList.toggle('hidden', !isXray);
+        if (isXray) { onXrayNetworkChange(); onXraySecurityChange(); }
+        if (isOpenVpn) onOpenVpnWssChange();
+    }
+
+    function onXrayNetworkChange() {
+        const net = document.getElementById('srvXrayNetwork').value;
+        document.getElementById('xrayModeWrap').classList.toggle('hidden', net !== 'xhttp');
+        document.getElementById('xrayXhttpHostWrap').classList.toggle('hidden', !['xhttp','ws','grpc','h2','httpupgrade'].includes(net));
+    }
+
+    function onOpenVpnWssChange() {
+        const enabled = document.getElementById('srvOpenvpnWss').checked;
+        ['srvOpenvpnWssHost','srvOpenvpnWssPort','srvOpenvpnWssPayload','srvOpenvpnWssTls','srvOpenvpnWssLocalPort']
+            .forEach(id => { const el = document.getElementById(id); if (el) el.disabled = !enabled; });
+    }
+
+    function onXraySecurityChange() {
+        const sec = document.getElementById('srvXraySecurity').value;
+        const isReality = sec === 'reality';
+        const isTlsLike = sec === 'tls' || sec === 'reality';
+        document.getElementById('xrayPbkWrap').classList.toggle('hidden', !isReality);
+        document.getElementById('xraySidWrap').classList.toggle('hidden', !isReality);
+        document.getElementById('xrayFlowWrap').classList.toggle('hidden', !isTlsLike);
+    }
+
+    function openServerModal(index) {
+        const isNew = index === -1;
+        document.getElementById('serverModalTitle').innerText = isNew ? "Novo servidor" : "Editar servidor";
+        document.getElementById('srvIndex').value = index;
+        const obj = isNew ? {} : serversArray[index];
+        document.getElementById('srvName').value      = obj.Name      || "";
+        let infoVal = (obj.Info || obj.type || "DIRECT").toUpperCase();
+        if (infoVal === "UDP" || infoVal === "SLOWDNS") infoVal = "DIRECT";
+        if (infoVal === "SSHXHTTP") infoVal = "XHTTP";
+        document.getElementById('srvInfo').value      = infoVal;
+        const flagValue = obj.Flag || ((obj.FLAG && !String(obj.FLAG).startsWith('http')) ? obj.FLAG : '');
+        const flagUrlValue = obj.FlagUrl || ((obj.FLAG && String(obj.FLAG).startsWith('http')) ? obj.FLAG : '');
+        document.getElementById('srvFlag').value      = flagValue;
+        document.getElementById('srvFlagUrl').value   = flagUrlValue;
+        document.getElementById('srvCheckUser').value = obj.CheckUser || "";
+        document.getElementById('srvPremium').checked = obj.Premium === true || obj.Premium === 1 || obj.Premium === '1' || String(obj.Premium || '').toLowerCase() === 'true' || String(obj.Category || obj.category || obj.TYPE || '').toLowerCase().indexOf('premium') >= 0 || String(obj.Name || '').toLowerCase().match(/\\b(premium|vip)\\b/) !== null;
+        updateFlagPreview('srvFlagUrl', 'srvFlagPreview');
+        document.getElementById('srvHost').value      = obj.ServerHost || "";
+        document.getElementById('srvPort').value      = obj.ServerPort || "";
+        document.getElementById('srvSSLPort').value   = obj.SSLPort    || "";
+        document.getElementById('srvProxyHost').value = obj.ProxyHost  || "";
+        document.getElementById('srvProxyPort').value = obj.ProxyPort  || "";
+        document.getElementById('srvUser').value      = obj.USER       || "";
+        document.getElementById('srvPass').value      = obj.PASS       || "";
+        document.getElementById('srvSni').value       = obj.Sni        || "";
+        document.getElementById('srvPayload').value   = obj.Payload    || "";
+        document.getElementById('srvXhttpServer').value  = obj.xhttpServer || "";
+        document.getElementById('srvXhttpPort').value    = obj.xhttpPort   || "443";
+        document.getElementById('srvXhttpHost').value    = obj.xhttpHost   || "";
+        document.getElementById('srvXhttpSni').value     = obj.xhttpSni    || obj.Sni || "";
+        document.getElementById('srvXhttpPath').value    = obj.xhttpPath   || "/ssh";
+        const tlsRaw = obj.xhttpTls;
+        document.getElementById('srvXhttpTls').checked   = (tlsRaw === undefined || tlsRaw === null || tlsRaw === "" || tlsRaw === true || tlsRaw === "true" || tlsRaw === "1");
+        document.getElementById('srvXhttpSshHost').value = obj.ServerHost || "";
+        document.getElementById('srvXhttpSshPort').value = obj.ServerPort || "22";
+        document.getElementById('srvXhttpUser').value    = obj.USER || "";
+        document.getElementById('srvXhttpPass').value    = obj.PASS || "";
+        document.getElementById('srvOpenvpnProfile').value = obj.ovpn || obj.openvpn_profile || obj.profile || "";
+        document.getElementById('srvOpenvpnServer').value = obj.server || obj.ServerHost || "";
+        document.getElementById('srvOpenvpnPort').value = obj.port || obj.ServerPort || "443";
+        document.getElementById('srvOpenvpnProto').value = obj.proto || obj.protocol || "tcp-client";
+        document.getElementById('srvOpenvpnCipher').value = obj.cipher || obj.data_cipher || "";
+        document.getElementById('srvOpenvpnUser').value = obj.username || obj.user || obj.USER || "";
+        document.getElementById('srvOpenvpnPass').value = obj.password || obj.pass || obj.PASS || "";
+        document.getElementById('srvOpenvpnAuth').value = obj.auth || obj.auth_digest || "SHA256";
+        document.getElementById('srvOpenvpnDns').value = obj.dns || obj.dns1 || "";
+        document.getElementById('srvOpenvpnDns2').value = obj.dns2 || "";
+        document.getElementById('srvOpenvpnIpv6').checked = !!obj.ipv6;
+        document.getElementById('srvOpenvpnCa').value = obj.ca || obj.ca_cert || "";
+        document.getElementById('srvOpenvpnCert').value = obj.cert || obj.client_cert || "";
+        document.getElementById('srvOpenvpnKey').value = obj.key || obj.client_key || obj.private_key || "";
+        document.getElementById('srvOpenvpnTlsCrypt').value = obj.tls_crypt || obj['tls-crypt'] || "";
+        document.getElementById('srvOpenvpnTlsAuth').value = obj.tls_auth || obj['tls-auth'] || "";
+        document.getElementById('srvOpenvpnCrl').value = obj.crl || obj.crl_verify || "";
+        document.getElementById('srvOpenvpnWss').checked = !!(obj.wss || obj.websocket || obj.openvpn_wss);
+        document.getElementById('srvOpenvpnWssHost').value = obj.wss_host || obj.bughost || obj.bugHost || "";
+        document.getElementById('srvOpenvpnWssPort').value = obj.wss_port || obj.bugport || obj.bugPort || "443";
+        document.getElementById('srvOpenvpnWssPayload').value = obj.wss_payload || obj.payload || obj.Payload || "";
+        document.getElementById('srvOpenvpnWssTls').checked = obj.wss_tls === undefined ? true : !!obj.wss_tls;
+        document.getElementById('srvOpenvpnWssLocalPort').value = obj.wss_local_port || obj.local_proxy_port || "9393";
+        const wg = obj.wireguard || {};
+        document.getElementById('srvWireguardConfig').value = wg.config || wg.wireguard_config || obj.wireguard_config || "";
+        document.getElementById('srvWireguardPrivateKey').value = wg.private_key || wg.privateKey || obj.private_key || "";
+        document.getElementById('srvWireguardAddress').value = wg.address || wg.addresses || obj.address || "";
+        document.getElementById('srvWireguardDns').value = wg.dns || obj.dns || "";
+        document.getElementById('srvWireguardListenPort').value = wg.listen_port || wg.listenPort || "";
+        document.getElementById('srvWireguardMtu').value = wg.mtu || wg.MTU || "";
+        document.getElementById('srvWireguardPeerPublicKey').value = wg.peer_public_key || wg.public_key || obj.peer_public_key || "";
+        document.getElementById('srvWireguardPresharedKey').value = wg.preshared_key || wg.pre_shared_key || "";
+        document.getElementById('srvWireguardEndpoint').value = wg.endpoint || obj.endpoint || "";
+        document.getElementById('srvWireguardAllowedIps').value = wg.allowed_ips || wg.allowedIPs || "0.0.0.0/0, ::/0";
+        document.getElementById('srvWireguardKeepalive').value = wg.keepalive || wg.persistent_keepalive || "";
+        const lw = obj.lightway || {};
+        document.getElementById('srvLightwayConfig').value = lw.config || lw.lightway_config || obj.lightway_config || "";
+        document.getElementById('srvLightwayServer').value = lw.server || lw.host || obj.server || "";
+        document.getElementById('srvLightwayPort').value = lw.port || obj.port || "443";
+        document.getElementById('srvLightwayMode').value = lw.mode || "tcp";
+        document.getElementById('srvLightwayServerDn').value = lw.server_dn || lw.sni || obj.server_dn || "";
+        document.getElementById('srvLightwayCipher').value = lw.cipher || "aes256";
+        document.getElementById('srvLightwayToken').value = lw.token || obj.token || "";
+        document.getElementById('srvLightwayUser').value = lw.user || lw.username || obj.user || obj.USER || "";
+        document.getElementById('srvLightwayPassword').value = lw.password || lw.pass || obj.password || obj.PASS || "";
+        document.getElementById('srvLightwayCa').value = lw.ca_cert || lw.ca || obj.ca_cert || obj.ca || "";
+        document.getElementById('srvLightwayTunLocal').value = lw.tun_local_ip || "100.64.0.6";
+        document.getElementById('srvLightwayTunPeer').value = lw.tun_peer_ip || "100.64.0.5";
+        document.getElementById('srvLightwayTunDns').value = lw.tun_dns_ip || "100.64.0.1";
+        document.getElementById('srvLightwayMtu').value = lw.outside_mtu || "";
+        document.getElementById('srvLightwayKeepalive').value = lw.keepalive_interval || "";
+        document.getElementById('srvLightwayTimeout').value = lw.keepalive_timeout || "";
+        document.getElementById('srvXrayProtocol').value = obj.xray_protocol || "vmess";
+        document.getElementById('srvXrayAddress').value  = obj.xray_address  || "";
+        document.getElementById('srvXrayPort').value     = obj.xray_port     || "";
+        document.getElementById('srvXrayUuid').value     = obj.xray_uuid     || "";
+        document.getElementById('srvXrayNetwork').value  = obj.xray_network  || "tcp";
+        document.getElementById('srvXrayPath').value     = obj.xray_path     || "";
+        document.getElementById('srvXrayMode').value     = obj.xray_mode     || "auto";
+        const tlsFlag = !!obj.xray_tls;
+        const allowInsecure = obj.xray_tls_allow_insecure ?? obj.xray_allow_insecure ?? obj.tls_allow_insecure ?? obj.v2rTlsAllowInsecure ?? false;
+        document.getElementById('srvXraySecurity').value    = obj.xray_security || (tlsFlag ? "tls" : "none");
+        document.getElementById('srvXrayAllowInsecure').checked = !!allowInsecure;
+        document.getElementById('srvXrayPinnedCert').value = obj.xray_pinned_cert || obj.xray_pinnedPeerCertSha256 || "";
+        document.getElementById('srvXrayFingerprint').value = obj.xray_fingerprint || "chrome";
+        document.getElementById('srvXraySni').value         = obj.xray_sni || obj.xray_host || "";
+        document.getElementById('srvXrayXhttpHost').value   = obj.xray_xhttp_host || obj.xray_host || "";
+        document.getElementById('srvXrayFlow').value        = obj.xray_flow || "";
+        document.getElementById('srvXrayPbk').value         = obj.xray_pbk || "";
+        document.getElementById('srvXraySid').value         = obj.xray_sid || "";
+        document.getElementById('srvXrayMux').checked       = !!obj.xray_mux;
+        document.getElementById('srvXrayFakeDns').checked   = !!obj.use_fake_dns;
+        document.getElementById('srvXrayFragmentPackets').value  = obj.xray_fragment_packets || "";
+        document.getElementById('srvXrayFragmentLength').value   = obj.xray_fragment_length != null ? obj.xray_fragment_length : "";
+        document.getElementById('srvXrayFragmentInterval').value = obj.xray_fragment_interval != null ? obj.xray_fragment_interval : "";
+        document.getElementById('srvXrayJson').value = (typeof obj.xray === "string" ? obj.xray : "") || "";
+        document.getElementById('srvXrayImportLink').value = "";
+        onModeChange();
+        openModal('modal-server');
+    }
+
+    function sanitizeLegacyAllowInsecure(value) {
+        if (Array.isArray(value)) return value.map(sanitizeLegacyAllowInsecure);
+        if (value && typeof value === 'object') {
+            const out = {};
+            Object.entries(value).forEach(([key, item]) => {
+                if (key === 'allowInsecure') return;
+                out[key] = sanitizeLegacyAllowInsecure(item);
+            });
+            return out;
+        }
+        return value;
+    }
+
+    function syncXrayV2rAliases(obj) {
+        if (!obj || String(obj.Info || '').toUpperCase() !== 'XRAY') return obj;
+        obj.v2rCoreType = 'xray';
+        obj.v2rProtocol = obj.xray_protocol || 'vless';
+        obj.v2rHost = obj.xray_address || '';
+        obj.v2rPort = obj.xray_port || '443';
+        obj.v2rUserId = obj.xray_uuid || '';
+        obj.v2rNetwork = obj.xray_network || 'tcp';
+        obj.v2rHttpPath = obj.xray_path || '';
+        obj.v2rHttpHost = obj.xray_xhttp_host || obj.xray_host || '';
+        obj.v2rTlsSni = obj.xray_sni || '';
+        obj.v2rTleSecurityType = obj.xray_security || (obj.xray_tls ? 'tls' : 'none');
+        obj.v2rTleFingerprintType = obj.xray_fingerprint || 'chrome';
+        obj.v2rFlow = obj.xray_flow || '';
+        obj.v2rMuxEnabled = !!obj.xray_mux;
+        obj.v2rTlsAllowInsecure = !!obj.xray_tls_allow_insecure;
+        obj.v2rVlessSecurity = obj.xray_security || 'none';
+        if (obj.xray_pinned_cert) obj.xray_pinnedPeerCertSha256 = String(obj.xray_pinned_cert);
+        delete obj.allowInsecure;
+        return sanitizeLegacyAllowInsecure(obj);
+    }
+
+    function saveServer() {
+        const index = parseInt(document.getElementById('srvIndex').value);
+        const mode  = document.getElementById('srvInfo').value.toUpperCase();
+        const isXray = mode === 'XRAY';
+        const isXHttp = mode === 'XHTTP' || mode === 'SSHXHTTP';
+        const isOpenVpn = mode === 'OPENVPN' || mode === 'OVPN' || mode === 'OPENCONNECT';
+        const isWireGuard = mode === 'WIREGUARD' || mode === 'WG';
+        const isLightway = mode === 'LIGHTWAY' || mode === 'EXPRESSVPN';
+        const obj = Object.assign({}, index === -1 ? {} : (serversArray[index] || {}), {
+            Name:      document.getElementById('srvName').value,
+            Info:      isOpenVpn ? 'OPENVPN' : (isWireGuard ? 'WIREGUARD' : (isLightway ? 'LIGHTWAY' : (isXHttp ? 'XHTTP' : mode))),
+            Flag:      document.getElementById('srvFlag').value,
+            FlagUrl:   document.getElementById('srvFlagUrl').value,
+            CheckUser: document.getElementById('srvCheckUser').value,
+            Premium:  document.getElementById('srvPremium').checked
+        });
+        obj.FLAG = obj.FlagUrl || obj.Flag || '';
+        if (isXHttp) {
+            obj.xhttpServer = document.getElementById('srvXhttpServer').value.trim();
+            obj.xhttpPort   = document.getElementById('srvXhttpPort').value.trim() || "443";
+            obj.xhttpHost   = document.getElementById('srvXhttpHost').value.trim();
+            obj.xhttpSni    = document.getElementById('srvXhttpSni').value.trim();
+            obj.xhttpPath   = document.getElementById('srvXhttpPath').value.trim() || "/ssh";
+            obj.xhttpTls    = document.getElementById('srvXhttpTls').checked ? "true" : "false";
+            const sshHost = document.getElementById('srvXhttpSshHost').value.trim();
+            const sshPort = document.getElementById('srvXhttpSshPort').value.trim() || "22";
+            if (sshHost) obj.ServerHost = sshHost;
+            obj.ServerPort = sshPort;
+            obj.USER = document.getElementById('srvXhttpUser').value;
+            obj.PASS = document.getElementById('srvXhttpPass').value;
+            if (!obj.xhttpServer) {
+                showToast("xhttpServer é obrigatório no modo XHTTP", "error");
+                return;
+            }
+        } else if (isOpenVpn) {
+            obj.ovpn = document.getElementById('srvOpenvpnProfile').value.trim();
+            obj.server = document.getElementById('srvOpenvpnServer').value.trim();
+            obj.port = document.getElementById('srvOpenvpnPort').value.trim() || "443";
+            obj.proto = document.getElementById('srvOpenvpnProto').value;
+            obj.cipher = document.getElementById('srvOpenvpnCipher').value.trim();
+            obj.username = document.getElementById('srvOpenvpnUser').value;
+            obj.password = document.getElementById('srvOpenvpnPass').value;
+            obj.auth = document.getElementById('srvOpenvpnAuth').value.trim() || "SHA256";
+            obj.dns = document.getElementById('srvOpenvpnDns').value.trim();
+            obj.dns2 = document.getElementById('srvOpenvpnDns2').value.trim();
+            obj.ipv6 = document.getElementById('srvOpenvpnIpv6').checked;
+            obj.ca = document.getElementById('srvOpenvpnCa').value.trim();
+            obj.cert = document.getElementById('srvOpenvpnCert').value.trim();
+            obj.key = document.getElementById('srvOpenvpnKey').value.trim();
+            obj.tls_crypt = document.getElementById('srvOpenvpnTlsCrypt').value.trim();
+            obj.tls_auth = document.getElementById('srvOpenvpnTlsAuth').value.trim();
+            obj.crl = document.getElementById('srvOpenvpnCrl').value.trim();
+            obj.wss = document.getElementById('srvOpenvpnWss').checked;
+            obj.wss_host = document.getElementById('srvOpenvpnWssHost').value.trim();
+            obj.wss_port = document.getElementById('srvOpenvpnWssPort').value.trim() || "443";
+            obj.wss_payload = document.getElementById('srvOpenvpnWssPayload').value;
+            obj.wss_tls = document.getElementById('srvOpenvpnWssTls').checked;
+            obj.wss_local_port = document.getElementById('srvOpenvpnWssLocalPort').value.trim() || "9393";
+            if (!obj.ovpn && !obj.server) {
+                showToast("Informe um perfil .ovpn ou o servidor OpenVPN", "error");
+                return;
+            }
+            if (obj.wss && !obj.wss_host) {
+                showToast("Informe wss_host/bughost para usar WSS", "error");
+                return;
+            }
+        } else if (isWireGuard) {
+            const wg = {
+                config: document.getElementById('srvWireguardConfig').value.trim(),
+                private_key: document.getElementById('srvWireguardPrivateKey').value.trim(),
+                address: document.getElementById('srvWireguardAddress').value.trim(),
+                dns: document.getElementById('srvWireguardDns').value.trim(),
+                listen_port: document.getElementById('srvWireguardListenPort').value.trim(),
+                mtu: document.getElementById('srvWireguardMtu').value.trim(),
+                peer_public_key: document.getElementById('srvWireguardPeerPublicKey').value.trim(),
+                preshared_key: document.getElementById('srvWireguardPresharedKey').value.trim(),
+                endpoint: document.getElementById('srvWireguardEndpoint').value.trim(),
+                allowed_ips: document.getElementById('srvWireguardAllowedIps').value.trim() || '0.0.0.0/0, ::/0',
+                keepalive: document.getElementById('srvWireguardKeepalive').value.trim()
+            };
+            obj.wireguard = wg;
+            if (!wg.config && (!wg.private_key || !wg.address || !wg.peer_public_key || !wg.endpoint)) {
+                showToast('Informe o perfil WireGuard ou PrivateKey, Address, Peer PublicKey e Endpoint', 'error');
+                return;
+            }
+        } else if (isLightway) {
+            const lw = {
+                config: document.getElementById('srvLightwayConfig').value.trim(),
+                server: document.getElementById('srvLightwayServer').value.trim(),
+                port: document.getElementById('srvLightwayPort').value.trim() || '443',
+                mode: document.getElementById('srvLightwayMode').value,
+                server_dn: document.getElementById('srvLightwayServerDn').value.trim(),
+                cipher: document.getElementById('srvLightwayCipher').value.trim() || 'aes256',
+                token: document.getElementById('srvLightwayToken').value.trim(),
+                user: document.getElementById('srvLightwayUser').value.trim(),
+                password: document.getElementById('srvLightwayPassword').value,
+                ca_cert: document.getElementById('srvLightwayCa').value.trim(),
+                tun_local_ip: document.getElementById('srvLightwayTunLocal').value.trim() || '100.64.0.6',
+                tun_peer_ip: document.getElementById('srvLightwayTunPeer').value.trim() || '100.64.0.5',
+                tun_dns_ip: document.getElementById('srvLightwayTunDns').value.trim() || '100.64.0.1',
+                outside_mtu: document.getElementById('srvLightwayMtu').value.trim(),
+                keepalive_interval: document.getElementById('srvLightwayKeepalive').value.trim(),
+                keepalive_timeout: document.getElementById('srvLightwayTimeout').value.trim()
+            };
+            obj.lightway = lw;
+            if (!lw.config && !lw.server) {
+                showToast('Informe o YAML Lightway ou o servidor/endpoint', 'error');
+                return;
+            }
+        } else if (!isXray) {
+            obj.ServerHost = document.getElementById('srvHost').value;
+            obj.ServerPort = document.getElementById('srvPort').value;
+            obj.SSLPort    = document.getElementById('srvSSLPort').value;
+            obj.ProxyHost  = document.getElementById('srvProxyHost').value;
+            obj.ProxyPort  = document.getElementById('srvProxyPort').value;
+            obj.USER       = document.getElementById('srvUser').value;
+            obj.PASS       = document.getElementById('srvPass').value;
+            obj.Sni        = document.getElementById('srvSni').value;
+            obj.Payload    = document.getElementById('srvPayload').value;
+        } else {
+            const rawJson = document.getElementById('srvXrayJson').value.trim();
+            if (rawJson) {
+                try { obj.xray = JSON.stringify(sanitizeLegacyAllowInsecure(JSON.parse(rawJson))); }
+                catch(e) { showToast("JSON XRay inválido: " + e.message, "error"); return; }
+            } else {
+                obj.xray_protocol = document.getElementById('srvXrayProtocol').value;
+                obj.xray_address  = document.getElementById('srvXrayAddress').value;
+                obj.xray_port     = document.getElementById('srvXrayPort').value;
+                obj.xray_uuid     = document.getElementById('srvXrayUuid').value;
+                obj.xray_network  = document.getElementById('srvXrayNetwork').value;
+                obj.xray_path     = document.getElementById('srvXrayPath').value;
+                obj.xray_mode     = document.getElementById('srvXrayMode').value;
+                const security = document.getElementById('srvXraySecurity').value;
+                obj.xray_security    = security;
+                obj.xray_tls         = security === 'tls' || security === 'reality';
+                obj.xray_tls_allow_insecure = document.getElementById('srvXrayAllowInsecure').checked;
+                obj.xray_fingerprint = document.getElementById('srvXrayFingerprint').value;
+                obj.xray_sni         = document.getElementById('srvXraySni').value;
+                obj.xray_xhttp_host  = document.getElementById('srvXrayXhttpHost').value;
+                obj.xray_flow        = document.getElementById('srvXrayFlow').value;
+                obj.xray_pbk         = document.getElementById('srvXrayPbk').value;
+                obj.xray_sid         = document.getElementById('srvXraySid').value;
+                const pinnedCert = document.getElementById('srvXrayPinnedCert').value.trim();
+                if (pinnedCert) {
+                    obj.xray_pinned_cert = pinnedCert;
+                    obj.xray_pinnedPeerCertSha256 = pinnedCert;
+                } else {
+                    delete obj.xray_pinned_cert;
+                    delete obj.xray_pinnedPeerCertSha256;
+                }
+                // Host de transporte é separado do SNI. O builder usa xray_host
+                // para WS/gRPC/H2/HTTP Upgrade e xray_xhttp_host para XHTTP.
+                obj.xray_host        = obj.xray_xhttp_host || "";
+                obj.xray_mux               = document.getElementById('srvXrayMux').checked;
+                obj.use_fake_dns           = document.getElementById('srvXrayFakeDns').checked;
+                obj.xray_fragment_packets  = document.getElementById('srvXrayFragmentPackets').value.trim();
+                const fl = parseInt(document.getElementById('srvXrayFragmentLength').value);
+                const fi = parseInt(document.getElementById('srvXrayFragmentInterval').value);
+                if (!isNaN(fl)) obj.xray_fragment_length   = fl;
+                if (!isNaN(fi)) obj.xray_fragment_interval = fi;
+            }
+        }
+        syncXrayV2rAliases(obj);
+        if (index === -1) serversArray.push(obj); else serversArray[index] = obj;
+        closeModal('modal-server'); renderServers(); processForm();
+    }
+
+    function importOpenVpnFile() {
+        document.getElementById('srvOpenvpnFile').click();
+    }
+
+    function clearOpenVpnProfile() {
+        ['srvOpenvpnProfile','srvOpenvpnServer','srvOpenvpnPort','srvOpenvpnUser','srvOpenvpnPass',
+         'srvOpenvpnCipher','srvOpenvpnAuth','srvOpenvpnDns','srvOpenvpnDns2','srvOpenvpnCa',
+         'srvOpenvpnCert','srvOpenvpnKey','srvOpenvpnTlsCrypt','srvOpenvpnTlsAuth','srvOpenvpnCrl',
+         'srvOpenvpnWssHost','srvOpenvpnWssPayload'].forEach(id => {
+            const el = document.getElementById(id); if (el) el.value = '';
+        });
+        document.getElementById('srvOpenvpnPort').value = '443';
+        document.getElementById('srvOpenvpnProto').value = 'tcp-client';
+        document.getElementById('srvOpenvpnWss').checked = false;
+        document.getElementById('srvOpenvpnWssTls').checked = true;
+        document.getElementById('srvOpenvpnWssPort').value = '443';
+        document.getElementById('srvOpenvpnWssLocalPort').value = '9393';
+        onOpenVpnWssChange();
+    }
+
+    function readOpenVpnFile(input) {
+        const file = input.files && input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+            const text = String(e.target.result || '').trim();
+            document.getElementById('srvOpenvpnProfile').value = text;
+            parseOpenVpnProfile(text);
+            showToast('Perfil .ovpn importado!', 'success');
+        };
+        reader.onerror = () => showToast('Não foi possível ler o perfil .ovpn.', 'error');
+        reader.readAsText(file);
+        input.value = '';
+    }
+
+    function openVpnBlock(profile, name) {
+        const match = profile.match(new RegExp('<' + name + '>\\s*([\\s\\S]*?)\\s*</' + name + '>', 'i'));
+        return match ? match[1].trim() : '';
+    }
+
+    function parseOpenVpnProfile(profile) {
+        if (!profile) return;
+        const lines = profile.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+        const remote = lines.find(line => /^remote\s+/i.test(line));
+        if (remote) {
+            const parts = remote.split(/\s+/);
+            document.getElementById('srvOpenvpnServer').value = parts[1] || '';
+            document.getElementById('srvOpenvpnPort').value = parts[2] || '443';
+        }
+        const proto = lines.find(line => /^proto\s+/i.test(line));
+        if (proto) {
+            const value = proto.split(/\s+/)[1] || 'tcp-client';
+            document.getElementById('srvOpenvpnProto').value = value.toLowerCase() === 'tcp' ? 'tcp-client' : value.toLowerCase();
+        }
+        const cipher = lines.find(line => /^(data-ciphers|cipher)\s+/i.test(line));
+        if (cipher) document.getElementById('srvOpenvpnCipher').value = cipher.replace(/^(data-ciphers|cipher)\s+/i, '').trim();
+        const auth = lines.find(line => /^auth\s+/i.test(line));
+        if (auth) document.getElementById('srvOpenvpnAuth').value = auth.split(/\s+/)[1] || 'SHA256';
+        const dns = lines.filter(line => /^dhcp-option\s+DNS\s+/i.test(line)).map(line => line.split(/\s+/)[2]).filter(Boolean);
+        if (dns[0]) document.getElementById('srvOpenvpnDns').value = dns[0];
+        if (dns[1]) document.getElementById('srvOpenvpnDns2').value = dns[1];
+        const blocks = {
+            ca: 'srvOpenvpnCa', cert: 'srvOpenvpnCert', key: 'srvOpenvpnKey',
+            'tls-crypt': 'srvOpenvpnTlsCrypt', 'tls-auth': 'srvOpenvpnTlsAuth', 'crl-verify': 'srvOpenvpnCrl'
+        };
+        Object.entries(blocks).forEach(([name, id]) => {
+            const value = openVpnBlock(profile, name);
+            if (value) document.getElementById(id).value = value;
+        });
+    }
+
+    function importBase64ToFields() {
+        const link = document.getElementById('srvXrayImportLink').value.trim();
+        if (!link) { showToast("Cole um link vmess:// ou vless:// antes.", "error"); return; }
+        try {
+            if (link.startsWith("vmess://")) {
+                const b64 = link.substring(8);
+                const decoded = JSON.parse(atob(b64.replace(/-/g,'+').replace(/_/g,'/')));
+                document.getElementById('srvXrayProtocol').value = "vmess";
+                document.getElementById('srvXrayAddress').value  = decoded.add || "";
+                document.getElementById('srvXrayPort').value     = String(decoded.port || "443");
+                document.getElementById('srvXrayUuid').value     = decoded.id   || "";
+                document.getElementById('srvXrayNetwork').value  = decoded.net  || "tcp";
+                document.getElementById('srvXrayPath').value     = decoded.path || "/";
+                document.getElementById('srvXrayMode').value     = "auto";
+                document.getElementById('srvXraySni').value      = decoded.sni || decoded.host || "";
+                document.getElementById('srvXrayXhttpHost').value = decoded.host || decoded.sni || "";
+                const sec = decoded.tls === "tls" ? "tls" : "none";
+                document.getElementById('srvXraySecurity').value    = sec;
+                document.getElementById('srvXrayFingerprint').value = decoded.fp || "chrome";
+                document.getElementById('srvXrayFlow').value = "";
+                document.getElementById('srvXrayPbk').value  = "";
+                document.getElementById('srvXraySid').value  = "";
+                document.getElementById('srvXrayMux').checked     = false;
+                document.getElementById('srvXrayFakeDns').checked = false;
+                document.getElementById('srvXrayFragmentPackets').value  = "";
+                document.getElementById('srvXrayFragmentLength').value   = "";
+                document.getElementById('srvXrayFragmentInterval').value = "";
+                if (decoded.ps) document.getElementById('srvName').value = decoded.ps;
+                document.getElementById('srvXrayJson').value = "";
+                onXrayNetworkChange(); onXraySecurityChange();
+                showToast("VMess importado! UUID: " + (decoded.id||"").substring(0,8) + "...", "success");
+            } else if (link.startsWith("vless://")) {
+                const noPrefix = link.substring(8);
+                let name = "", rest = noPrefix;
+                if (rest.includes("#")) { const s = rest.split("#",2); rest = s[0]; name = decodeURIComponent(s[1]); }
+                const atIdx = rest.indexOf("@");
+                const uuid  = rest.substring(0, atIdx);
+                let hostPort = rest.substring(atIdx+1);
+                let query = "";
+                if (hostPort.includes("?")) { const s = hostPort.split("?",2); hostPort = s[0]; query = s[1]; }
+                let address = "", port = "443";
+                if (hostPort.startsWith("[")) {
+                    const b = hostPort.lastIndexOf("]");
+                    address = hostPort.substring(1, b);
+                    if (b+2 < hostPort.length) port = hostPort.substring(b+2);
+                } else { const hp = hostPort.split(":"); address = hp[0]; if (hp.length > 1) port = hp[1]; }
+                const params = {};
+                query.split("&").forEach(p => { const kv = p.split("=",2); if (kv.length===2) params[kv[0]] = decodeURIComponent(kv[1]); });
+                document.getElementById('srvXrayProtocol').value = "vless";
+                document.getElementById('srvXrayAddress').value  = address;
+                document.getElementById('srvXrayPort').value     = port;
+                document.getElementById('srvXrayUuid').value     = uuid;
+                document.getElementById('srvXrayNetwork').value  = params.type || "tcp";
+                document.getElementById('srvXrayPath').value     = params.path || "/";
+                document.getElementById('srvXrayMode').value     = params.mode || "auto";
+                document.getElementById('srvXraySni').value       = params.sni  || params.host || "";
+                document.getElementById('srvXrayXhttpHost').value = params.host || params.sni  || "";
+                const sec = params.security || "none";
+                document.getElementById('srvXraySecurity').value    = sec;
+                document.getElementById('srvXrayFingerprint').value = params.fp   || "chrome";
+                document.getElementById('srvXrayFlow').value = params.flow || "";
+                document.getElementById('srvXrayPbk').value  = params.pbk  || "";
+                document.getElementById('srvXraySid').value  = params.sid  || "";
+                document.getElementById('srvXrayMux').checked     = false;
+                document.getElementById('srvXrayFakeDns').checked = false;
+                document.getElementById('srvXrayFragmentPackets').value  = "";
+                document.getElementById('srvXrayFragmentLength').value   = "";
+                document.getElementById('srvXrayFragmentInterval').value = "";
+                if (name) document.getElementById('srvName').value = name;
+                document.getElementById('srvXrayJson').value = "";
+                onXrayNetworkChange(); onXraySecurityChange();
+                showToast("VLess importado! UUID: " + uuid.substring(0,8) + "...", "success");
+            } else {
+                const uuidRe = /^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/;
+                if (uuidRe.test(link)) {
+                    document.getElementById('srvXrayUuid').value = link;
+                    showToast("UUID aplicado ao campo!", "success");
+                } else { showToast("Link inválido. Use vmess://, vless:// ou UUID.", "error"); }
+            }
+        } catch(e) { showToast("Erro ao decodificar: " + e.message, "error"); }
+    }
+
+    function deleteServer(index) {
+        if (confirm("Excluir este servidor?")) { serversArray.splice(index,1); renderServers(); processForm(); }
+    }
+
+    // ── REORDENAÇÃO ───────────────────────────────────────────────────────────
+    function moveServerUp(index) {
+        if (index <= 0) return;
+        [serversArray[index-1], serversArray[index]] = [serversArray[index], serversArray[index-1]];
+        renderServers(); processForm();
+    }
+    function moveServerDown(index) {
+        if (index >= serversArray.length - 1) return;
+        [serversArray[index], serversArray[index+1]] = [serversArray[index+1], serversArray[index]];
+        renderServers(); processForm();
+    }
+    function moveMultiServUp(index) {
+        if (index <= 0) return;
+        [multiServsArray[index-1], multiServsArray[index]] = [multiServsArray[index], multiServsArray[index-1]];
+        renderMultiServs(); processForm();
+    }
+    function moveMultiServDown(index) {
+        if (index >= multiServsArray.length - 1) return;
+        [multiServsArray[index], multiServsArray[index+1]] = [multiServsArray[index+1], multiServsArray[index]];
+        renderMultiServs(); processForm();
+    }
+
+    // ── DRAG AND DROP ─────────────────────────────────────────────────────────
+    function handleDragStart(e, index) {
+        dragSrcIndex = index;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', this.innerHTML);
+        this.classList.add('dragging');
+    }
+    function handleDragOver(e) {
+        if (e.preventDefault) e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        return false;
+    }
+    function handleDrop(e, index) {
+        if (e.stopPropagation) e.stopPropagation();
+        if (dragSrcIndex !== null && dragSrcIndex !== index) {
+            const item = serversArray.splice(dragSrcIndex, 1)[0];
+            serversArray.splice(index, 0, item);
+            renderServers(); processForm();
+        }
+        dragSrcIndex = null;
+        return false;
+    }
+    function handleDragEnd() {
+        this.classList.remove('dragging');
+        document.querySelectorAll('#serversList .entity-card').forEach(el => el.classList.remove('dragging'));
+        dragSrcIndex = null;
+    }
+
+    function handleMultiDragStart(e, index) {
+        dragSrcIndex = index;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', this.innerHTML);
+        this.classList.add('dragging');
+    }
+    function handleMultiDragOver(e) {
+        if (e.preventDefault) e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        return false;
+    }
+    function handleMultiDrop(e, index) {
+        if (e.stopPropagation) e.stopPropagation();
+        if (dragSrcIndex !== null && dragSrcIndex !== index) {
+            const item = multiServsArray.splice(dragSrcIndex, 1)[0];
+            multiServsArray.splice(index, 0, item);
+            renderMultiServs(); processForm();
+        }
+        dragSrcIndex = null;
+        return false;
+    }
+    function handleMultiDragEnd() {
+        this.classList.remove('dragging');
+        document.querySelectorAll('#multiServsList .entity-card').forEach(el => el.classList.remove('dragging'));
+        dragSrcIndex = null;
+    }
+
+    // ── NETWORKS / PAYLOADS ────────────────────────────────────────────────────
+    function openMultiServModal(index) {
+        const isNew = index === -1;
+        document.getElementById('multiServModalTitle').innerText = isNew ? "Nova Network/Payload" : "Editar Network/Payload";
+        document.getElementById('msIndex').value = index;
+        const obj = isNew ? {} : multiServsArray[index];
+        document.getElementById('msName').value = obj.Name || "";
+        document.getElementById('msType').value = obj.Info || obj.TYPE || "";
+        document.getElementById('msFlagUrl').value = obj.FLAG || obj.Flag || obj.FlagUrl || "";
+        document.getElementById('msCategoria').value = obj.Categoria || "";
+        document.getElementById('msPayload').value = obj.Payload || "";
+        document.getElementById('msSni').value = obj.SNI || obj.Sni || "";
+        document.getElementById('msTlsIP').value = obj.TlsIP || "";
+        document.getElementById('msProxyIP').value = obj.ProxyIP || "";
+        document.getElementById('msProxyPort').value = obj.ProxyPort || "";
+        document.getElementById('msCheckUser').value = obj.CheckUser || "";
+        updateFlagPreview('msFlagUrl', 'msFlagPreview');
+        openModal('modal-multiserv');
+    }
+
+    function saveMultiServ() {
+        const index = parseInt(document.getElementById('msIndex').value);
+        const previous = index === -1 ? {} : (multiServsArray[index] || {});
+        const obj = Object.assign({}, previous, {
+            Name: document.getElementById('msName').value.trim(),
+            Info: document.getElementById('msType').value.trim(),
+            FLAG: document.getElementById('msFlagUrl').value.trim(),
+            Categoria: document.getElementById('msCategoria').value.trim(),
+            Payload: document.getElementById('msPayload').value,
+            SNI: document.getElementById('msSni').value.trim(),
+            TlsIP: document.getElementById('msTlsIP').value.trim(),
+            ProxyIP: document.getElementById('msProxyIP').value.trim(),
+            ProxyPort: document.getElementById('msProxyPort').value.trim(),
+            CheckUser: document.getElementById('msCheckUser').value.trim()
+        });
+        delete obj.TYPE; delete obj.Flag; delete obj.FlagUrl;
+        if (index===-1) multiServsArray.push(sanitizeLegacyAllowInsecure(obj));
+        else multiServsArray[index] = sanitizeLegacyAllowInsecure(obj);
+        closeModal('modal-multiserv'); renderMultiServs(); processForm();
+    }
+
+    function deleteMultiServ(index) {
+        if (confirm("Remover este grupo?")) { multiServsArray.splice(index,1); renderMultiServs(); processForm(); }
+    }
+
+    // ── RENDERS ───────────────────────────────────────────────────────────────
+    function modeBadge(info) {
+        const m = (info||"").toUpperCase();
+        if (m === "XRAY") return `<span class="badge badge-xray">⚡ XRAY</span>`;
+        if (m === "XHTTP" || m === "SSHXHTTP") return `<span class="badge badge-xhttp">🌐 XHTTP</span>`;
+        if (m === "OPENVPN" || m === "OVPN" || m === "OPENCONNECT") return `<span class="badge badge-ssh">🛡️ OPENVPN</span>`;
+        if (m === "WIREGUARD" || m === "WG") return `<span class="badge badge-ssh">🔗 WIREGUARD</span>`;
+        if (m === "LIGHTWAY" || m === "EXPRESSVPN") return `<span class="badge badge-ssh">⚡ LIGHTWAY</span>`;
+        if (["DIRECT","PROXY","SSL","TLSWS","WS","WSS"].includes(m))
+            return `<span class="badge badge-ssh">🔒 SSH</span>`;
+        return `<span class="badge badge-other">${m}</span>`;
+    }
+
+    function renderServers() {
+        const list = document.getElementById('serversList');
+        const empty = document.getElementById('serversEmpty');
+        list.innerHTML = '';
+        if (serversArray.length === 0) { empty.classList.remove('hidden'); return; }
+        empty.classList.add('hidden');
+        serversArray.forEach((srv, idx) => {
+            const card = document.createElement('div');
+            card.className = "entity-card";
+            card.setAttribute('draggable', 'true');
+            card.addEventListener('dragstart', (e) => handleDragStart.call(card, e, idx), false);
+            card.addEventListener('dragover', handleDragOver, false);
+            card.addEventListener('drop', (e) => handleDrop.call(card, e, idx), false);
+            card.addEventListener('dragend', handleDragEnd, false);
+            const detail = srv.ServerHost || srv.xhttpServer || srv.server || srv.xray_address || '';
+            card.innerHTML = `
+                <span class="entity-drag"><i class="fa-solid fa-grip-vertical"></i></span>
+                <div class="entity-info">
+                    <div class="entity-title">
+                        <span class="entity-name">${srv.Name || 'Sem Nome'}</span>
+                        ${modeBadge(srv.Info)}
+                    </div>
+                    ${detail ? `<div class="entity-detail">${detail}</div>` : ''}
+                </div>
+                <div class="entity-actions">
+                    <button onclick="moveServerUp(${idx})" ${idx===0?'disabled':''} class="icon-btn" title="Mover para cima"><i class="fa-solid fa-chevron-up"></i></button>
+                    <button onclick="moveServerDown(${idx})" ${idx===serversArray.length-1?'disabled':''} class="icon-btn" title="Mover para baixo"><i class="fa-solid fa-chevron-down"></i></button>
+                    <button onclick="openServerModal(${idx})" class="icon-btn icon-btn-edit" title="Editar"><i class="fa-solid fa-pen"></i></button>
+                    <button onclick="deleteServer(${idx})" class="icon-btn icon-btn-danger" title="Excluir"><i class="fa-solid fa-trash"></i></button>
+                </div>`;
+            list.appendChild(card);
+        });
+    }
+
+    function renderMultiServs() {
+        const list = document.getElementById('multiServsList');
+        const empty = document.getElementById('multiServsEmpty');
+        list.innerHTML = '';
+        if (multiServsArray.length === 0) { empty.classList.remove('hidden'); return; }
+        empty.classList.add('hidden');
+        multiServsArray.forEach((ms, idx) => {
+            const card = document.createElement('div');
+            card.className = "entity-card";
+            card.setAttribute('draggable', 'true');
+            card.addEventListener('dragstart', (e) => handleMultiDragStart.call(card, e, idx), false);
+            card.addEventListener('dragover', handleMultiDragOver, false);
+            card.addEventListener('drop', (e) => handleMultiDrop.call(card, e, idx), false);
+            card.addEventListener('dragend', handleMultiDragEnd, false);
+            card.innerHTML = `
+                <span class="entity-drag"><i class="fa-solid fa-grip-vertical"></i></span>
+                <div class="entity-info">
+                    <div class="entity-title">
+                        <span class="entity-name">${ms.Name || 'Sem Nome'}</span>
+                        ${ms.TYPE ? `<span class="badge badge-other">${ms.TYPE}</span>` : ''}
+                    </div>
+                    ${ms.ServerIP ? `<div class="entity-detail">${ms.ServerIP}</div>` : ''}
+                </div>
+                <div class="entity-actions">
+                    <button onclick="moveMultiServUp(${idx})" ${idx===0?'disabled':''} class="icon-btn" title="Mover para cima"><i class="fa-solid fa-chevron-up"></i></button>
+                    <button onclick="moveMultiServDown(${idx})" ${idx===multiServsArray.length-1?'disabled':''} class="icon-btn" title="Mover para baixo"><i class="fa-solid fa-chevron-down"></i></button>
+                    <button onclick="openMultiServModal(${idx})" class="icon-btn icon-btn-edit" title="Editar"><i class="fa-solid fa-pen"></i></button>
+                    <button onclick="deleteMultiServ(${idx})" class="icon-btn icon-btn-danger" title="Excluir"><i class="fa-solid fa-trash"></i></button>
+                </div>`;
+            list.appendChild(card);
+        });
+    }
+
+    // ── HTML CONVERTER ────────────────────────────────────────────────────────
+    function clearHtml() { document.getElementById('inputHtmlRaw').value=""; document.getElementById('outputHtmlJson').value=""; document.getElementById('htmlPreviewFrame').srcdoc=""; }
+    function convertHtml() {
+        const raw = document.getElementById('inputHtmlRaw').value.trim();
+        if (!raw) return showToast("Cole um HTML válido antes.", "error");
+        const version = document.getElementById('inputVersion').value || "1.0";
+        const jsonObj = { Version: version, HtmlUI: `@\n${raw}\n@` };
+        document.getElementById('outputHtmlJson').value = JSON.stringify(jsonObj, null, 4);
+        showToast("JSON HTML gerado!", "success"); saveDraftToLocalStorage(); previewHtml();
+    }
+    function previewHtml() {
+        const raw = document.getElementById('inputHtmlRaw').value;
+        const iframe = document.getElementById('htmlPreviewFrame');
+        iframe.srcdoc = raw || "<div style='padding:20px;text-align:center;color:#94a3b8;font-family:sans-serif;font-size:13px;'>Nenhum HTML para renderizar.</div>";
+    }
+
+    // ── CLOUD DEPLOY ──────────────────────────────────────────────────────────
+    async function executeCloudDeploy() {
+        if (!githubConfig.token) return showToast("GitHub não conectado.", "error");
+        let dados, filename;
+        if (currentTab === 'html') { dados = document.getElementById('outputHtmlJson').value; filename = "HTML.json"; }
+        else { processForm(); dados = document.getElementById('outputJson').value; filename = 'config.json'; }
+        if (!dados.trim() || dados==="{}") return showToast("Gere dados válidos primeiro!", "error");
+        const fullPath = `${githubConfig.folder||""}${filename}`;
+        const apiUrl   = `https://api.github.com/repos/${githubConfig.owner}/${githubConfig.repo}/contents/${fullPath}`;
+        showToast("Efetuando commit...", "success");
+        try {
+            let sha = "";
+            const getRes = await fetch(apiUrl, { headers: getGitHeaders() });
+            if (getRes.ok) { const existing = await getRes.json(); sha = existing.sha; }
+            const body = { message: `Yumeko 6G Deploy: ${filename}`, content: btoa(unescape(encodeURIComponent(dados))) };
+            if (sha) body.sha = sha;
+            const putRes = await fetch(apiUrl, { method:'PUT', headers:{...getGitHeaders(),'Content-Type':'application/json'}, body: JSON.stringify(body) });
+            if (putRes.ok) showToast(`✅ ${filename} enviado!`, "success");
+            else { const err = await putRes.json(); showToast(`Erro: ${err.message}`, "error"); }
+        } catch(e) { showToast(`Erro de rede: ${e.message}`, "error"); }
+    }
+
+    // ── MODAIS ────────────────────────────────────────────────────────────────
+    function openProfileModal() { openModal('modal-profile'); fetchCloudFiles(); }
+    function openModal(id)  {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.add('is-open');
+        document.body.style.overflow = "hidden";
+    }
+    function closeModal(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.remove('is-open');
+        const anyOpen = document.querySelector('.modal-overlay.is-open');
+        if (!anyOpen) document.body.style.overflow = "";
+    }
+
+    // ── FILE LISTENERS ────────────────────────────────────────────────────────
+    function setupFileListeners() {
+        document.getElementById('jsonFileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0]; if (!file) return;
+            const r = new FileReader();
+            r.onload = evt => {
+                if (currentTab==='html') document.getElementById('outputHtmlJson').value = evt.target.result;
+                else document.getElementById('outputJson').value = evt.target.result;
+                loadFromJson();
+            };
+            r.readAsText(file); e.target.value='';
+        });
+        document.getElementById('htmlFileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0]; if (!file) return;
+            const r = new FileReader();
+            r.onload = evt => {
+                const content = evt.target.result.trim();
+                if (content.startsWith('{') && content.includes('HtmlUI')) { document.getElementById('outputHtmlJson').value = content; loadFromJson(); }
+                else { document.getElementById('inputHtmlRaw').value = content; convertHtml(); }
+            };
+            r.readAsText(file); e.target.value='';
+        });
+    }
+
+    // ── DOWNLOAD ──────────────────────────────────────────────────────────────
+    function downloadJson() {
+        let dados, nomeArquivo;
+        if (currentTab==='html') { dados = document.getElementById('outputHtmlJson').value; nomeArquivo = "HTML.json"; }
+        else { processForm(); dados = document.getElementById('outputJson').value; nomeArquivo = 'config.json'; }
+        if (!dados.trim() || dados==="{}") return showToast("Nenhum dado válido.", "error");
+        const blob = new Blob([dados], { type:'application/json' });
+        const url  = URL.createObjectURL(blob);
+        const a    = document.createElement('a');
+        a.href = url; a.download = nomeArquivo;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+        showToast(`${nomeArquivo} baixado!`, "success");
+    }
+
+    // ── DRAFT ─────────────────────────────────────────────────────────────────
+    function saveDraftToLocalStorage() {
+        const draft = {
+            v:      document.getElementById('inputVersion').value,
+            c_ads:  document.getElementById('checkAds').checked,
+            c_hybrid: document.getElementById('checkHybridMode').checked,
+            c_ui:   document.getElementById('inputUIMode').value,
+            c_nativeAnchor: document.getElementById('inputNativeAnchor').value,
+            c_h_url:document.getElementById('inputHtmlUiUrl').value,
+            c_up_url:document.getElementById('inputUpdateUrl').value,
+            c_rn:   document.getElementById('inputReleaseNotes').value,
+            c_tm:   document.getElementById('inputThemeUrl').value,
+            c_fd:   document.getElementById('inputConfigFundo').value,
+            t_wp:   document.getElementById('inputWallpaper').value,
+            t_logo: document.getElementById('inputLogo').value,
+            t_bn:   document.getElementById('inputBanner').value,
+            t_bn_lk:document.getElementById('inputBannerLink').value,
+            t_bn_mg:document.getElementById('inputBannerMsg').value,
+            servers: serversArray,
+            multi:   multiServsArray,
+            html:   document.getElementById('inputHtmlRaw').value
+        };
+        localStorage.setItem('yumeko_draft_state', JSON.stringify(draft));
+    }
+
+    function loadState() {
+        const draftStr = localStorage.getItem('yumeko_draft_state');
+        if (draftStr) {
+            try {
+                const d = JSON.parse(draftStr);
+                document.getElementById('inputVersion').value      = d.v || "1.0";
+                document.getElementById('checkAds').checked        = !!d.c_ads;
+                document.getElementById('checkHybridMode').checked = !!d.c_hybrid;
+                document.getElementById('inputUIMode').value       = d.c_ui || "";
+                document.getElementById('inputNativeAnchor').value = d.c_nativeAnchor || "4affa1f54a40194f";
+                document.getElementById('inputHtmlUiUrl').value    = d.c_h_url || "";
+                document.getElementById('inputUpdateUrl').value    = d.c_up_url || "";
+                document.getElementById('inputReleaseNotes').value = d.c_rn || "";
+                document.getElementById('inputThemeUrl').value     = d.c_tm || "";
+                document.getElementById('inputConfigFundo').value  = d.c_fd || "";
+                document.getElementById('inputWallpaper').value    = d.t_wp || "";
+                document.getElementById('inputLogo').value         = d.t_logo || "";
+                document.getElementById('inputBanner').value       = d.t_bn || "";
+                document.getElementById('inputBannerLink').value   = d.t_bn_lk || "";
+                document.getElementById('inputBannerMsg').value    = d.t_bn_mg || "";
+                document.getElementById('inputHtmlRaw').value      = d.html || "";
+                serversArray    = Array.isArray(d.servers) ? d.servers : [];
+                multiServsArray = Array.isArray(d.multi)   ? d.multi   : [];
+                updateFlagPreview('inputWallpaper','wallpaperPreview');
+                updateFlagPreview('inputLogo','logoPreview');
+                updateFlagPreview('inputBanner','bannerPreview');
+            } catch(e) {}
+        }
+        renderServers(); renderMultiServs();
+    }
+
+    // ── TOAST ─────────────────────────────────────────────────────────────────
+    function showToast(message, type="success") {
+        const container = document.getElementById('toast-container');
+        const toast     = document.createElement('div');
+        const icon = type==="success" ? "fa-circle-check" : "fa-circle-exclamation";
+        toast.className = `toast ${type === 'success' ? 'toast-success' : 'toast-error'}`;
+        toast.innerHTML = `<i class="fa-solid ${icon}"></i><span>${message}</span>`;
+        container.appendChild(toast);
+        requestAnimationFrame(() => requestAnimationFrame(() => toast.classList.add('toast-in')));
+        setTimeout(() => { toast.classList.remove('toast-in'); setTimeout(() => toast.remove(), 300); }, 3500);
+    }
+    </script>
+</body>
+</html>
