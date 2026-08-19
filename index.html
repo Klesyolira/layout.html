@@ -329,20 +329,44 @@
 </div>
 
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-
-
 </div>
-<div class="group-title">Atualizações &amp; links</div>
+<div class="group-title">Atualizações, links e aparência remota</div>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 <div><label class="field-label">layout_url do painel externo</label><input class="field-input" id="inputHtmlUiUrl" oninput="processForm()" placeholder="https://seuusuario.github.io/seurepo/" type="text"/></div>
 <div><label class="field-label">UrlUpdate do Config</label><input class="field-input" id="inputUpdateUrl" oninput="processForm()" placeholder="https://raw.githubusercontent.com/.../config.json" type="text"/></div>
-
-</div>
-<div class="group-title">Aparência</div>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 <div><label class="field-label">LogoLink</label><input class="field-input" id="inputThemeUrl" oninput="processForm()" placeholder="https://..." type="text"/></div>
-<div><label class="field-label">BackgroundLink</label><input class="field-input" id="inputConfigFundo" oninput="processForm()" placeholder="https://..." type="text"/></div>
+<div><label class="field-label">BackgroundLink / fundo online</label><input class="field-input" id="inputConfigFundo" oninput="processForm()" placeholder="https://..." type="text"/></div>
 <div class="sm:col-span-2"><label class="field-label">videoUrl (reprodução somente no modo nativo)</label><input class="field-input font-mono" id="inputVideoUrl" oninput="processForm()" placeholder="https://.../video.mp4" type="text"/><p class="field-hint">O site apenas grava esta URL no Config. O aplicativo Yumeko reproduz o vídeo somente na interface nativa.</p></div>
+</div>
+<div class="group-title">Cores e dimensões da interface nativa</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div><label class="field-label">FundoColor</label><input class="field-input font-mono" id="inputFundoColor" oninput="processForm()" placeholder="#5F000000" type="text"/></div>
+<div><label class="field-label">Spinner1Color</label><input class="field-input font-mono" id="inputSpinner1Color" oninput="processForm()" placeholder="#219F9F9F" type="text"/></div>
+<div><label class="field-label">Spinner2Color</label><input class="field-input font-mono" id="inputSpinner2Color" oninput="processForm()" placeholder="#219F9F9F" type="text"/></div>
+<div><label class="field-label">UserColor</label><input class="field-input font-mono" id="inputUserColor" oninput="processForm()" placeholder="#219F9F9F" type="text"/></div>
+<div><label class="field-label">PassColor</label><input class="field-input font-mono" id="inputPassColor" oninput="processForm()" placeholder="#219F9F9F" type="text"/></div>
+<div><label class="field-label">ButtonColor</label><input class="field-input font-mono" id="inputButtonColor" oninput="processForm()" placeholder="#C2930000" type="text"/></div>
+<div><label class="field-label">BordaColor</label><input class="field-input font-mono" id="inputBordaColor" oninput="processForm()" placeholder="#FF920013" type="text"/></div>
+<div><label class="field-label">FundoSpinner1Color</label><input class="field-input font-mono" id="inputFundoSpinner1Color" oninput="processForm()" placeholder="#E500030E" type="text"/></div>
+<div><label class="field-label">FundoSpinner2Color</label><input class="field-input font-mono" id="inputFundoSpinner2Color" oninput="processForm()" placeholder="#E500030E" type="text"/></div>
+<div><label class="field-label">CorUser</label><input class="field-input font-mono" id="inputCorUser" oninput="processForm()" placeholder="#F000030E" type="text"/></div>
+<div><label class="field-label">CorLogs</label><input class="field-input font-mono" id="inputCorLogs" oninput="processForm()" placeholder="#F000030E" type="text"/></div>
+<div><label class="field-label">BordaWidth</label><input class="field-input font-mono" id="inputBordaWidth" oninput="processForm()" placeholder="2" type="text"/></div>
+<div><label class="field-label">CornerRadius</label><input class="field-input font-mono" id="inputCornerRadius" oninput="processForm()" placeholder="25" type="text"/></div>
+</div>
+<div class="group-title">Comportamento, portas e contatos</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="flex items-center gap-3 rounded-xl border border-line bg-panel px-3 py-3"><input id="inputCheckUser" onchange="processForm()" type="checkbox"/><label class="field-label m-0">CheckUser ativado</label></div>
+<div><label class="field-label">UDPPort</label><input class="field-input font-mono" id="inputUDPPort" oninput="processForm()" placeholder="7300;7400;7500" type="text"/></div>
+<div><label class="field-label">UrlContato</label><input class="field-input" id="inputUrlContato" oninput="processForm()" placeholder="https://t.me/..." type="text"/></div>
+<div><label class="field-label">EmailFeedback</label><input class="field-input" id="inputEmailFeedback" oninput="processForm()" placeholder="email@dominio" type="email"/></div>
+<div><label class="field-label">Sms</label><input class="field-input" id="inputSms" oninput="processForm()" placeholder="https://..." type="text"/></div>
+<div><label class="field-label">UrlTermos</label><input class="field-input" id="inputUrlTermos" oninput="processForm()" placeholder="https://..." type="text"/></div>
+</div>
+<div class="group-title">Rodapé e Icons</div>
+<div class="grid grid-cols-1 gap-4">
+<div><label class="field-label">Rodape</label><input class="field-input" id="inputRodape" oninput="processForm()" placeholder="https://..." type="text"/></div>
+<div><label class="field-label">Icons (JSON)</label><textarea class="field-input font-mono text-xs" id="inputIconsJson" oninput="processForm()" placeholder='{"vpn":"https://...","ic_logo":"https://..."}' rows="7"></textarea><p class="field-hint">Edite as URLs dos ícones usados pelo IconLoader. O objeto completo é preservado no Config.</p></div>
 </div>
 <div class="group-title">Servidores</div>
 <div class="flex justify-between items-center mb-3 -mt-2">
@@ -671,6 +695,7 @@
 <div><label class="field-label">ProxyIP</label><input class="field-input font-mono" id="msProxyIP" type="text"/></div>
 <div><label class="field-label">ProxyPort</label><input class="field-input font-mono" id="msProxyPort" type="text"/></div>
 <div class="sm:col-span-2"><label class="field-label">CheckUser opcional</label><input class="field-input font-mono" id="msCheckUser" type="text"/></div>
+<div class="sm:col-span-2"><details class="adv"><summary><i class="fa-solid fa-chevron-right adv-chevron"></i> Campos avançados do protocolo</summary><div class="adv-body"><label class="field-label">JSON adicional da Network</label><textarea class="field-input font-mono text-xs" id="msExtraJson" placeholder='{"xray_protocol":"vless","xray_network":"xhttp","ovpn":"...","wireguard":{}}' rows="9"></textarea><p class="field-hint">Use este campo para xray_*, ovpn, wireguard, lightway e outros campos aceitos pelo Config. Os campos básicos acima continuam sendo editáveis normalmente.</p></div></details></div>
 </div>
 </div>
 <div class="modal-footer">
@@ -705,8 +730,10 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         loadCloudSession();
+        if (!localStorage.getItem('yumeko_github_config')) loadState();
         setupFileListeners();
         processForm();
+        if (!localStorage.getItem('yumeko_github_config')) loadBundledConfig();
     });
 
     // ── CONFIG / SERVERS / NETWORKS ───────────────────────────────────────────
@@ -773,6 +800,37 @@
         const mode = modeFromObject(obj);
         return mode === 'XHTTP' ? 'XHTTP (SSH)' : mode;
     }
+    const YUMEKO_ROOT_TEXT_FIELDS = {
+        inputFundoColor:'FundoColor', inputSpinner1Color:'Spinner1Color', inputSpinner2Color:'Spinner2Color',
+        inputUserColor:'UserColor', inputPassColor:'PassColor', inputButtonColor:'ButtonColor', inputBordaColor:'BordaColor',
+        inputFundoSpinner1Color:'FundoSpinner1Color', inputFundoSpinner2Color:'FundoSpinner2Color', inputCorUser:'CorUser',
+        inputCorLogs:'CorLogs', inputBordaWidth:'BordaWidth', inputCornerRadius:'CornerRadius', inputUDPPort:'UDPPort',
+        inputUrlContato:'UrlContato', inputEmailFeedback:'EmailFeedback', inputSms:'Sms', inputUrlTermos:'UrlTermos', inputRodape:'Rodape'
+    };
+    function loadRootFields(root) {
+        Object.entries(YUMEKO_ROOT_TEXT_FIELDS).forEach(([id,key]) => putValue(id, root[key] ?? ''));
+        putChecked('inputCheckUser', root.CheckUser === true || String(root.CheckUser).toLowerCase() === 'true');
+        const icons = root.Icons && typeof root.Icons === 'object' ? root.Icons : {};
+        putValue('inputIconsJson', JSON.stringify(icons, null, 2));
+    }
+    function readRootFields(root) {
+        Object.entries(YUMEKO_ROOT_TEXT_FIELDS).forEach(([id,key]) => {
+            const node = el(id);
+            if (node) root[key] = node.value;
+        });
+        const check = el('inputCheckUser');
+        if (check) root.CheckUser = !!check.checked;
+        const iconsText = readValue('inputIconsJson').trim();
+        if (iconsText) {
+            try {
+                const parsed = JSON.parse(iconsText);
+                if (!parsed || Array.isArray(parsed) || typeof parsed !== 'object') throw new Error('Icons precisa ser um objeto JSON.');
+                root.Icons = sanitizeYumeko(parsed);
+            } catch (error) {
+                showToast(`Icons inválido: ${error.message}`, 'error');
+            }
+        }
+    }
     function processForm() {
         const root = sanitizeYumeko({ ...(yumekoConfigDocument || {}) });
         root.Version = readValue('inputVersion', root.Version || '1.0') || '1.0';
@@ -781,6 +839,7 @@
         root.LogoLink = readValue('inputThemeUrl', root.LogoLink || '');
         root.BackgroundLink = readValue('inputConfigFundo', root.BackgroundLink || '');
         root.videoUrl = readValue('inputVideoUrl', root.videoUrl || '');
+        readRootFields(root);
         root.Servers = sanitizeYumeko(serversArray || []);
         root.Networks = sanitizeYumeko(networksArray || []);
         delete root.HTML;
@@ -805,6 +864,7 @@
             putValue('inputThemeUrl', yumekoConfigDocument.LogoLink || '');
             putValue('inputConfigFundo', yumekoConfigDocument.BackgroundLink || '');
             putValue('inputVideoUrl', yumekoConfigDocument.videoUrl || '');
+            loadRootFields(yumekoConfigDocument);
             serversArray = Array.isArray(yumekoConfigDocument.Servers) ? yumekoConfigDocument.Servers : [];
             networksArray = Array.isArray(yumekoConfigDocument.Networks) ? yumekoConfigDocument.Networks : [];
             renderServers();
@@ -984,6 +1044,9 @@
         clearModalFields('modal-network'); putValue('msIndex', index);
         const obj = index >= 0 && networksArray[index] ? networksArray[index] : {};
         putValue('msName', obj.Name || ''); putValue('msType', obj.Info || 'Proxy'); putValue('msFlagUrl', obj.FLAG || obj.Flag || ''); putValue('msCategoria', obj.Categoria || ''); putValue('msPayload', obj.Payload || ''); putValue('msSni', obj.SNI || ''); putValue('msTlsIP', obj.TlsIP || ''); putValue('msProxyIP', obj.ProxyIP || ''); putValue('msProxyPort', obj.ProxyPort || ''); putValue('msCheckUser', obj.CheckUser || '');
+        const networkBaseKeys = new Set(['Name','Info','FLAG','Flag','Color','Payload','SNI','TlsIP','ProxyIP','ProxyPort','Categoria','ID','CheckUser']);
+        const networkExtra = Object.fromEntries(Object.entries(obj).filter(([key]) => !networkBaseKeys.has(key)));
+        putValue('msExtraJson', JSON.stringify(networkExtra, null, 2));
         updateFlagPreview('msFlagUrl', 'msFlagPreview');
         const title = el('networkModalTitle'); if (title) title.textContent = index >= 0 ? 'Editar Network / Payload' : 'Adicionar Network / Payload';
         openModal('modal-network');
@@ -991,7 +1054,13 @@
     function saveNetwork() {
         const index = parseInt(readValue('msIndex', '-1'), 10);
         const old = index >= 0 && networksArray[index] ? { ...networksArray[index] } : {};
-        const obj = sanitizeYumeko({ ...old, Name:readValue('msName').trim(), FLAG:readValue('msFlagUrl').trim(), Color:old.Color || '#BD993399', Payload:readValue('msPayload'), SNI:readValue('msSni').trim(), TlsIP:readValue('msTlsIP').trim(), ProxyIP:readValue('msProxyIP').trim(), ProxyPort:readValue('msProxyPort').trim(), Categoria:readValue('msCategoria').trim(), ID:old.ID || String(Date.now()), Info:readValue('msType').trim() || 'Proxy', CheckUser:readValue('msCheckUser').trim() });
+        let extra = {};
+        const extraText = readValue('msExtraJson').trim();
+        if (extraText) {
+            try { extra = JSON.parse(extraText); if (!extra || Array.isArray(extra) || typeof extra !== 'object') throw new Error('O JSON avançado precisa ser um objeto.'); }
+            catch (error) { return showToast(`JSON avançado inválido: ${error.message}`, 'error'); }
+        }
+        const obj = sanitizeYumeko({ ...old, ...extra, Name:readValue('msName').trim(), FLAG:readValue('msFlagUrl').trim(), Color:old.Color || '#BD993399', Payload:readValue('msPayload'), SNI:readValue('msSni').trim(), TlsIP:readValue('msTlsIP').trim(), ProxyIP:readValue('msProxyIP').trim(), ProxyPort:readValue('msProxyPort').trim(), Categoria:readValue('msCategoria').trim(), ID:old.ID || String(Date.now()), Info:readValue('msType').trim() || 'Proxy', CheckUser:readValue('msCheckUser').trim() });
         if (!obj.Name) return showToast('Informe o nome da Network.', 'error');
         networksArray[index >= 0 ? index : networksArray.length] = obj;
         renderNetworks(); processForm(); closeModal('modal-network'); showToast('Network salva!', 'success');
@@ -1041,9 +1110,29 @@
     }
 
 
-panel.write_text(text.replace(marker, block + marker, 1), encoding='utf-8')
-print('patched', panel)
     // ── LOGIN / CLOUD ─────────────────────────────────────────────────────────
+    async function loadBundledConfig() {
+        try {
+            const res = await fetch('config.json', { cache: 'no-store' });
+            if (!res.ok) return;
+            const text = await res.text();
+            const output = el('outputJson');
+            let shouldLoad = true;
+            if (output && output.value.trim()) {
+                try {
+                    const current = JSON.parse(output.value);
+                    const hasLists = (Array.isArray(current.Servers) && current.Servers.length) || (Array.isArray(current.Networks) && current.Networks.length);
+                    const hasRootValues = Object.entries(current).some(([key,value]) => {
+                        if (['Version','layout_url','UrlUpdate','LogoLink','BackgroundLink','videoUrl','Servers','Networks'].includes(key)) return false;
+                        if (key === 'Icons' && value && typeof value === 'object' && Object.keys(value).length === 0) return false;
+                        return value !== '' && value !== false && value != null;
+                    });
+                    shouldLoad = !hasLists && !hasRootValues && (!current.Version || current.Version === '1.0');
+                } catch (error) { shouldLoad = true; }
+            }
+            if (output && shouldLoad) { output.value = text; loadFromJson(); }
+        } catch (error) { console.debug('Config local ainda não disponível:', error.message); }
+    }
     function loadCloudSession() {
         const saved = localStorage.getItem('yumeko_github_config');
         if (saved) {
@@ -1113,7 +1202,7 @@ print('patched', panel)
     }
 
     // ── GITHUB API ────────────────────────────────────────────────────────────
-    const getGitHeaders = () => ({ 'Authorization': `Bearer ${githubConfig.token}`, 'Accept': 'application/vnd.github+json' });
+    function getGitHeaders() { return { 'Authorization': `Bearer ${githubConfig.token}`, 'Accept': 'application/vnd.github+json' }; }
 
     async function fetchGitHubProfile() {
         if (!githubConfig.token) return;
@@ -1261,7 +1350,7 @@ print('patched', panel)
         localStorage.setItem('yumeko_draft_state', JSON.stringify({
             version:get('inputVersion'), layout_url:get('inputHtmlUiUrl'), update_url:get('inputUpdateUrl'),
             logo:get('inputThemeUrl'), background:get('inputConfigFundo'), video:get('inputVideoUrl'),
-            servers:serversArray, networks:networksArray
+            root: yumekoConfigDocument, servers:serversArray, networks:networksArray
         }));
     }
     function loadState() {
@@ -1270,6 +1359,7 @@ print('patched', panel)
             const set = (id, value) => { const el = document.getElementById(id); if (el) el.value = value || ''; };
             set('inputVersion', d.version); set('inputHtmlUiUrl', d.layout_url); set('inputUpdateUrl', d.update_url);
             set('inputThemeUrl', d.logo); set('inputConfigFundo', d.background); set('inputVideoUrl', d.video);
+            if (d.root && typeof d.root === 'object') { yumekoConfigDocument = sanitizeYumeko(d.root); loadRootFields(yumekoConfigDocument); }
             serversArray = Array.isArray(d.servers) ? d.servers : [];
             networksArray = Array.isArray(d.networks) ? d.networks : [];
         } catch (e) {}
