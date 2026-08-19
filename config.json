@@ -1,5 +1,5 @@
 {
-  "Version": "67.7.10",
+  "Version": "67.7.11",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -196,6 +196,7 @@
             "xray_tls_allow_insecure": false,
             "xray_fingerprint": "chrome",
             "xray_sni": "app.tim.com.br",
+           "xray_pinned_cert": "0d9bfecea1489d8fcddbb2a66a83504895d23e23690d969521ec156337ad1a9c",             
             "xray_xhttp_host": "br5.azion.app",
             "xray_flow": "",
             "xray_pbk": "",
