@@ -709,6 +709,340 @@
         processForm();
     });
 
+    // ── CONFIG / SERVERS / NETWORKS ───────────────────────────────────────────
+    const YUMEKO_FORBIDDEN_KEYS = new Set([
+        'HTML', 'NativeAnchor', 'checkAds', 'checkHybridMode', 'srvPremium', 'Premium',
+        'allowInsecure', 'xray_tls_allow_insecure', 'xray_mux', 'use_fake_dns'
+    ]);
+
+    function el(id) { return document.getElementById(id); }
+    function readValue(id, fallback = '') {
+        const node = el(id);
+        return node ? String(node.value ?? fallback) : fallback;
+    }
+    function readChecked(id) { const node = el(id); return !!(node && node.checked); }
+    function putValue(id, value = '') { const node = el(id); if (node) node.value = value == null ? '' : String(value); }
+    function putChecked(id, value) { const node = el(id); if (node) node.checked = !!value; }
+    function clearModalFields(rootId) {
+        const root = el(rootId);
+        if (!root) return;
+        root.querySelectorAll('input, textarea').forEach(node => {
+            if (node.type === 'checkbox') node.checked = false;
+            else if (node.type !== 'file') node.value = '';
+        });
+        root.querySelectorAll('select').forEach(node => { if (node.options.length) node.selectedIndex = 0; });
+    }
+    function setBlockVisible(id, visible) {
+        const node = el(id);
+        if (node) node.classList.toggle('hidden', !visible);
+    }
+    function escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+    }
+    function cleanPin(value) {
+        if (Array.isArray(value)) value = value.join('');
+        let pin = String(value || '').trim().replace(/^sha256\/\//i, '').replace(/[^0-9a-f]/gi, '');
+        return pin ? pin.toLowerCase() : '';
+    }
+    function sanitizeYumeko(value, key = '') {
+        if (Array.isArray(value)) return value.map(item => sanitizeYumeko(item, key));
+        if (value && typeof value === 'object') {
+            const out = {};
+            Object.entries(value).forEach(([k, v]) => {
+                if (YUMEKO_FORBIDDEN_KEYS.has(k) || /^xray_fragment_/i.test(k)) return;
+                if (k === 'xray_pinnedPeerCertSha256') {
+                    const pin = cleanPin(v);
+                    if (pin) out[k] = pin;
+                    return;
+                }
+                out[k] = sanitizeYumeko(v, k);
+            });
+            return out;
+        }
+        return value;
+    }
+    function modeFromObject(obj) {
+        const raw = String(obj.Info || obj.info || obj.Protocol || obj.protocol || obj.mode || '').toUpperCase();
+        if (raw === 'SSH-XHTTP' || raw === 'SSHXHTTP' || raw === 'XHTTP') return 'XHTTP';
+        if (raw === 'OVPN' || raw === 'OPENCONNECT') return 'OPENVPN';
+        if (raw === 'WG') return 'WIREGUARD';
+        if (raw === 'EXPRESSVPN') return 'LIGHTWAY';
+        return ['DIRECT','PROXY','SSL','TLSWS','WS','WSS','XHTTP','OPENVPN','WIREGUARD','LIGHTWAY','XRAY'].includes(raw) ? raw : 'DIRECT';
+    }
+    function displayMode(obj) {
+        const mode = modeFromObject(obj);
+        return mode === 'XHTTP' ? 'XHTTP (SSH)' : mode;
+    }
+    function processForm() {
+        const root = sanitizeYumeko({ ...(yumekoConfigDocument || {}) });
+        root.Version = readValue('inputVersion', root.Version || '1.0') || '1.0';
+        root.layout_url = readValue('inputHtmlUiUrl', root.layout_url || '');
+        root.UrlUpdate = readValue('inputUpdateUrl', root.UrlUpdate || '');
+        root.LogoLink = readValue('inputThemeUrl', root.LogoLink || '');
+        root.BackgroundLink = readValue('inputConfigFundo', root.BackgroundLink || '');
+        root.videoUrl = readValue('inputVideoUrl', root.videoUrl || '');
+        root.Servers = sanitizeYumeko(serversArray || []);
+        root.Networks = sanitizeYumeko(networksArray || []);
+        delete root.HTML;
+        ['NativeAnchor','checkAds','checkHybridMode','srvPremium','allowInsecure','xray_tls_allow_insecure','xray_mux','use_fake_dns'].forEach(k => delete root[k]);
+        Object.keys(root).filter(k => /^xray_fragment_/i.test(k)).forEach(k => delete root[k]);
+        yumekoConfigDocument = root;
+        const output = el('outputJson');
+        if (output) output.value = JSON.stringify(root, null, 2);
+        if (typeof saveDraftToLocalStorage === 'function') saveDraftToLocalStorage();
+        return root;
+    }
+    function loadFromJson() {
+        const output = el('outputJson');
+        if (!output) return;
+        try {
+            const parsed = JSON.parse(output.value || '{}');
+            if (!parsed || Array.isArray(parsed) || typeof parsed !== 'object') throw new Error('O Config precisa ser um objeto JSON.');
+            yumekoConfigDocument = sanitizeYumeko(parsed);
+            putValue('inputVersion', yumekoConfigDocument.Version || '1.0');
+            putValue('inputHtmlUiUrl', yumekoConfigDocument.layout_url || '');
+            putValue('inputUpdateUrl', yumekoConfigDocument.UrlUpdate || '');
+            putValue('inputThemeUrl', yumekoConfigDocument.LogoLink || '');
+            putValue('inputConfigFundo', yumekoConfigDocument.BackgroundLink || '');
+            putValue('inputVideoUrl', yumekoConfigDocument.videoUrl || '');
+            serversArray = Array.isArray(yumekoConfigDocument.Servers) ? yumekoConfigDocument.Servers : [];
+            networksArray = Array.isArray(yumekoConfigDocument.Networks) ? yumekoConfigDocument.Networks : [];
+            renderServers();
+            renderNetworks();
+            processForm();
+            showToast('Config.json carregado no painel!', 'success');
+        } catch (error) {
+            showToast(`JSON inválido: ${error.message}`, 'error');
+        }
+    }
+    function switchTab(tab) {
+        currentTab = 'config';
+        document.querySelectorAll('.nav-btn').forEach(node => node.classList.remove('active-nav-btn'));
+        const nav = el('nav-config');
+        if (nav) nav.classList.add('active-nav-btn');
+        document.querySelectorAll('[id^="section-"]').forEach(node => node.classList.toggle('hidden', node.id !== 'section-config'));
+    }
+    function updateFlagPreview(inputId, previewId) {
+        const input = el(inputId), image = el(previewId);
+        if (input && image) { image.src = input.value.trim(); image.classList.toggle('hidden', !input.value.trim()); }
+    }
+    function onModeChange() {
+        const mode = readValue('srvInfo').toUpperCase();
+        setBlockVisible('xhttp-section', mode === 'XHTTP');
+        setBlockVisible('openvpn-section', mode === 'OPENVPN');
+        setBlockVisible('wireguard-section', mode === 'WIREGUARD');
+        setBlockVisible('lightway-section', mode === 'LIGHTWAY');
+        setBlockVisible('xray-section', mode === 'XRAY');
+        const base = el('srvBaseSection');
+        if (base) base.classList.remove('hidden');
+        onXrayNetworkChange();
+        onXraySecurityChange();
+        onOpenVpnWssChange();
+    }
+    function onXrayNetworkChange() {
+        const network = readValue('srvXrayNetwork').toLowerCase();
+        setBlockVisible('xrayXhttpHostWrap', network === 'xhttp' || network === 'ws' || network === 'h2' || network === 'httpupgrade');
+        const path = el('srvXrayPath');
+        if (path && !path.value && network === 'xhttp') path.value = '/xhttp';
+    }
+    function onXraySecurityChange() {
+        const security = readValue('srvXraySecurity').toLowerCase();
+        setBlockVisible('xrayPbkWrap', security === 'reality');
+        setBlockVisible('xraySidWrap', security === 'reality');
+        setBlockVisible('xrayFlowWrap', security === 'reality' || readValue('srvXrayProtocol').toLowerCase() === 'vless');
+    }
+    function onOpenVpnWssChange() {
+        const visible = readChecked('srvOpenvpnWss');
+        ['srvOpenvpnWssHost','srvOpenvpnWssPort','srvOpenvpnWssPayload','srvOpenvpnWssTls','srvOpenvpnWssLocalPort'].forEach(id => {
+            const node = el(id);
+            if (node) { const wrap = node.closest('.grid, .field-group, div'); if (wrap) wrap.classList.toggle('opacity-50', !visible); node.disabled = !visible; }
+        });
+    }
+    function resetServerModal() {
+        clearModalFields('modal-server');
+        putValue('srvIndex', '-1');
+        putValue('srvType', 'free');
+        putValue('srvInfo', 'DIRECT');
+        putValue('srvPort', '22');
+        putValue('srvSSLPort', '443');
+        putValue('srvXhttpPort', '443');
+        putValue('srvXhttpPath', '/ssh');
+        putValue('srvXhttpSshPort', '22');
+        putValue('srvOpenvpnPort', '443');
+        putValue('srvOpenvpnProto', 'tcp-client');
+        putValue('srvOpenvpnAuth', 'SHA256');
+        putValue('srvOpenvpnWssPort', '443');
+        putValue('srvOpenvpnWssLocalPort', '9393');
+        putValue('srvWireguardAllowedIps', '0.0.0.0/0, ::/0');
+        putValue('srvXrayPort', '443');
+        putValue('srvXrayFingerprint', 'chrome');
+        putValue('srvXraySecurity', 'none');
+        putValue('srvXrayNetwork', 'tcp');
+        putValue('srvXrayMode', 'auto');
+        putChecked('srvXrayTls', false);
+        onModeChange();
+    }
+    function openServerModal(index = -1) {
+        resetServerModal();
+        const obj = index >= 0 && serversArray[index] ? serversArray[index] : {};
+        putValue('srvIndex', index);
+        putValue('srvName', obj.Name || '');
+        putValue('srvInfo', displayMode(obj));
+        putValue('srvType', obj.TYPE || (obj.Premium === true ? 'Premium' : 'free'));
+        putValue('srvFlag', obj.FLAG || obj.Flag || '');
+        putValue('srvFlagUrl', obj.FlagUrl || '');
+        putValue('srvCheckUser', obj.CheckUser || '');
+        putValue('srvHost', obj.PServerIP || obj.ServerHost || obj.ServerIP || '');
+        putValue('srvPort', obj.ServerPort || obj.port || '22');
+        putValue('srvSSLPort', obj.SSLPort || '443');
+        putValue('srvUser', obj.USER || obj.username || '');
+        putValue('srvPass', obj.PASS || obj.password || '');
+        putValue('srvSni', obj.SNI || obj.sni || '');
+        putValue('srvPayload', obj.Payload || obj.payload || '');
+        putValue('srvProxyHost', obj.ProxyIP || obj.proxyHost || '');
+        putValue('srvProxyPort', obj.ProxyPort || obj.proxyPort || '');
+        const xhttp = obj.xhttp || obj;
+        putValue('srvXhttpServer', xhttp.xhttpServer || obj.ServerIP || '');
+        putValue('srvXhttpPort', xhttp.xhttpPort || obj.ServerPort || '443');
+        putValue('srvXhttpHost', xhttp.xhttpHost || obj.xhttp_host || '');
+        putValue('srvXhttpSni', xhttp.xhttpSni || obj.SNI || '');
+        putValue('srvXhttpPath', xhttp.xhttpPath || '/ssh');
+        putChecked('srvXhttpTls', xhttp.xhttpTls === true || String(xhttp.xhttpTls).toLowerCase() === 'true');
+        putValue('srvXhttpSshHost', xhttp.ServerHost || obj.ServerHost || obj.ServerIP || '');
+        putValue('srvXhttpSshPort', xhttp.ServerPort || obj.ServerPort || '22');
+        putValue('srvXhttpUser', xhttp.USER || obj.USER || '');
+        putValue('srvXhttpPass', xhttp.PASS || obj.PASS || '');
+        putValue('srvOpenvpnProfile', obj.ovpn || obj.config || '');
+        putValue('srvOpenvpnServer', obj.server || obj.ServerIP || '');
+        putValue('srvOpenvpnPort', obj.port || obj.ServerPort || '443');
+        putValue('srvOpenvpnProto', obj.proto || 'tcp-client');
+        putValue('srvOpenvpnCipher', obj.cipher || '');
+        putValue('srvOpenvpnUser', obj.username || '');
+        putValue('srvOpenvpnPass', obj.password || '');
+        putValue('srvOpenvpnAuth', obj.auth || 'SHA256');
+        putValue('srvOpenvpnDns', obj.dns || '');
+        putValue('srvOpenvpnDns2', obj.dns2 || '');
+        putChecked('srvOpenvpnIpv6', obj.ipv6);
+        ['ca','cert','key','tls_crypt','tls_auth','crl'].forEach(k => putValue(`srvOpenvpn${k === 'tls_crypt' ? 'TlsCrypt' : k === 'tls_auth' ? 'TlsAuth' : k.charAt(0).toUpperCase()+k.slice(1)}`, obj[k] || ''));
+        putChecked('srvOpenvpnWss', obj.wss);
+        putValue('srvOpenvpnWssHost', obj.wssHost || ''); putValue('srvOpenvpnWssPort', obj.wssPort || '443');
+        putValue('srvOpenvpnWssPayload', obj.wssPayload || ''); putChecked('srvOpenvpnWssTls', obj.wssTls !== false);
+        putValue('srvOpenvpnWssLocalPort', obj.wssLocalPort || '9393');
+        const wg = obj.wireguard || obj;
+        putValue('srvWireguardConfig', wg.config || ''); putValue('srvWireguardPrivateKey', wg.private_key || '');
+        putValue('srvWireguardAddress', wg.address || ''); putValue('srvWireguardDns', wg.dns || '');
+        putValue('srvWireguardListenPort', wg.listen_port || ''); putValue('srvWireguardMtu', wg.mtu || '');
+        putValue('srvWireguardPeerPublicKey', wg.peer_public_key || ''); putValue('srvWireguardPresharedKey', wg.preshared_key || '');
+        putValue('srvWireguardEndpoint', wg.endpoint || ''); putValue('srvWireguardAllowedIps', wg.allowed_ips || '0.0.0.0/0, ::/0'); putValue('srvWireguardKeepalive', wg.keepalive || '');
+        const lw = obj.lightway || obj;
+        putValue('srvLightwayConfig', lw.config || ''); putValue('srvLightwayServer', lw.server || obj.ServerIP || ''); putValue('srvLightwayPort', lw.port || obj.ServerPort || '443');
+        putValue('srvLightwayMode', lw.mode || 'tcp'); putValue('srvLightwayServerDn', lw.server_dn || ''); putValue('srvLightwayCipher', lw.cipher || 'aes256');
+        putValue('srvLightwayToken', lw.token || ''); putValue('srvLightwayUser', lw.username || lw.user || ''); putValue('srvLightwayPassword', lw.password || ''); putValue('srvLightwayCa', lw.ca || '');
+        putValue('srvLightwayTunLocal', lw.tun_local || '100.64.0.6'); putValue('srvLightwayTunPeer', lw.tun_peer || '100.64.0.5'); putValue('srvLightwayTunDns', lw.tun_dns || '100.64.0.1');
+        putValue('srvLightwayMtu', lw.mtu || ''); putValue('srvLightwayKeepalive', lw.keepalive || ''); putValue('srvLightwayTimeout', lw.timeout || '');
+        putValue('srvXrayImportLink', ''); putValue('srvXrayProtocol', obj.xray_protocol || 'vless'); putValue('srvXrayNetwork', obj.xray_network || 'tcp');
+        putValue('srvXrayAddress', obj.xray_address || obj.ServerIP || ''); putValue('srvXrayPort', obj.xray_port || obj.ServerPort || '443'); putValue('srvXrayUuid', obj.xray_uuid || '');
+        putValue('srvXrayPath', obj.xray_path || ''); putValue('srvXrayMode', obj.xray_mode || 'auto'); putValue('srvXraySni', obj.xray_sni || '');
+        putValue('srvXrayXhttpHost', obj.xray_xhttp_host || obj.xray_host || ''); putValue('srvXraySecurity', obj.xray_security || 'none');
+        putValue('srvXrayPinnedCert', cleanPin(obj.xray_pinnedPeerCertSha256 || '')); putValue('srvXrayFingerprint', obj.xray_fingerprint || 'chrome');
+        putValue('srvXrayFlow', obj.xray_flow || ''); putValue('srvXrayPbk', obj.xray_pbk || ''); putValue('srvXraySid', obj.xray_sid || '');
+        putValue('srvXrayJson', typeof obj.xray === 'string' ? obj.xray : '');
+        updateFlagPreview('srvFlagUrl', 'srvFlagPreview');
+        onModeChange();
+        const title = el('serverModalTitle'); if (title) title.textContent = index >= 0 ? 'Editar servidor' : 'Adicionar servidor';
+        openModal('modal-server');
+    }
+    function saveServer() {
+        const index = parseInt(readValue('srvIndex', '-1'), 10);
+        const mode = readValue('srvInfo', 'DIRECT').toUpperCase();
+        const old = index >= 0 && serversArray[index] ? { ...serversArray[index] } : {};
+        const obj = {
+            ...old,
+            Name: readValue('srvName').trim(), Color: old.Color || '#BD993399', TYPE: readValue('srvType', 'free'),
+            FLAG: readValue('srvFlag').trim(), PServerIP: readValue('srvHost').trim(), ServerIP: readValue('srvHost').trim(),
+            CheckUser: readValue('srvCheckUser').trim(), ServerPort: readValue('srvPort').trim(), SSLPort: readValue('srvSSLPort').trim(),
+            Categoria: old.Categoria || (mode === 'DIRECT' ? 'Servidores' : mode), ID: old.ID || String(Date.now()), USER: readValue('srvUser'), PASS: readValue('srvPass')
+        };
+        if (!obj.Name) return showToast('Informe o nome do servidor.', 'error');
+        if (!obj.FLAG) delete obj.FLAG;
+        if (mode === 'XHTTP') Object.assign(obj, { xhttpServer:readValue('srvXhttpServer').trim(), xhttpPort:readValue('srvXhttpPort').trim() || '443', xhttpHost:readValue('srvXhttpHost').trim(), xhttpSni:readValue('srvXhttpSni').trim(), xhttpPath:readValue('srvXhttpPath').trim() || '/ssh', xhttpTls:readChecked('srvXhttpTls') ? 'true' : 'false' });
+        if (mode === 'OPENVPN') Object.assign(obj, { ovpn:readValue('srvOpenvpnProfile').trim(), server:readValue('srvOpenvpnServer').trim(), port:readValue('srvOpenvpnPort').trim() || '443', proto:readValue('srvOpenvpnProto') || 'tcp-client', cipher:readValue('srvOpenvpnCipher').trim(), username:readValue('srvOpenvpnUser'), password:readValue('srvOpenvpnPass'), auth:readValue('srvOpenvpnAuth').trim() || 'SHA256', dns:readValue('srvOpenvpnDns').trim(), dns2:readValue('srvOpenvpnDns2').trim(), ipv6:readChecked('srvOpenvpnIpv6'), ca:readValue('srvOpenvpnCa').trim(), cert:readValue('srvOpenvpnCert').trim(), key:readValue('srvOpenvpnKey').trim(), tls_crypt:readValue('srvOpenvpnTlsCrypt').trim(), tls_auth:readValue('srvOpenvpnTlsAuth').trim(), crl:readValue('srvOpenvpnCrl').trim() });
+        if (mode === 'WIREGUARD') obj.wireguard = { config:readValue('srvWireguardConfig').trim(), private_key:readValue('srvWireguardPrivateKey').trim(), address:readValue('srvWireguardAddress').trim(), dns:readValue('srvWireguardDns').trim(), listen_port:readValue('srvWireguardListenPort').trim(), mtu:readValue('srvWireguardMtu').trim(), peer_public_key:readValue('srvWireguardPeerPublicKey').trim(), preshared_key:readValue('srvWireguardPresharedKey').trim(), endpoint:readValue('srvWireguardEndpoint').trim(), allowed_ips:readValue('srvWireguardAllowedIps').trim() || '0.0.0.0/0, ::/0', keepalive:readValue('srvWireguardKeepalive').trim() };
+        if (mode === 'LIGHTWAY') obj.lightway = { config:readValue('srvLightwayConfig').trim(), server:readValue('srvLightwayServer').trim(), port:readValue('srvLightwayPort').trim() || '443', mode:readValue('srvLightwayMode') || 'tcp', server_dn:readValue('srvLightwayServerDn').trim(), cipher:readValue('srvLightwayCipher').trim() || 'aes256', token:readValue('srvLightwayToken').trim(), username:readValue('srvLightwayUser'), password:readValue('srvLightwayPassword'), ca:readValue('srvLightwayCa').trim(), tun_local:readValue('srvLightwayTunLocal').trim(), tun_peer:readValue('srvLightwayTunPeer').trim(), tun_dns:readValue('srvLightwayTunDns').trim(), mtu:readValue('srvLightwayMtu').trim(), keepalive:readValue('srvLightwayKeepalive').trim(), timeout:readValue('srvLightwayTimeout').trim() };
+        if (mode === 'XRAY') {
+            const pin = cleanPin(readValue('srvXrayPinnedCert'));
+            if (pin && pin.length !== 64) return showToast('O pin XRay precisa ser hexadecimal com 64 caracteres.', 'error');
+            Object.assign(obj, { xray_protocol:readValue('srvXrayProtocol') || 'vless', xray_address:readValue('srvXrayAddress').trim(), xray_port:readValue('srvXrayPort').trim() || '443', xray_uuid:readValue('srvXrayUuid').trim(), xray_network:readValue('srvXrayNetwork') || 'tcp', xray_path:readValue('srvXrayPath').trim(), xray_mode:readValue('srvXrayMode') || 'auto', xray_security:readValue('srvXraySecurity') || 'none', xray_tls:readValue('srvXraySecurity') !== 'none', xray_fingerprint:readValue('srvXrayFingerprint').trim() || 'chrome', xray_sni:readValue('srvXraySni').trim(), xray_xhttp_host:readValue('srvXrayXhttpHost').trim(), xray_flow:readValue('srvXrayFlow').trim(), xray_pbk:readValue('srvXrayPbk').trim(), xray_sid:readValue('srvXraySid').trim() });
+            if (pin) obj.xray_pinnedPeerCertSha256 = pin; else delete obj.xray_pinnedPeerCertSha256;
+            const rawXray = readValue('srvXrayJson').trim();
+            if (rawXray) { try { obj.xray = sanitizeYumeko(JSON.parse(rawXray)); } catch (e) { return showToast(`JSON XRay inválido: ${e.message}`, 'error'); } } else delete obj.xray;
+        }
+        serversArray[index >= 0 ? index : serversArray.length] = sanitizeYumeko(obj);
+        renderServers(); processForm(); closeModal('modal-server'); showToast('Servidor salvo!', 'success');
+    }
+    function openNetworkModal(index = -1) {
+        clearModalFields('modal-network'); putValue('msIndex', index);
+        const obj = index >= 0 && networksArray[index] ? networksArray[index] : {};
+        putValue('msName', obj.Name || ''); putValue('msType', obj.Info || 'Proxy'); putValue('msFlagUrl', obj.FLAG || obj.Flag || ''); putValue('msCategoria', obj.Categoria || ''); putValue('msPayload', obj.Payload || ''); putValue('msSni', obj.SNI || ''); putValue('msTlsIP', obj.TlsIP || ''); putValue('msProxyIP', obj.ProxyIP || ''); putValue('msProxyPort', obj.ProxyPort || ''); putValue('msCheckUser', obj.CheckUser || '');
+        updateFlagPreview('msFlagUrl', 'msFlagPreview');
+        const title = el('networkModalTitle'); if (title) title.textContent = index >= 0 ? 'Editar Network / Payload' : 'Adicionar Network / Payload';
+        openModal('modal-network');
+    }
+    function saveNetwork() {
+        const index = parseInt(readValue('msIndex', '-1'), 10);
+        const old = index >= 0 && networksArray[index] ? { ...networksArray[index] } : {};
+        const obj = sanitizeYumeko({ ...old, Name:readValue('msName').trim(), FLAG:readValue('msFlagUrl').trim(), Color:old.Color || '#BD993399', Payload:readValue('msPayload'), SNI:readValue('msSni').trim(), TlsIP:readValue('msTlsIP').trim(), ProxyIP:readValue('msProxyIP').trim(), ProxyPort:readValue('msProxyPort').trim(), Categoria:readValue('msCategoria').trim(), ID:old.ID || String(Date.now()), Info:readValue('msType').trim() || 'Proxy', CheckUser:readValue('msCheckUser').trim() });
+        if (!obj.Name) return showToast('Informe o nome da Network.', 'error');
+        networksArray[index >= 0 ? index : networksArray.length] = obj;
+        renderNetworks(); processForm(); closeModal('modal-network'); showToast('Network salva!', 'success');
+    }
+    function renderServers() {
+        const list = el('serversList'), empty = el('serversEmpty'); if (!list || !empty) return;
+        list.innerHTML = '';
+        if (!serversArray.length) { empty.classList.remove('hidden'); return; }
+        empty.classList.add('hidden');
+        serversArray.forEach((srv, index) => {
+            const card = document.createElement('div'); card.className = 'entity-card';
+            const host = srv.ServerIP || srv.PServerIP || srv.xray_address || srv.server || '';
+            card.innerHTML = `<span class="entity-drag"><i class="fa-solid fa-grip-vertical"></i></span><div class="entity-info"><div class="entity-title"><span class="entity-name">${escapeHtml(srv.Name || 'Sem nome')}</span><span class="badge badge-other">${escapeHtml(srv.TYPE || 'free')}</span></div><div class="entity-detail">${escapeHtml(displayMode(srv))}${host ? ' · ' + escapeHtml(host) : ''}</div></div><div class="entity-actions"><button class="icon-btn" onclick="moveServerUp(${index})" ${index === 0 ? 'disabled' : ''}><i class="fa-solid fa-chevron-up"></i></button><button class="icon-btn" onclick="moveServerDown(${index})" ${index === serversArray.length-1 ? 'disabled' : ''}><i class="fa-solid fa-chevron-down"></i></button><button class="icon-btn icon-btn-edit" onclick="openServerModal(${index})"><i class="fa-solid fa-pen"></i></button><button class="icon-btn icon-btn-danger" onclick="deleteServer(${index})"><i class="fa-solid fa-trash"></i></button></div>`;
+            list.appendChild(card);
+        });
+    }
+    function renderNetworks() {
+        const list = el('networksList'), empty = el('networksEmpty'); if (!list || !empty) return;
+        list.innerHTML = '';
+        if (!networksArray.length) { empty.classList.remove('hidden'); return; }
+        empty.classList.add('hidden');
+        networksArray.forEach((net, index) => {
+            const card = document.createElement('div'); card.className = 'entity-card';
+            card.innerHTML = `<span class="entity-drag"><i class="fa-solid fa-grip-vertical"></i></span><div class="entity-info"><div class="entity-title"><span class="entity-name">${escapeHtml(net.Name || 'Sem nome')}</span><span class="badge badge-other">${escapeHtml(net.Info || net.Categoria || 'Network')}</span></div><div class="entity-detail">${escapeHtml(net.ProxyIP || net.TlsIP || net.SNI || '')}</div></div><div class="entity-actions"><button class="icon-btn" onclick="moveNetworkUp(${index})" ${index === 0 ? 'disabled' : ''}><i class="fa-solid fa-chevron-up"></i></button><button class="icon-btn" onclick="moveNetworkDown(${index})" ${index === networksArray.length-1 ? 'disabled' : ''}><i class="fa-solid fa-chevron-down"></i></button><button class="icon-btn icon-btn-edit" onclick="openNetworkModal(${index})"><i class="fa-solid fa-pen"></i></button><button class="icon-btn icon-btn-danger" onclick="deleteNetwork(${index})"><i class="fa-solid fa-trash"></i></button></div>`;
+            list.appendChild(card);
+        });
+    }
+    function moveServerUp(i) { if (i > 0) { [serversArray[i-1], serversArray[i]] = [serversArray[i], serversArray[i-1]]; renderServers(); processForm(); } }
+    function moveServerDown(i) { if (i < serversArray.length - 1) { [serversArray[i+1], serversArray[i]] = [serversArray[i], serversArray[i+1]]; renderServers(); processForm(); } }
+    function deleteServer(i) { if (confirm('Excluir este servidor?')) { serversArray.splice(i, 1); renderServers(); processForm(); } }
+    function moveNetworkUp(i) { if (i > 0) { [networksArray[i-1], networksArray[i]] = [networksArray[i], networksArray[i-1]]; renderNetworks(); processForm(); } }
+    function moveNetworkDown(i) { if (i < networksArray.length - 1) { [networksArray[i+1], networksArray[i]] = [networksArray[i], networksArray[i+1]]; renderNetworks(); processForm(); } }
+    function deleteNetwork(i) { if (confirm('Excluir esta Network?')) { networksArray.splice(i, 1); renderNetworks(); processForm(); } }
+    function importOpenVpnFile() { const input = el('srvOpenvpnFile'); if (input) input.click(); }
+    function clearOpenVpnProfile() { putValue('srvOpenvpnProfile', ''); ['srvOpenvpnServer','srvOpenvpnPort','srvOpenvpnCipher','srvOpenvpnAuth','srvOpenvpnDns','srvOpenvpnDns2','srvOpenvpnCa','srvOpenvpnCert','srvOpenvpnKey','srvOpenvpnTlsCrypt','srvOpenvpnTlsAuth','srvOpenvpnCrl'].forEach(id => putValue(id, '')); showToast('Perfil OpenVPN limpo.', 'success'); }
+    function openVpnBlock(profile, name) { const match = String(profile || '').match(new RegExp('<' + name + '>\\s*([\\s\\S]*?)\\s*</' + name + '>', 'i')); return match ? match[1].trim() : ''; }
+    function parseOpenVpnProfile(profile) { const lines = String(profile || '').split(/\r?\n/).map(s => s.trim()).filter(Boolean); const remote = lines.find(x => /^remote\s+/i.test(x)); if (remote) { const p = remote.split(/\s+/); putValue('srvOpenvpnServer', p[1] || ''); putValue('srvOpenvpnPort', p[2] || '443'); } const proto = lines.find(x => /^proto\s+/i.test(x)); if (proto) putValue('srvOpenvpnProto', proto.split(/\s+/)[1] === 'udp' ? 'udp' : 'tcp-client'); const cipher = lines.find(x => /^(data-ciphers|cipher)\s+/i.test(x)); if (cipher) putValue('srvOpenvpnCipher', cipher.replace(/^(data-ciphers|cipher)\s+/i, '').trim()); const auth = lines.find(x => /^auth\s+/i.test(x)); if (auth) putValue('srvOpenvpnAuth', auth.split(/\s+/)[1] || 'SHA256'); const dns = lines.filter(x => /^dhcp-option\s+DNS\s+/i.test(x)).map(x => x.split(/\s+/)[2]); putValue('srvOpenvpnDns', dns[0] || ''); putValue('srvOpenvpnDns2', dns[1] || ''); [['ca','srvOpenvpnCa'],['cert','srvOpenvpnCert'],['key','srvOpenvpnKey'],['tls-crypt','srvOpenvpnTlsCrypt'],['tls-auth','srvOpenvpnTlsAuth'],['crl-verify','srvOpenvpnCrl']].forEach(([name,id]) => { const value = openVpnBlock(profile,name); if (value) putValue(id,value); }); }
+    function readOpenVpnFile(input) { const file = input && input.files && input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = e => { const profile = String(e.target.result || '').trim(); putValue('srvOpenvpnProfile', profile); parseOpenVpnProfile(profile); showToast('Perfil .ovpn importado!', 'success'); }; reader.onerror = () => showToast('Não foi possível ler o perfil .ovpn.', 'error'); reader.readAsText(file); input.value = ''; }
+    function importBase64ToFields() {
+        const link = readValue('srvXrayImportLink').trim(); if (!link) return showToast('Cole um link vmess:// ou vless:// antes.', 'error');
+        try {
+            if (link.toLowerCase().startsWith('vmess://')) { const b64 = link.slice(8).replace(/-/g,'+').replace(/_/g,'/'); const d = JSON.parse(decodeURIComponent(escape(atob(b64)))); putValue('srvXrayProtocol','vmess'); putValue('srvXrayAddress',d.add || ''); putValue('srvXrayPort',d.port || '443'); putValue('srvXrayUuid',d.id || ''); putValue('srvXrayNetwork',d.net || 'tcp'); putValue('srvXrayPath',d.path || ''); putValue('srvXraySni',d.sni || d.host || ''); putValue('srvXrayXhttpHost',d.host || d.sni || ''); putValue('srvXraySecurity',d.tls === 'tls' ? 'tls' : 'none'); putValue('srvXrayFingerprint',d.fp || 'chrome'); }
+            else if (link.toLowerCase().startsWith('vless://')) { const u = new URL(link); putValue('srvXrayProtocol','vless'); putValue('srvXrayAddress',u.hostname); putValue('srvXrayPort',u.port || '443'); putValue('srvXrayUuid',decodeURIComponent(u.username)); const q = u.searchParams; putValue('srvXrayNetwork',q.get('type') || q.get('net') || 'tcp'); putValue('srvXrayPath',q.get('path') || ''); putValue('srvXraySni',q.get('sni') || u.hostname); putValue('srvXrayXhttpHost',q.get('host') || ''); putValue('srvXraySecurity',q.get('security') || 'none'); putValue('srvXrayFingerprint',q.get('fp') || 'chrome'); putValue('srvXrayFlow',q.get('flow') || ''); putValue('srvXrayPbk',q.get('pbk') || ''); putValue('srvXraySid',q.get('sid') || ''); }
+            else if (/^[0-9a-f-]{20,}$/i.test(link)) putValue('srvXrayUuid', link); else throw new Error('Formato vmess/vless não reconhecido.');
+            onXrayNetworkChange(); onXraySecurityChange(); showToast('Dados XRay importados!', 'success');
+        } catch (error) { showToast(`Falha ao importar XRay: ${error.message}`, 'error'); }
+    }
+
+
+panel.write_text(text.replace(marker, block + marker, 1), encoding='utf-8')
+print('patched', panel)
     // ── LOGIN / CLOUD ─────────────────────────────────────────────────────────
     function loadCloudSession() {
         const saved = localStorage.getItem('yumeko_github_config');
