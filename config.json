@@ -1,5 +1,5 @@
 {
-  "Version": "67.7.43",
+  "Version": "67.7.44",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -182,7 +182,7 @@
     {
       "Name": "YUMEKO ORACLE  01",
       "FLAG": "https://raw.githubusercontent.com/Klesyolira/yumko.html/refs/heads/main/05_yoru_steel.png",
-      "Color": "#BD1f1f1f",
+      "Color": "#BDd47b00",
       "Categoria": "02 Xray TESTE",
       "Info": "Xray",
       "CheckUser": "http://152.70.220.155:5656/checkUser",
