@@ -1,5 +1,5 @@
 {
-  "Version": "67.7.23",
+  "Version": "67.7.25",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -298,5 +298,5 @@
   ],
   "OfflineFolder": "Yuro",
   "OfflineFile": "Yuro.json",
-  "OfflineEnabled": false
+  "OfflineEnabled": true
 }
