@@ -1,5 +1,5 @@
 {
-  "Version": "67.7.44",
+  "Version": "67.7.45",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -148,7 +148,7 @@
     },
     {
       "Name": "YUMEKO 05",
-      "FLAG": "07_yoru_crimson.png",
+      "FLAG": "https://raw.githubusercontent.com/Klesyolira/yumko.html/refs/heads/main/07_yoru_crimson.png",
       "Color": "#BDff0000",
       "Payload": "",
       "SNI": "[app_host]",
