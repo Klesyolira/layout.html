@@ -1,5 +1,5 @@
 {
-  "Version": "67.7.22",
+  "Version": "67.7.23",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -292,7 +292,7 @@
       "xray_fingerprint": "",
       "xray_pbk": "",
       "xray_sid": "",
-      "xray_xhttp_host": "",
+      "xray_xhttp_host": "br5.azion.app",
       "xray_mode": "auto"
     }
   ]
