@@ -1,5 +1,5 @@
 {
-  "Version": "67.7.45",
+  "Version": "67.7.46",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -143,7 +143,7 @@
       "ProxyPort": "443",
       "Categoria": "Ssh Verde TESTE",
       "ID": "13",
-      "Info": "Wss",
+      "Info": "Tlsws",
       "CheckUser": ""
     },
     {
