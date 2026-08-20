@@ -20,7 +20,7 @@
   "EmailFeedback": "lughlt@bk.ru",
   "Sms": "https://paste.minerdso.com.br/paste.php?raw&id=140",
   "UrlTermos": "https://paste.anasor.com/paste.php?raw&id=353145",
-  "UrlUpdate": "https://raw.githubusercontent.com/Klesyolira/layout.html/refs/heads/main/config.json",
+  "UrlUpdate": "",
   "Icons": {
     "vpn": "https://raw.githubusercontent.com/Klesyolira/yumko.html/refs/heads/main/vpn.png",
     "apn": "https://raw.githubusercontent.com/Klesyolira/yumko.html/refs/heads/main/apn.png",
@@ -335,5 +335,37 @@
   ],
   "OfflineFolder": "Yuro",
   "OfflineFile": "Yuro.json",
-  "OfflineEnabled": true
+  "OfflineEnabled": true,
+  "EngineConfigPolicy": {
+    "mode": "offline-only",
+    "engineMapAsset": "config/ssh-engine-map.json",
+    "allowOnlineReplacement": false,
+    "allowOnlineEngineOverrides": false,
+    "updateRequiresNewApk": true
+  },
+  "OnlineConfigPolicy": {
+    "allowedSections": [
+      "Version",
+      "UI",
+      "Icons",
+      "LogoLink",
+      "BackgroundLink",
+      "Rodape",
+      "videoUrl",
+      "Servers",
+      "Networks",
+      "CheckUser",
+      "UDPPort",
+      "UrlContato",
+      "EmailFeedback",
+      "Sms",
+      "UrlTermos"
+    ],
+    "forbiddenSections": [
+      "SshEngineMap",
+      "EngineOverrides",
+      "ssh-engine-map.json"
+    ],
+    "note": "Listas e visual podem ser atualizados; o motor de transporte não."
+  }
 }
