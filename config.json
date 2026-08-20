@@ -295,5 +295,8 @@
       "xray_xhttp_host": "br5.azion.app",
       "xray_mode": "auto"
     }
-  ]
+  ],
+  "OfflineFolder": "Yuro",
+  "OfflineFile": "Yuro.json",
+  "OfflineEnabled": false
 }
