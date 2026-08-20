@@ -1,5 +1,5 @@
 {
-  "Version": "67.7.42",
+  "Version": "67.7.43",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -92,7 +92,7 @@
   "Networks": [
     {
       "Name": "YUMEKO 01",
-      "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/free.png",
+      "FLAG": "https://raw.githubusercontent.com/Klesyolira/yumko.html/refs/heads/main/01_yoru_neon.png",
       "Color": "#BD632566",
       "Payload": "GET / HTTP/1.1[crlf]Host: [app_host][crlf]Connection: Upgrade[crlf]Upgrade: websocket[crlf][crlf]@@@GET / HTTP/1.1[crlf]Host: [app_host][crlf]Connection: Upgrade[crlf]Upgrade: websocket[crlf][crlf]@@@[split]HTTP/ 2 HTTP/1.1 CONNECT HTTP/1.1[lf][lf]#HTTP/ 2\\nHost: m.opera.com\\n\\n",
       "SNI": "",
@@ -106,7 +106,7 @@
     },
     {
       "Name": "YUMEKO 02",
-      "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/free.png",
+      "FLAG": "https://raw.githubusercontent.com/Klesyolira/yumko.html/refs/heads/main/01_yoru_neon.png",
       "Color": "#BD632566",
       "Payload": "ACL / HTTP/1.1[lf]Host: [app_host][lf]Upgrade: Websocket websocket[lf][split][lf]",
       "SNI": "",
@@ -120,7 +120,7 @@
     },
     {
       "Name": "YUMEKO 03",
-      "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/free.png",
+      "FLAG": "https://raw.githubusercontent.com/Klesyolira/yumko.html/refs/heads/main/01_yoru_neon.png",
       "Color": "#BD632566",
       "Payload": "ACL / HTTP/1.1[lf]Host: [app_host][lf]Upgrade: Websocket websocket[lf][split][lf]@@@[rotate=GET;POST;PUT;HEAD;CONNECT] / HTTP/1.1[lf]Host: [app_host][crlf]Connection: Upgrade[lf]Upgrade: Websocket[lf][lf]@@@[rotate=ACL;MOVE;MERGE;PATCH;SEARCH] / HTTP/1.1 [lf]Host: [app_host][crlf]Connection: Upgrade[lf]Upgrade: Websocket[lf][lf]",
       "SNI": "",
@@ -134,7 +134,7 @@
     },
     {
       "Name": "YUMEKO 04",
-      "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/free.png",
+      "FLAG": "https://raw.githubusercontent.com/Klesyolira/yumko.html/refs/heads/main/08_yumeko_mint.png",
       "Color": "#BD00ff00",
       "Payload": "GET / HTTP/1.1[crlf]Host: g.gugu55.online[crlf]Upgrade: websocket[crlf]Connection: Upgrade[crlf][crlf]",
       "SNI": "[app_host]",
@@ -143,12 +143,12 @@
       "ProxyPort": "443",
       "Categoria": "Ssh Verde TESTE",
       "ID": "13",
-      "Info": "Proxy",
+      "Info": "Wss",
       "CheckUser": ""
     },
     {
       "Name": "YUMEKO 05",
-      "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/free.png",
+      "FLAG": "07_yoru_crimson.png",
       "Color": "#BDff0000",
       "Payload": "",
       "SNI": "[app_host]",
@@ -163,7 +163,7 @@
     {
       "Name": "YUMEKO  06",
       "Categoria": "Ssh Xhttp",
-      "FLAG": "https://telegra.ph/file/02b0f511eaaaa1d2d467a.png",
+      "FLAG": "https://raw.githubusercontent.com/Klesyolira/yumko.html/refs/heads/main/09_yoru_indigo.png",
       "ServerIP": "179.191.168.49",
       "ServerPort": "443",
       "USER": "grupo5",
@@ -181,8 +181,8 @@
     },
     {
       "Name": "YUMEKO ORACLE  01",
-      "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Oracle.webp",
-      "Color": "#BDf07000",
+      "FLAG": "https://raw.githubusercontent.com/Klesyolira/yumko.html/refs/heads/main/05_yoru_steel.png",
+      "Color": "#BD1f1f1f",
       "Categoria": "02 Xray TESTE",
       "Info": "Xray",
       "CheckUser": "http://152.70.220.155:5656/checkUser",
@@ -211,7 +211,7 @@
     },
     {
       "Name": "XRAY  XHTTP BETO 02",
-      "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Oracle.webp",
+      "FLAG": "https://raw.githubusercontent.com/Klesyolira/yumko.html/refs/heads/main/09_yoru_indigo.png",
       "Color": "#BD0000ff",
       "Payload": "",
       "SNI": "",
@@ -241,7 +241,7 @@
     {
       "Name": "XRAY  XHTTP BETO 03",
       "Info": "Xray",
-      "FLAG": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/br.png",
+      "FLAG": "https://raw.githubusercontent.com/Klesyolira/yumko.html/refs/heads/main/09_yoru_indigo.png",
       "Color": "#BD0000ff",
       "Categoria": "Xray BLUE",
       "CheckUser": "http://152.70.220.155:5656/checkUser",
@@ -274,7 +274,7 @@
       "Name": "10 OPEN VPN",
       "Info": "OpenVPN",
       "Categoria": "03 xHTTP Lite - Padrão APK 02",
-      "FLAG": "https://telegra.ph/file/02b0f511eaaaa1d2d467a.png",
+      "FLAG": "https://raw.githubusercontent.com/Klesyolira/yumko.html/refs/heads/main/04_yumeko_aqua.png",
       "CheckUser": "http://152.70.220.155:5656/checkUser",
       "ovpn": "client\ndev tun1\nproto tcp\nremote 144.217.253.149 443\nresolv-retry infinite\nnobind\npersist-key\npersist-tun\nauth-user-pass\nverb 3\ncipher AES-256-GCM\nauth SHA256\ndata-ciphers AES-256-GCM:AES-128-GCM\nfast-io\npull\nroute-delay 2\nredirect-gateway\n<ca>\n-----BEGIN CERTIFICATE-----\nMIIDSzCCAjOgAwIBAgIUJdJ6+6lTiYZBvpl2P40Lgx3BeHowDQYJKoZIhvcNAQEL\nBQAwFjEUMBIGA1UEAwwLdnBuYm9vay5jb20wHhcNMjMwMjIwMTk0NTM1WhcNMzMw\nMjE3MTk0NTM1WjAWMRQwEgYDVQQDDAt2cG5ib29rLmNvbTCCASIwDQYJKoZIhvcN\nAQEBBQADggEPADCCAQoCggEBAMcVK+hYl6Wl57YxXIVy7Jlgglj42LaC2sUWK3ls\naRcKQfs/ridG6+9dSP1ziCrZ1f5pOLz34gMYXChhUOc/x9rSIRGHao4gHeXmEoGs\ntwjxA+kRBSv5xqeUgaTKAhdwiV5SvBE8EViWe3rlHLoUbWBQ7Kky/L4cg7u+ma1V\n31PgOPhWY3RqZJLBMu3PHCctaaHQyoPLDNDyCz7Zb2Wos+tjIb3YP5GTfkZlnJsN\nva0HdSGEyerTQL5fqW2V6IZ4t2Np2kVnJcfEWgJF0Kw1nqoPfKjxM44bR+K1EGGW\nir1rs/RFPg8yFVxd4ZHpqoCo2lXZjc6oP1cwtIswIHb6EbsCAwEAAaOBkDCBjTAd\nBgNVHQ4EFgQULgM8Z91cLOSHl6EDF8jalx3piqQwUQYDVR0jBEowSIAULgM8Z91c\nLOSHl6EDF8jalx3piqShGqQYMBYxFDASBgNVBAMMC3ZwbmJvb2suY29tghQl0nr7\nqVOJhkG+mXY/jQuDHcF4ejAMBgNVHRMEBTADAQH/MAsGA1UdDwQEAwIBBjANBgkq\nhkiG9w0BAQsFAAOCAQEAT5hsP+dz11oREADNMlTEehXWfoI0aBws5c8noDHoVgnc\nBXuI4BREP3k6OsOXedHrAPA4dJXG2e5h33Ljqr5jYbm7TjUVf1yT/r3TDKIJMeJ4\n+KFs7tmXy0ejLFORbk8v0wAYMQWM9ealEGePQVjOhJJysEhJfA4u5zdGmJDYkCr+\n3cTiig/a53JqpwjjYFVHYPSJkC/nTz6tQOw9crDlZ3j+LLWln0Cy/bdj9oqurnrc\nxUtl3+PWM9D1HoBpdGduvQJ4HXfss6OrajukKfDsbDS4njD933vzRd4E36GjOI8Q\n1VKIe7kamttHV5HCsoeSYLjdxbXBAY2E0ZhQzpZB7g==\n-----END CERTIFICATE-----\n</ca>\n<cert>\n-----BEGIN CERTIFICATE-----\nMIIDYDCCAkigAwIBAgIQP/z/mAlVNddzohzjQghcqzANBgkqhkiG9w0BAQsFADAW\nMRQwEgYDVQQDDAt2cG5ib29rLmNvbTAeFw0yMzAyMjAyMzMwNDlaFw0zMzAyMTcy\nMzMwNDlaMB0xGzAZBgNVBAMMEmNsaWVudC52cG5ib29rLmNvbTCCASIwDQYJKoZI\nhvcNAQEBBQADggEPADCCAQoCggEBANPiNyyYH6yLXss6AeHLzJ6/9JfUzVAs7ttq\n8OWJRkBjKuEPW3MUVjpMgptm6+zJohM4IdSo/ES6H81sLK4AWiUUOzeOt8xAzgib\nNrLss5px0D0Pm+uXH8hGOle386JH5oyOQ6ub2O3ro0TeTF4rg43TF1oOz2AVS/gc\nsB3d6AG73otZ4C6/wabiGz4rFO8xl4S4PBKX73Eb7cdSoACc8AIrqcR+PEDHOZYt\n1qp4lM87+5ADEXelpe9vLTaoXonIuZElqA9rwFi/KQmPCHsl7eEnmSo1iOg0y3iP\n0CRHzv8FkvhhpB9Z3i3TUxq8XvnLtEQ38eD5Dw20WMYPmPShtXMCAwEAAaOBojCB\nnzAJBgNVHRMEAjAAMB0GA1UdDgQWBBQKO5Ub8pRCA8iTdRIxUIeMpNX2vzBRBgNV\nHSMESjBIgBQuAzxn3Vws5IeXoQMXyNqXHemKpKEapBgwFjEUMBIGA1UEAwwLdnBu\nYm9vay5jb22CFCXSevupU4mGQb6Zdj+NC4MdwXh6MBMGA1UdJQQMMAoGCCsGAQUF\nBwMCMAsGA1UdDwQEAwIHgDANBgkqhkiG9w0BAQsFAAOCAQEAel1YOAWHWFLH3N41\nSCIdQNbkQ18UFBbtZz4bzV6VeCWHNzPtWQ6UIeADpcBp0mngS09qJCQ8PwOBMvFw\nMizhDz2Ipz817XtLJuEMQ3Io51LRxPP394mlw46e8KFOh06QI8jnC/QlBH19PI+M\nOeQ3Gx6uYK41HHmyu/Z7dUE4c4s2iiHA7UgD98dkrU0rGAv1R/d2xRXqEm4PrwDj\nMlC1TY8LrIJd6Ipt00uUfHVAzhX3NKR528azYH3bud5NV+KEiQZSyirUyoMbMQeO\nUXh+GEDX5GBPElzQmPOsLete/PMH9Ayg6Gh/sccqwgH7BxjqcVLKXg2S4jL5BUPd\nkI3/sg==\n-----END CERTIFICATE-----\n</cert>\n<key>\n-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDT4jcsmB+si17L\nOgHhy8yev/SX1M1QLO7bavDliUZAYyrhD1tzFFY6TIKbZuvsyaITOCHUqPxEuh/N\nbCyuAFolFDs3jrfMQM4Imzay7LOacdA9D5vrlx/IRjpXt/OiR+aMjkOrm9jt66NE\n3kxeK4ON0xdaDs9gFUv4HLAd3egBu96LWeAuv8Gm4hs+KxTvMZeEuDwSl+9xG+3H\nUqAAnPACK6nEfjxAxzmWLdaqeJTPO/uQAxF3paXvby02qF6JyLmRJagPa8BYvykJ\njwh7Je3hJ5kqNYjoNMt4j9AkR87/BZL4YaQfWd4t01MavF75y7REN/Hg+Q8NtFjG\nD5j0obVzAgMBAAECggEAAV/BLdfatLq+paC9rGIu9ISYKHfn0PJJpkCeSU7HltlN\nyOHZnPhvyrb+TdWwB/wSwf8mMQPbhvKSDDn8XDCCZSUpcSXKyVdOPr4K78QbMhA0\n4oB8aV20hg72h+UYfl/q/dRaWf2LvZc+ms66Pg4YL05EI4BfFedtc7Fz7u2meIRl\nWm0b7/QQ10wrR1I7PonZzgnU9diB1cKxptJ06AfJmCGobymjq/A1JsAr/NFnJlmu\nyq3n5tcRpfc8K+XsfnpwDQJo3kKwLGIoBmUkGEcHgQhVwOL5+P+3pTYr1bt4cAUp\nFxbExqcxW0es//g3x2Z80icUpa4/OvSTAa0XF3J4UQKBgQDv4E/3/r5lULYIksNC\nzO1yRp7awv41ZAUpDSglNtWsehnhhUsiVE/Ezmyz4E0qjsW2+EUxUZ990T4ZVK4b\n9cEhB/TDBc6PBPd498aIGiiqznWXMdsU2o6xrvkQeWdmXoVjvWTcRWlfAQ+PQBOJ\ntJ3wR7ZoHgu0P/yzIzn0eQ+BiQKBgQDiIDgRtlQBw8tZc66OzxWOuJh6M5xUF5zY\nS0SLXFWlKVkfGACaerHUlFwZKID39BBifgXO1VOQ6AzalDd2vaIU9CHo2bFpTY7S\nEkkcIt9Gpl5o1sjEyJChXBIz+s48XBMXlqFN7AdhX/H6R43g8eS/YlzqSBxkUcAa\nV3tt8n+sGwKBgD+aSXnnKNKyWOHjEDUJIzh2sy4sH71GXPvqiid756II6g3bCvX6\nRwBW/4meQrezDYebQrV2AAUbUwziYBv3yJKainKfeop/daK0iAaUcQ4BGjrRtFZO\nMSG51D5jAmCpVVMB59lj6jGPlXGVOtj7dBk+2oW22cGcacOR5o8E/nCJAoGBALVP\nKCXrj8gqea4rt1cCbEKXeIrjPwGePUCgeUFUs8dONAteb31ty5CrtHznoSEvLMQM\nUBPbsLmLlmLcXOx0eLVcWqQdiMbqTQ3bY4uP2n8HfsOJFEnUl0MKU/4hp6N2IEjV\nmlikW/aTu632Gai3y7Y45E9lqn41nlaAtpMd0YjpAoGBAL8VimbhI7FK7X1vaxXy\ntnqLuYddL+hsxXXfcIVNjLVat3L2WN0YKZtbzWD8TW8hbbtnuS8F8REg7YvYjkZJ\nt8VO6ZmI7I++borJBNmbWS4gEk85DYnaLI9iw4oF2+Dr0LKKAaUL+Pq67wmvufOn\nhTobb/WAAcA75GKmU4jn5Ln2\n-----END PRIVATE KEY-----\n</key>",
       "server": "144.217.253.149",
@@ -324,7 +324,7 @@
       "Name": "11 WireGuard",
       "Info": "WireGuard",
       "Categoria": "03 xHTTP Lite - Padrão APK 02",
-      "FLAG": "https://telegra.ph/file/02b0f511eaaaa1d2d467a.png",
+      "FLAG": "https://raw.githubusercontent.com/Klesyolira/yumko.html/refs/heads/main/06_yumeko_lilac.png",
       "CheckUser": "http://152.70.220.155:5656/checkUser",
       "wireguard": {
         "config": "",
@@ -339,7 +339,7 @@
         "preshared_key": "",
         "persistent_keepalive": ""
       },
-      "Color": "#BD00ffff",
+      "Color": "#BD7e42ff",
       "Payload": "",
       "SNI": "",
       "TlsIP": "",
