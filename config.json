@@ -1,5 +1,5 @@
 {
-  "Version": "67.7.18",
+  "Version": "67.7.19",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -271,17 +271,6 @@
       "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Oracle.webp",
       "Color": "#BD993399",
       "Payload": "",
-      "xray": {
-        "xray_protocol": "vless",
-        "xray_address": "179.191.168.49",
-        "xray_port": "443",
-        "xray_uuid": "e80da181-c3f1-46fd-bc15-2b4d924c4e66",
-        "xray_network": "xhttp",
-        "xray_path": "/xhttp",
-        "xray_sni": "app.tim.com.br",
-        "xray_security": "tls",
-        "xray_flow": ""
-      },
       "SNI": "",
       "TlsIP": "",
       "ProxyIP": "",
@@ -289,7 +278,16 @@
       "Categoria": "Xray TIM",
       "ID": "1787187529330",
       "Info": "Xray",
-      "CheckUser": "http://152.70.220.155:5656/checkUser"
+      "CheckUser": "http://152.70.220.155:5656/checkUser",
+      "xray_protocol": "vless",
+      "xray_address": "179.191.168.49",
+      "xray_port": "443",
+      "xray_uuid": "e80da181-c3f1-46fd-bc15-2b4d924c4e66",
+      "xray_network": "xhttp",
+      "xray_path": "/xhttp",
+      "xray_sni": "app.tim.com.br",
+      "xray_security": "tls",
+      "xray_flow": ""
     }
   ]
 }
