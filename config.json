@@ -1,5 +1,5 @@
 {
-  "Version": "67.7.48",
+  "Version": "67.7.49",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -327,7 +327,7 @@
       "FLAG": "https://raw.githubusercontent.com/Klesyolira/yumko.html/refs/heads/main/06_yumeko_lilac.png",
       "CheckUser": "http://152.70.220.155:5656/checkUser",
       "wireguard": {
-        "config": "",
+        "config": "[Interface]\nAddress = 192.168.6.38/32\nDNS = 1.1.1.1,8.8.8.8\nPrivateKey = gOsgiF59vyXB2BH5ndT0vsxmhnBTZxtjZqE5wne+c3M=\n\n[Peer]\nPublicKey=T4BLZr9U24hn0Bdk7TcLUGOqaX+rD/sY8x3T1KwzFhg=\nAllowedIPs = 0.0.0.0/0, ::/0\nEndpoint = jp1.vpnjantit.com:1024",
         "private_key": "ELjPhtHDYR61O6Ww052S76sr/JWHkHwlH4hc5mY5alA=",
         "address": "192.168.6.244/32",
         "dns": "1.1.1.1",
