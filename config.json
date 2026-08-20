@@ -1,5 +1,5 @@
 {
-  "Version": "73",
+  "Version": "74",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -20,7 +20,7 @@
   "EmailFeedback": "lughlt@bk.ru",
   "Sms": "https://paste.minerdso.com.br/paste.php?raw&id=140",
   "UrlTermos": "https://paste.anasor.com/paste.php?raw&id=353145",
-  "UrlUpdate": "",
+  "UrlUpdate": "https://raw.githubusercontent.com/Klesyolira/layout.html/refs/heads/main/config.json",
   "Icons": {
     "vpn": "https://raw.githubusercontent.com/Klesyolira/yumko.html/refs/heads/main/vpn.png",
     "apn": "https://raw.githubusercontent.com/Klesyolira/yumko.html/refs/heads/main/apn.png",
