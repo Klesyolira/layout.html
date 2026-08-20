@@ -1,5 +1,5 @@
 {
-  "Version": "67.7.21",
+  "Version": "67.7.22",
   "FundoColor": "#5F000000",
   "Spinner1Color": "#219F9F9F",
   "Spinner2Color": "#219F9F9F",
@@ -267,7 +267,7 @@
       }
     },
     {
-      "Name": "TIM  Xray",
+      "Name": "BETO TIM  Xray",
       "FLAG": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Oracle.webp",
       "Color": "#BD993399",
       "Payload": "",
